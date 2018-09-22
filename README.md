@@ -1,5 +1,7 @@
 # pypistats
 
+[![Build Status](https://travis-ci.org/hugovk/pypistats.svg?branch=master)](https://travis-ci.org/hugovk/pypistats)
+
 Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api).
 
 ## Installation
