@@ -12,6 +12,7 @@ Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api).
 
 ```bash
 git clone https://github.com/hugovk/pypistats
+cd pypistats
 pip install .
 ```
 
