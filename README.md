@@ -1,6 +1,8 @@
 # pypistats
 
 [![Build Status](https://travis-ci.org/hugovk/pypistats.svg?branch=master)](https://travis-ci.org/hugovk/pypistats)
+[![GitHub](https://img.shields.io/github/license/hugovk/pypistats.svg)](LICENSE.txt)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api).
 
