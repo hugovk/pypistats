@@ -22,8 +22,11 @@ Return values are the JSON responses documented in the API:
 https://pypistats.org/api/
 
 ```python
+import pypistats
+from pprint import pprint
+
 # Initialise the API
-api = PyPiStats()
+api = pypistats.PyPiStats()
 
 # Call the API
 pprint(api.recent("pillow"))

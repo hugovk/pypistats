@@ -24,7 +24,6 @@ class PyPiStats(object):
         else:
             params = ""
         url = self.base_url + endpoint + params
-        print(url)
 
         r = requests.get(url)
 
