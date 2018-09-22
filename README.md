@@ -29,24 +29,24 @@ from pprint import pprint
 api = pypistats.PyPiStats()
 
 # Call the API
-pprint(api.recent("pillow"))
-pprint(api.recent("pillow", "day"))
-pprint(api.recent("pillow", "week"))
-pprint(api.recent("pillow", "month"))
+print(api.recent("pillow"))
+print(api.recent("pillow", "day", output="table"))
+pprint(api.recent("pillow", "week", output="json"))
+print(api.recent("pillow", "month"))
 
-pprint(api.overall("pillow"))
-pprint(api.overall("pillow", mirrors=True))
-pprint(api.overall("pillow", mirrors=False))
+print(api.overall("pillow"))
+print(api.overall("pillow", mirrors=True, output="table"))
+pprint(api.overall("pillow", mirrors=False, output="json"))
 
-pprint(api.python_major("pillow"))
-pprint(api.python_major("pillow", version=2))
-pprint(api.python_major("pillow", version="3"))
+print(api.python_major("pillow"))
+print(api.python_major("pillow", version=2, output="table"))
+pprint(api.python_major("pillow", version="3", output="json"))
 
-pprint(api.python_minor("pillow"))
-pprint(api.python_minor("pillow", version=2.7))
-pprint(api.python_minor("pillow", version="3.7"))
+print(api.python_minor("pillow"))
+print(api.python_minor("pillow", version=2.7, output="table"))
+pprint(api.python_minor("pillow", version="3.7", output="json"))
 
-pprint(api.system("pillow"))
-pprint(api.system("pillow", os="darwin"))
-pprint(api.system("pillow", os="linux"))
+print(api.system("pillow"))
+print(api.system("pillow", os="darwin", output="table"))
+pprint(api.system("pillow", os="linux", output="json"))
 ```

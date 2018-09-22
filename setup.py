@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from setuptools import setup
+from setuptools import find_packages, setup
 
 with open("README.md") as f:
     long_description = f.read()
@@ -11,16 +11,23 @@ with open("pypistats/version.py") as f:
 
 setup(
     name="pypistats",
-    version=version,
     description="Python interface to PyPI Stats API https://pypistats.org/api",
     long_description=long_description,
     long_description_content_type="text/markdown",
+    version=version,
     author="hugovk",
     url="https://github.com/hugovk/pypistats",
-    packages=["pypistats"],
-    install_requires=["requests"],
+    license="MIT",
+    keywords=["PyPI", "downloads", "statistics", "stats", "BigQuery"],
+    packages=find_packages(),
+    install_requires=["pytablewriter>=0.32.0", "requests"],
     python_requires=">=3.6",
     classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Developers",
+        "Intended Audience :: End Users/Desktop",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
@@ -28,5 +35,3 @@ setup(
         "Programming Language :: Python :: Implementation :: CPython",
     ],
 )
-
-# End of file
