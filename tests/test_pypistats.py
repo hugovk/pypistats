@@ -62,3 +62,53 @@ class TestPypiStats(unittest.TestCase):
         for row in output:
             self.assertGreaterEqual(row["date"], start_date)
             self.assertLessEqual(row["date"], end_date)
+
+    def test__paramify_none(self):
+        # Arrange
+        period = None
+
+        # Act
+        param = pypistats._paramify("period", period)
+
+        # Assert
+        self.assertEqual(param, "")
+
+    def test__paramify_string(self):
+        # Arrange
+        period = "day"
+
+        # Act
+        param = pypistats._paramify("period", period)
+
+        # Assert
+        self.assertEqual(param, "&period=day")
+
+    def test__paramify_bool(self):
+        # Arrange
+        mirrors = True
+
+        # Act
+        param = pypistats._paramify("mirrors", mirrors)
+
+        # Assert
+        self.assertEqual(param, "&mirrors=true")
+
+    def test__paramify_int(self):
+        # Arrange
+        version = 3
+
+        # Act
+        param = pypistats._paramify("version", 3)
+
+        # Assert
+        self.assertEqual(param, "&version=3")
+
+    def test__paramify_float(self):
+        # Arrange
+        version = 3.7
+
+        # Act
+        param = pypistats._paramify("version", 3.7)
+
+        # Assert
+        self.assertEqual(param, "&version=3.7")
