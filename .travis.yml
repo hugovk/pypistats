@@ -12,12 +12,13 @@ matrix:
 
 install:
  - pip install -U pip
- - pip install -U flake8
+ - pip install -U flake8 pytest
  - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then pip install -U black; fi
+ - pip install -e .
 
 script:
- # Test
- - python setup.py test
+ # Unit tests
+ - pytest
 
  # Static analysis
  - flake8 --statistics --count
