@@ -34,6 +34,11 @@ if __name__ == "__main__":
     # print(pypistats.python_minor("pillow"))
     # print(pypistats.python_minor("pillow", version=2.7, output="table"))
     # pprint(pypistats.python_minor("pillow", version="3.7", output="json"))
+    # print(
+    #     pypistats.python_minor(
+    #         "pillow", output="json", start_date="2018-09-20", end_date="2018-09-22"
+    #     )
+    # )
 
     # print(pypistats.system("pillow"))
     # print(pypistats.system("pillow", os="darwin", output="table"))

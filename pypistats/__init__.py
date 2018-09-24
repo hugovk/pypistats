@@ -14,7 +14,9 @@ __version__ = version.__version__
 BASE_URL = "https://pypistats.org/api/"
 
 
-def pypi_stats_api(endpoint, params=None, output="table"):
+def pypi_stats_api(
+    endpoint, params=None, output="table", start_date=None, end_date=None
+):
     """Call the API and return JSON"""
     if params:
         params = "?" + params
@@ -29,11 +31,33 @@ def pypi_stats_api(endpoint, params=None, output="table"):
 
     res = r.json()
 
+    if start_date or end_date:
+        res["data"] = _filter(res["data"], start_date, end_date)
+
     if output == "json":
         return res
 
     data = res["data"]
     return _tabulate(data)
+
+
+def _filter(data, start_date, end_date):
+    """Only return data with dates between start_date and end_date"""
+    temp_data = []
+    if start_date:
+        for row in data:
+            if "date" in row and row["date"] >= start_date:
+                temp_data.append(row)
+        data = temp_data
+
+    temp_data = []
+    if end_date:
+        for row in data:
+            if "date" in row and row["date"] <= end_date:
+                temp_data.append(row)
+        data = temp_data
+
+    return data
 
 
 def _tabulate(data):
