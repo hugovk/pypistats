@@ -98,7 +98,7 @@ class TestPypiStats(unittest.TestCase):
         version = 3
 
         # Act
-        param = pypistats._paramify("version", 3)
+        param = pypistats._paramify("version", version)
 
         # Assert
         self.assertEqual(param, "&version=3")
@@ -108,7 +108,7 @@ class TestPypiStats(unittest.TestCase):
         version = 3.7
 
         # Act
-        param = pypistats._paramify("version", 3.7)
+        param = pypistats._paramify("version", version)
 
         # Assert
         self.assertEqual(param, "&version=3.7")
