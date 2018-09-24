@@ -41,7 +41,7 @@ def pypi_stats_api(
     return _tabulate(data)
 
 
-def _filter(data, start_date, end_date):
+def _filter(data, start_date=None, end_date=None):
     """Only return data with dates between start_date and end_date"""
     temp_data = []
     if start_date:

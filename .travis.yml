@@ -12,11 +12,18 @@ matrix:
 
 install:
  - pip install -U pip
- - pip install -U flake8
+ - pip install -U flake8 pytest pytest-cov
  - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then pip install -U black; fi
  - pip install -e .
 
 script:
+ # Unit tests
+ - pytest --cov pypistats
+
  # Static analysis
  - flake8 --statistics --count
  - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then black --check --diff .; fi
+
+after_success:
+  - coverage report
+  - pip install -U codecov && codecov
