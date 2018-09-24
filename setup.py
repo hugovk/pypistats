@@ -21,8 +21,6 @@ setup(
     keywords=["PyPI", "downloads", "statistics", "stats", "BigQuery"],
     packages=find_packages(),
     install_requires=["pytablewriter>=0.32.0", "requests"],
-    setup_requires=["pytest-runner"],
-    tests_require=["pytest"],
     python_requires=">=3.6",
     classifiers=[
         "Development Status :: 3 - Alpha",
