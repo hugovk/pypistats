@@ -15,7 +15,7 @@ BASE_URL = "https://pypistats.org/api/"
 
 
 def pypi_stats_api(
-    endpoint, params=None, output="table", start_date=None, end_date=None, total=False
+    endpoint, params=None, output="table", start_date=None, end_date=None, total=True
 ):
     """Call the API and return JSON"""
     if params:
