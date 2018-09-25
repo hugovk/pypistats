@@ -15,7 +15,7 @@ BASE_URL = "https://pypistats.org/api/"
 
 
 def pypi_stats_api(
-    endpoint, params=None, output="table", start_date=None, end_date=None, total=False
+    endpoint, params=None, output="table", start_date=None, end_date=None, total=True
 ):
     """Call the API and return JSON"""
     if params:
@@ -65,6 +65,11 @@ def _filter(data, start_date=None, end_date=None):
 
 def _total(data):
     """Sum all downloads per category, regardless of date"""
+
+    # Only sum lists of dicts, not a single dict
+    if isinstance(data, dict):
+        return data
+
     totalled = {}
     for row in data:
         try:
@@ -89,7 +94,7 @@ def _tabulate(data):
         header_list = list(data.keys())
         writer.value_matrix = [data]
     elif isinstance(data, list):
-        header_list = list(set().union(*(d.keys() for d in data)))
+        header_list = sorted(set().union(*(d.keys() for d in data)))
         writer.value_matrix = data
 
     # Move downloads last
