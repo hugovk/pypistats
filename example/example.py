@@ -41,7 +41,7 @@ if __name__ == "__main__":
     # )
     # print(
     #     pypistats.python_minor(
-    #         "pillow", start_date="2018-08-01", end_date="2018-08-31", aggregate=True
+    #         "pillow", start_date="2018-08-01", end_date="2018-08-31", total=True
     #     )
     # )
 
