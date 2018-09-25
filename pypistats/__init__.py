@@ -89,7 +89,7 @@ def _tabulate(data):
         header_list = list(data.keys())
         writer.value_matrix = [data]
     elif isinstance(data, list):
-        header_list = list(set().union(*(d.keys() for d in data)))
+        header_list = sorted(set().union(*(d.keys() for d in data)))
         writer.value_matrix = data
 
     # Move downloads last
