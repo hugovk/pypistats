@@ -20,6 +20,7 @@ setup(
     license="MIT",
     keywords=["PyPI", "downloads", "statistics", "stats", "BigQuery"],
     packages=find_packages(),
+    entry_points={"console_scripts": ["pypistats = pypistats.cli:main"]},
     install_requires=["pytablewriter>=0.32.0", "requests"],
     python_requires=">=3.6",
     classifiers=[
