@@ -4,6 +4,9 @@
 CLI with subcommands for pypistats
 """
 import argparse
+from datetime import date
+
+from dateutil.relativedelta import relativedelta
 
 import pypistats
 
@@ -65,6 +68,7 @@ def recent(args):
         argument("-m", "--mirrors", choices=("true", "false", "with", "without")),
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
+        argument("-l", "--last-month", action="store_true"),
     ]
 )
 def overall(args):
@@ -86,6 +90,7 @@ def overall(args):
         argument("-v", "--version", help="e.g. 2 or 3"),
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
+        argument("-l", "--last-month", action="store_true"),
     ]
 )
 def python_major(args):
@@ -105,6 +110,7 @@ def python_major(args):
         argument("-v", "--version", help="e.g. 2.7 or 3.6"),
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
+        argument("-l", "--last-month", action="store_true"),
     ]
 )
 def python_minor(args):
@@ -124,6 +130,7 @@ def python_minor(args):
         argument("-o", "--os", help="e.g. windows, linux, darwin or other"),
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
+        argument("-l", "--last-month", action="store_true"),
     ]
 )
 def system(args):
@@ -134,11 +141,23 @@ def system(args):
     )
 
 
+def _last_month():
+    """Helper to return start_date and end_date of the previous month as yyyy-mm-dd"""
+    today = date.today()
+    d = today - relativedelta(months=1)
+    first = date(d.year, d.month, 1)
+    last = date(today.year, today.month, 1) - relativedelta(days=1)
+    return str(first), str(last)
+
+
 def main():
     args = cli.parse_args()
     if args.subcommand is None:
         cli.print_help()
     else:
+        if args.last_month:
+            args.start_date, args.end_date = _last_month()
+
         args.func(args)
 
 
