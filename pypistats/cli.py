@@ -155,7 +155,7 @@ def main():
     if args.subcommand is None:
         cli.print_help()
     else:
-        if args.last_month:
+        if hasattr(args, "last_month") and args.last_month:
             args.start_date, args.end_date = _last_month()
 
         args.func(args)
