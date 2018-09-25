@@ -63,32 +63,75 @@ def recent(args):
     [
         argument("package"),
         argument("-m", "--mirrors", choices=("true", "false", "with", "without")),
+        argument("-sd", "--start-date", help="yyyy-mm-dd"),
+        argument("-ed", "--end-date", help="yyyy-mm-dd"),
     ]
 )
 def overall(args):
     if args.mirrors in ["with", "without"]:
         args.mirrors = args.mirrors == "with"
-    print(pypistats.overall(args.package, mirrors=args.mirrors))
-
-
-@subcommand([argument("package"), argument("-v", "--version", help="e.g. 2 or 3")])
-def python_major(args):
-    print(pypistats.python_major(args.package, version=args.version))
-
-
-@subcommand([argument("package"), argument("-v", "--version", help="e.g. 2.7 or 3.6")])
-def python_minor(args):
-    print(pypistats.python_minor(args.package, version=args.version))
+    print(
+        pypistats.overall(
+            args.package,
+            mirrors=args.mirrors,
+            start_date=args.start_date,
+            end_date=args.end_date,
+        )
+    )
 
 
 @subcommand(
     [
         argument("package"),
-        argument("-o", "--os", help="e.g. windows, linux, darwin or othe"),
+        argument("-v", "--version", help="e.g. 2 or 3"),
+        argument("-sd", "--start-date", help="yyyy-mm-dd"),
+        argument("-ed", "--end-date", help="yyyy-mm-dd"),
+    ]
+)
+def python_major(args):
+    print(
+        pypistats.python_major(
+            args.package,
+            version=args.version,
+            start_date=args.start_date,
+            end_date=args.end_date,
+        )
+    )
+
+
+@subcommand(
+    [
+        argument("package"),
+        argument("-v", "--version", help="e.g. 2.7 or 3.6"),
+        argument("-sd", "--start-date", help="yyyy-mm-dd"),
+        argument("-ed", "--end-date", help="yyyy-mm-dd"),
+    ]
+)
+def python_minor(args):
+    print(
+        pypistats.python_minor(
+            args.package,
+            version=args.version,
+            start_date=args.start_date,
+            end_date=args.end_date,
+        )
+    )
+
+
+@subcommand(
+    [
+        argument("package"),
+        argument("-o", "--os", help="e.g. windows, linux, darwin or other"),
+        argument("-sd", "--start-date", help="yyyy-mm-dd"),
+        argument("-ed", "--end-date", help="yyyy-mm-dd"),
     ]
 )
 def system(args):
-    print(pypistats.system(args.package, os=args.os))
+    print(
+        pypistats.system(
+            args.package, os=args.os, start_date=args.start_date, end_date=args.end_date
+        )
+    )
 
 
 def main():
