@@ -86,11 +86,16 @@ def _tabulate(data):
     writer.margin = 1
 
     if isinstance(data, dict):
-        writer.header_list = list(data.keys())
+        header_list = list(data.keys())
         writer.value_matrix = [data]
     elif isinstance(data, list):
-        writer.header_list = list(set().union(*(d.keys() for d in data)))
+        header_list = list(set().union(*(d.keys() for d in data)))
         writer.value_matrix = data
+
+    # Move downloads last
+    header_list.append("downloads")
+    header_list.remove("downloads")
+    writer.header_list = header_list
 
     return writer.dumps()
 
