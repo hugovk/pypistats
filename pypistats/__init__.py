@@ -15,7 +15,7 @@ BASE_URL = "https://pypistats.org/api/"
 
 
 def pypi_stats_api(
-    endpoint, params=None, output="table", start_date=None, end_date=None
+    endpoint, params=None, output="table", start_date=None, end_date=None, total=False
 ):
     """Call the API and return JSON"""
     if params:
@@ -33,6 +33,9 @@ def pypi_stats_api(
 
     if start_date or end_date:
         res["data"] = _filter(res["data"], start_date, end_date)
+
+    if total:
+        res["data"] = _total(res["data"])
 
     if output == "json":
         return res
@@ -60,22 +63,45 @@ def _filter(data, start_date=None, end_date=None):
     return data
 
 
+def _total(data):
+    """Sum all downloads per category, regardless of date"""
+    totalled = {}
+    for row in data:
+        try:
+            totalled[row["category"]] += row["downloads"]
+        except KeyError:
+            totalled[row["category"]] = row["downloads"]
+
+    data = []
+    for k, v in totalled.items():
+        data.append({"category": k, "downloads": v})
+
+    return data
+
+
 def _tabulate(data):
+    """Return data in table"""
+
     writer = pytablewriter.MarkdownTableWriter()
     writer.margin = 1
 
     if isinstance(data, dict):
-        writer.header_list = list(data.keys())
+        header_list = list(data.keys())
         writer.value_matrix = [data]
     elif isinstance(data, list):
-        writer.header_list = list(set().union(*(d.keys() for d in data)))
+        header_list = list(set().union(*(d.keys() for d in data)))
         writer.value_matrix = data
+
+    # Move downloads last
+    header_list.append("downloads")
+    header_list.remove("downloads")
+    writer.header_list = header_list
 
     return writer.dumps()
 
 
 def _paramify(param_name, param_value):
-    """If param_value, append &param_name=param_value to params"""
+    """If param_value, return &param_name=param_value"""
     if isinstance(param_value, bool):
         param_value = str(param_value).lower()
 

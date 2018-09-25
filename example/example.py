@@ -39,6 +39,11 @@ if __name__ == "__main__":
     #         "pillow", output="json", start_date="2018-09-20", end_date="2018-09-22"
     #     )
     # )
+    # print(
+    #     pypistats.python_minor(
+    #         "pillow", start_date="2018-08-01", end_date="2018-08-31", total=True
+    #     )
+    # )
 
     # print(pypistats.system("pillow"))
     # print(pypistats.system("pillow", os="darwin", output="table"))

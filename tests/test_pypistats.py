@@ -112,3 +112,15 @@ class TestPypiStats(unittest.TestCase):
 
         # Assert
         self.assertEqual(param, "&version=3.7")
+
+    def test__total(self):
+        # Arrange
+        from data.python_minor import data as input
+
+        # Act
+        output = pypistats._total(input)
+
+        # Assert
+        self.assertEqual(len(output), 12)
+        self.assertEqual(output[0]["category"], "2.4")
+        self.assertEqual(output[0]["downloads"], 9)
