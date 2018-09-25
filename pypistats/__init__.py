@@ -15,7 +15,13 @@ BASE_URL = "https://pypistats.org/api/"
 
 
 def pypi_stats_api(
-    endpoint, params=None, output="table", start_date=None, end_date=None, total=True
+    endpoint,
+    params=None,
+    output="table",
+    start_date=None,
+    end_date=None,
+    sort=True,
+    total=True,
 ):
     """Call the API and return JSON"""
     if params:
@@ -40,6 +46,10 @@ def pypi_stats_api(
     if output == "json":
         return res
 
+    # Only sort for table
+    if sort:
+        res["data"] = _sort(res["data"])
+
     data = res["data"]
     return _tabulate(data)
 
@@ -60,6 +70,17 @@ def _filter(data, start_date=None, end_date=None):
                 temp_data.append(row)
         data = temp_data
 
+    return data
+
+
+def _sort(data):
+    """Sort by downloads"""
+
+    # Only sum lists of dicts, not a single dict
+    if isinstance(data, dict):
+        return data
+
+    data = sorted(data, key=lambda k: k["downloads"], reverse=True)
     return data
 
 

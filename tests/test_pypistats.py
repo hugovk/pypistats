@@ -7,6 +7,19 @@ import unittest
 
 import pypistats
 
+SAMPLE_DATA = [
+    {"category": "2.6", "date": "2018-08-15", "downloads": 51},
+    {"category": "2.7", "date": "2018-08-15", "downloads": 63749},
+    {"category": "3.2", "date": "2018-08-15", "downloads": 2},
+    {"category": "3.3", "date": "2018-08-15", "downloads": 40},
+    {"category": "3.4", "date": "2018-08-15", "downloads": 6095},
+    {"category": "3.5", "date": "2018-08-15", "downloads": 20358},
+    {"category": "3.6", "date": "2018-08-15", "downloads": 35274},
+    {"category": "3.7", "date": "2018-08-15", "downloads": 6595},
+    {"category": "3.8", "date": "2018-08-15", "downloads": 3},
+    {"category": "null", "date": "2018-08-15", "downloads": 1019},
+]
+
 
 class TestPypiStats(unittest.TestCase):
     def test__filter_no_filters_no_change(self):
@@ -115,18 +128,7 @@ class TestPypiStats(unittest.TestCase):
 
     def test__tabulate(self):
         # Arrange
-        data = [
-            {"category": "2.6", "date": "2018-08-15", "downloads": 51},
-            {"category": "2.7", "date": "2018-08-15", "downloads": 63749},
-            {"category": "3.2", "date": "2018-08-15", "downloads": 2},
-            {"category": "3.3", "date": "2018-08-15", "downloads": 40},
-            {"category": "3.4", "date": "2018-08-15", "downloads": 6095},
-            {"category": "3.5", "date": "2018-08-15", "downloads": 20358},
-            {"category": "3.6", "date": "2018-08-15", "downloads": 35274},
-            {"category": "3.7", "date": "2018-08-15", "downloads": 6595},
-            {"category": "3.8", "date": "2018-08-15", "downloads": 3},
-            {"category": "null", "date": "2018-08-15", "downloads": 1019},
-        ]
+        data = SAMPLE_DATA
         expected_output = """
 | category |    date    | downloads |
 |----------|------------|----------:|
@@ -147,6 +149,38 @@ class TestPypiStats(unittest.TestCase):
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
+
+    def test__sort(self):
+        # Arrange
+        data = SAMPLE_DATA
+        expected_output = [
+            {"category": "2.7", "date": "2018-08-15", "downloads": 63749},
+            {"category": "3.6", "date": "2018-08-15", "downloads": 35274},
+            {"category": "3.5", "date": "2018-08-15", "downloads": 20358},
+            {"category": "3.7", "date": "2018-08-15", "downloads": 6595},
+            {"category": "3.4", "date": "2018-08-15", "downloads": 6095},
+            {"category": "null", "date": "2018-08-15", "downloads": 1019},
+            {"category": "2.6", "date": "2018-08-15", "downloads": 51},
+            {"category": "3.3", "date": "2018-08-15", "downloads": 40},
+            {"category": "3.8", "date": "2018-08-15", "downloads": 3},
+            {"category": "3.2", "date": "2018-08-15", "downloads": 2},
+        ]
+
+        # Act
+        output = pypistats._sort(data)
+
+        # Assert
+        self.assertEqual(output, expected_output)
+
+    def test__sort_recent(self):
+        # Arrange
+        data = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
+
+        # Act
+        output = pypistats._sort(data)
+
+        # Assert
+        self.assertEqual(output, data)
 
     def test__total(self):
         # Arrange
