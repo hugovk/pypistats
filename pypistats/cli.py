@@ -56,10 +56,18 @@ def subcommand(args=None, parent=subparsers):
 
 
 @subcommand(
-    [argument("package"), argument("-p", "--period", choices=("day", "week", "month"))]
+    [
+        argument("package"),
+        argument("-p", "--period", choices=("day", "week", "month")),
+        argument("-j", "--json", action="store_true", help="Output JSON"),
+    ]
 )
 def recent(args):
-    print(pypistats.recent(args.package, period=args.period))
+    print(
+        pypistats.recent(
+            args.package, period=args.period, output="json" if args.json else "table"
+        )
+    )
 
 
 @subcommand(
@@ -69,6 +77,7 @@ def recent(args):
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
         argument("-l", "--last-month", action="store_true"),
+        argument("-j", "--json", action="store_true", help="Output JSON"),
     ]
 )
 def overall(args):
@@ -80,6 +89,7 @@ def overall(args):
             mirrors=args.mirrors,
             start_date=args.start_date,
             end_date=args.end_date,
+            output="json" if args.json else "table",
         )
     )
 
@@ -91,6 +101,7 @@ def overall(args):
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
         argument("-l", "--last-month", action="store_true"),
+        argument("-j", "--json", action="store_true", help="Output JSON"),
     ]
 )
 def python_major(args):
@@ -100,6 +111,7 @@ def python_major(args):
             version=args.version,
             start_date=args.start_date,
             end_date=args.end_date,
+            output="json" if args.json else "table",
         )
     )
 
@@ -111,15 +123,18 @@ def python_major(args):
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
         argument("-l", "--last-month", action="store_true"),
+        argument("-j", "--json", action="store_true", help="Output JSON"),
     ]
 )
 def python_minor(args):
+
     print(
         pypistats.python_minor(
             args.package,
             version=args.version,
             start_date=args.start_date,
             end_date=args.end_date,
+            output="json" if args.json else "table",
         )
     )
 
@@ -131,12 +146,17 @@ def python_minor(args):
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
         argument("-l", "--last-month", action="store_true"),
+        argument("-j", "--json", action="store_true", help="Output JSON"),
     ]
 )
 def system(args):
     print(
         pypistats.system(
-            args.package, os=args.os, start_date=args.start_date, end_date=args.end_date
+            args.package,
+            os=args.os,
+            start_date=args.start_date,
+            end_date=args.end_date,
+            output="json" if args.json else "table",
         )
     )
 
