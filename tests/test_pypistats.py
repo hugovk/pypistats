@@ -159,3 +159,13 @@ class TestPypiStats(unittest.TestCase):
         self.assertEqual(len(output), 12)
         self.assertEqual(output[0]["category"], "2.4")
         self.assertEqual(output[0]["downloads"], 9)
+
+    def test__total_recent(self):
+        # Arrange
+        data = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
+
+        # Act
+        output = pypistats._total(data)
+
+        # Assert
+        self.assertEqual(output, data)
