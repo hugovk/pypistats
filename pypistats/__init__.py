@@ -65,6 +65,11 @@ def _filter(data, start_date=None, end_date=None):
 
 def _total(data):
     """Sum all downloads per category, regardless of date"""
+
+    # Only sum lists of dicts, not a single dict
+    if isinstance(data, dict):
+        return data
+
     totalled = {}
     for row in data:
         try:
