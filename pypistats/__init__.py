@@ -4,8 +4,8 @@
 Python interface to PyPI Stats API
 https://pypistats.org/api
 """
-import pytablewriter
 import requests
+from pytablewriter import Align, MarkdownTableWriter
 
 from . import version
 
@@ -47,12 +47,13 @@ def pypi_stats_api(
         return res
 
     # These only for table
-    if sort:
-        res["data"] = _sort(res["data"])
-
-    res["data"] = _grand_total(res["data"])
-
     data = res["data"]
+    if sort:
+        data = _sort(data)
+
+    data = _percent(data)
+    data = _grand_total(data)
+
     return _tabulate(data)
 
 
@@ -121,10 +122,25 @@ def _grand_total(data):
     return data
 
 
+def _percent(data):
+    """Add a percent column"""
+
+    # Only for lists of dicts, not a single dict
+    if isinstance(data, dict):
+        return data
+
+    grand_total = sum(row["downloads"] for row in data)
+
+    for row in data:
+        row["percent"] = "{:.2%}".format(row["downloads"] / grand_total)
+
+    return data
+
+
 def _tabulate(data):
     """Return data in table"""
 
-    writer = pytablewriter.MarkdownTableWriter()
+    writer = MarkdownTableWriter()
     writer.margin = 1
 
     if isinstance(data, dict):
