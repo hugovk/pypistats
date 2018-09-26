@@ -46,9 +46,11 @@ def pypi_stats_api(
     if output == "json":
         return res
 
-    # Only sort for table
+    # These only for table
     if sort:
         res["data"] = _sort(res["data"])
+
+    res["data"] = _grand_total(res["data"])
 
     data = res["data"]
     return _tabulate(data)
@@ -76,7 +78,7 @@ def _filter(data, start_date=None, end_date=None):
 def _sort(data):
     """Sort by downloads"""
 
-    # Only sum lists of dicts, not a single dict
+    # Only for lists of dicts, not a single dict
     if isinstance(data, dict):
         return data
 
@@ -87,7 +89,7 @@ def _sort(data):
 def _total(data):
     """Sum all downloads per category, regardless of date"""
 
-    # Only sum lists of dicts, not a single dict
+    # Only for lists of dicts, not a single dict
     if isinstance(data, dict):
         return data
 
@@ -101,6 +103,20 @@ def _total(data):
     data = []
     for k, v in totalled.items():
         data.append({"category": k, "downloads": v})
+
+    return data
+
+
+def _grand_total(data):
+    """Add a grand total row"""
+
+    # Only for lists of dicts, not a single dict
+    if isinstance(data, dict):
+        return data
+
+    grand_total = sum(row["downloads"] for row in data)
+    new_row = {"category": "Total", "downloads": grand_total}
+    data.append(new_row)
 
     return data
 

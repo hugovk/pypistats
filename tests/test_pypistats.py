@@ -202,3 +202,26 @@ class TestPypiStats(unittest.TestCase):
 
         # Assert
         self.assertEqual(output, data)
+
+    def test__grand_total(self):
+        # Arrange
+        data = copy.deepcopy(PYTHON_MINOR_DATA)
+        original_len = len(data)
+
+        # Act
+        output = pypistats._grand_total(data)
+
+        # Assert
+        self.assertEqual(len(output), original_len + 1)
+        self.assertEqual(output[-1]["category"], "Total")
+        self.assertEqual(output[-1]["downloads"], 9355317)
+
+    def test__grand_total_recent(self):
+        # Arrange
+        data = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
+
+        # Act
+        output = pypistats._grand_total(data)
+
+        # Assert
+        self.assertEqual(output, data)
