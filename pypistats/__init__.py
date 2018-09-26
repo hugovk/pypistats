@@ -115,6 +115,10 @@ def _grand_total(data):
     if isinstance(data, dict):
         return data
 
+    # No need when there's only one row
+    if len(data) == 1:
+        return data
+
     grand_total = sum(row["downloads"] for row in data)
     new_row = {"category": "Total", "downloads": grand_total}
     data.append(new_row)
@@ -129,7 +133,7 @@ def _percent(data):
     if isinstance(data, dict):
         return data
 
-    # No need for a total when there's only one row
+    # No need when there's only one row
     if len(data) == 1:
         return data
 
