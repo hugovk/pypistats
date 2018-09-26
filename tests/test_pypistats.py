@@ -3,9 +3,11 @@
 """
 Unit tests for pypistats
 """
+import copy
 import unittest
 
 import pypistats
+from data.python_minor import data as PYTHON_MINOR_DATA
 
 SAMPLE_DATA = [
     {"category": "2.6", "date": "2018-08-15", "downloads": 51},
@@ -24,7 +26,7 @@ SAMPLE_DATA = [
 class TestPypiStats(unittest.TestCase):
     def test__filter_no_filters_no_change(self):
         # Arrange
-        from data.python_minor import data
+        data = copy.deepcopy(PYTHON_MINOR_DATA)
 
         # Act
         output = pypistats._filter(data)
@@ -34,8 +36,7 @@ class TestPypiStats(unittest.TestCase):
 
     def test__filter_start_date(self):
         # Arrange
-        from data.python_minor import data
-
+        data = copy.deepcopy(PYTHON_MINOR_DATA)
         start_date = "2018-09-22"
 
         # Act
@@ -48,8 +49,7 @@ class TestPypiStats(unittest.TestCase):
 
     def test__filter_end_date(self):
         # Arrange
-        from data.python_minor import data
-
+        data = copy.deepcopy(PYTHON_MINOR_DATA)
         end_date = "2018-04-22"
 
         # Act
@@ -62,8 +62,7 @@ class TestPypiStats(unittest.TestCase):
 
     def test__filter_start_and_end_date(self):
         # Arrange
-        from data.python_minor import data
-
+        data = copy.deepcopy(PYTHON_MINOR_DATA)
         start_date = "2018-09-01"
         end_date = "2018-09-11"
 
@@ -184,7 +183,7 @@ class TestPypiStats(unittest.TestCase):
 
     def test__total(self):
         # Arrange
-        from data.python_minor import data
+        data = copy.deepcopy(PYTHON_MINOR_DATA)
 
         # Act
         output = pypistats._total(data)
