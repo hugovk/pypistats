@@ -127,7 +127,7 @@ class TestPypiStats(unittest.TestCase):
 
     def test__tabulate(self):
         # Arrange
-        data = SAMPLE_DATA
+        data = copy.deepcopy(SAMPLE_DATA)
         expected_output = """
 | category |    date    | downloads |
 |----------|------------|----------:|
@@ -151,7 +151,7 @@ class TestPypiStats(unittest.TestCase):
 
     def test__sort(self):
         # Arrange
-        data = SAMPLE_DATA
+        data = copy.deepcopy(SAMPLE_DATA)
         expected_output = [
             {"category": "2.7", "date": "2018-08-15", "downloads": 63749},
             {"category": "3.6", "date": "2018-08-15", "downloads": 35274},
