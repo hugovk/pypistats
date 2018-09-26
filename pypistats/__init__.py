@@ -129,6 +129,10 @@ def _percent(data):
     if isinstance(data, dict):
         return data
 
+    # No need for a total when there's only one row
+    if len(data) == 1:
+        return data
+
     grand_total = sum(row["downloads"] for row in data)
 
     for row in data:
