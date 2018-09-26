@@ -22,6 +22,7 @@ SAMPLE_DATA = [
     {"category": "null", "date": "2018-08-15", "downloads": 1019},
 ]
 SAMPLE_DATA_ONE_ROW = [{"category": "with_mirrors", "downloads": 11497042}]
+SAMPLE_DATA_RECENT = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
 
 
 class TestPypiStats(unittest.TestCase):
@@ -174,13 +175,13 @@ class TestPypiStats(unittest.TestCase):
 
     def test__sort_recent(self):
         # Arrange
-        data = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
+        data = copy.deepcopy(SAMPLE_DATA_RECENT)
 
         # Act
         output = pypistats._sort(data)
 
         # Assert
-        self.assertEqual(output, data)
+        self.assertEqual(output, SAMPLE_DATA_RECENT)
 
     def test__total(self):
         # Arrange
@@ -196,13 +197,13 @@ class TestPypiStats(unittest.TestCase):
 
     def test__total_recent(self):
         # Arrange
-        data = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
+        data = copy.deepcopy(SAMPLE_DATA_RECENT)
 
         # Act
         output = pypistats._total(data)
 
         # Assert
-        self.assertEqual(output, data)
+        self.assertEqual(output, SAMPLE_DATA_RECENT)
 
     def test__grand_total(self):
         # Arrange
@@ -229,13 +230,13 @@ class TestPypiStats(unittest.TestCase):
 
     def test__grand_total_recent(self):
         # Arrange
-        data = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
+        data = copy.deepcopy(SAMPLE_DATA_RECENT)
 
         # Act
         output = pypistats._grand_total(data)
 
         # Assert
-        self.assertEqual(output, data)
+        self.assertEqual(output, SAMPLE_DATA_RECENT)
 
     def test__percent(self):
         # Arrange
@@ -270,10 +271,10 @@ class TestPypiStats(unittest.TestCase):
 
     def test__percent_recent(self):
         # Arrange
-        data = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
+        data = copy.deepcopy(SAMPLE_DATA_RECENT)
 
         # Act
         output = pypistats._percent(data)
 
         # Assert
-        self.assertEqual(output, data)
+        self.assertEqual(output, SAMPLE_DATA_RECENT)
