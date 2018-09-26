@@ -155,6 +155,13 @@ def _tabulate(data):
     header_list.remove("downloads")
     writer.header_list = header_list
 
+    # Custom alignment
+    writer.align_list = [Align.AUTO] * len(header_list)
+    try:
+        writer.align_list[header_list.index("percent")] = Align.RIGHT
+    except ValueError:
+        pass
+
     return writer.dumps()
 
 
