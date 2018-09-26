@@ -127,7 +127,7 @@ class TestPypiStats(unittest.TestCase):
 
     def test__tabulate(self):
         # Arrange
-        data = SAMPLE_DATA
+        data = copy.deepcopy(SAMPLE_DATA)
         expected_output = """
 | category |    date    | downloads |
 |----------|------------|----------:|
@@ -151,7 +151,7 @@ class TestPypiStats(unittest.TestCase):
 
     def test__sort(self):
         # Arrange
-        data = SAMPLE_DATA
+        data = copy.deepcopy(SAMPLE_DATA)
         expected_output = [
             {"category": "2.7", "date": "2018-08-15", "downloads": 63749},
             {"category": "3.6", "date": "2018-08-15", "downloads": 35274},
@@ -222,6 +222,37 @@ class TestPypiStats(unittest.TestCase):
 
         # Act
         output = pypistats._grand_total(data)
+
+        # Assert
+        self.assertEqual(output, data)
+
+    def test__percent(self):
+        # Arrange
+        data = [
+            {"category": "2.7", "downloads": 63749},
+            {"category": "3.6", "downloads": 35274},
+            {"category": "2.6", "downloads": 51},
+            {"category": "3.2", "downloads": 2},
+        ]
+        expected_output = [
+            {"category": "2.7", "percent": "64.34%", "downloads": 63749},
+            {"category": "3.6", "percent": "35.60%", "downloads": 35274},
+            {"category": "2.6", "percent": "0.05%", "downloads": 51},
+            {"category": "3.2", "percent": "0.00%", "downloads": 2},
+        ]
+
+        # Act
+        output = pypistats._percent(data)
+
+        # Assert
+        self.assertEqual(output, expected_output)
+
+    def test__percent_recent(self):
+        # Arrange
+        data = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
+
+        # Act
+        output = pypistats._percent(data)
 
         # Assert
         self.assertEqual(output, data)
