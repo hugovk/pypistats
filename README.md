@@ -19,35 +19,32 @@ pip install .
 
 ## Example use
 
-Return values are the JSON responses documented in the API: 
+Return values are from the JSON responses documented in the API: 
 https://pypistats.org/api/
 
 ```python
 import pypistats
 from pprint import pprint
 
-# Initialise the API
-api = pypistats.PyPiStats()
-
 # Call the API
-print(api.recent("pillow"))
-print(api.recent("pillow", "day", output="table"))
-pprint(api.recent("pillow", "week", output="json"))
-print(api.recent("pillow", "month"))
+print(pypistats.recent("pillow"))
+print(pypistats.recent("pillow", "day", output="table"))
+pprint(pypistats.recent("pillow", "week", output="json"))
+print(pypistats.recent("pillow", "month"))
 
-print(api.overall("pillow"))
-print(api.overall("pillow", mirrors=True, output="table"))
-pprint(api.overall("pillow", mirrors=False, output="json"))
+print(pypistats.overall("pillow"))
+print(pypistats.overall("pillow", mirrors=True, output="table"))
+pprint(pypistats.overall("pillow", mirrors=False, output="json"))
 
-print(api.python_major("pillow"))
-print(api.python_major("pillow", version=2, output="table"))
-pprint(api.python_major("pillow", version="3", output="json"))
+print(pypistats.python_major("pillow"))
+print(pypistats.python_major("pillow", version=2, output="table"))
+pprint(pypistats.python_major("pillow", version="3", output="json"))
 
-print(api.python_minor("pillow"))
-print(api.python_minor("pillow", version=2.7, output="table"))
-pprint(api.python_minor("pillow", version="3.7", output="json"))
+print(pypistats.python_minor("pillow"))
+print(pypistats.python_minor("pillow", version=2.7, output="table"))
+pprint(pypistats.python_minor("pillow", version="3.7", output="json"))
 
-print(api.system("pillow"))
-print(api.system("pillow", os="darwin", output="table"))
-pprint(api.system("pillow", os="linux", output="json"))
+print(pypistats.system("pillow"))
+print(pypistats.system("pillow", os="darwin", output="table"))
+pprint(pypistats.system("pillow", os="linux", output="json"))
 ```
