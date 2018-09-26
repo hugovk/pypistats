@@ -247,6 +247,16 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output, expected_output)
 
+    def test__percent_one_row(self):
+        # Arrange
+        data = [{"category": "2.7", "downloads": 63749}]
+
+        # Act
+        output = pypistats._percent(data)
+
+        # Assert
+        self.assertEqual(output, data)
+
     def test__percent_recent(self):
         # Arrange
         data = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
