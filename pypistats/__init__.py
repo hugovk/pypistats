@@ -5,7 +5,7 @@ Python interface to PyPI Stats API
 https://pypistats.org/api
 """
 import requests
-from pytablewriter import Align, MarkdownTableWriter
+from pytablewriter import Align, Format, MarkdownTableWriter
 
 from . import version
 
@@ -163,10 +163,17 @@ def _tabulate(data):
     header_list.remove("downloads")
     writer.header_list = header_list
 
-    # Custom alignment
+    # Custom alignment and format
     writer.align_list = [Align.AUTO] * len(header_list)
+    writer.format_list = [Format.NONE] * len(header_list)
+
     try:
         writer.align_list[header_list.index("percent")] = Align.RIGHT
+    except ValueError:
+        pass
+
+    try:
+        writer.format_list[header_list.index("downloads")] = Format.THOUSAND_SEPARATOR
     except ValueError:
         pass
 
