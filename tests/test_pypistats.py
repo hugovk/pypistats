@@ -134,15 +134,15 @@ class TestPypiStats(unittest.TestCase):
 | category |    date    | downloads |
 |----------|------------|----------:|
 |      2.6 | 2018-08-15 |        51 |
-|      2.7 | 2018-08-15 |     63749 |
+|      2.7 | 2018-08-15 |    63,749 |
 |      3.2 | 2018-08-15 |         2 |
 |      3.3 | 2018-08-15 |        40 |
-|      3.4 | 2018-08-15 |      6095 |
-|      3.5 | 2018-08-15 |     20358 |
-|      3.6 | 2018-08-15 |     35274 |
-|      3.7 | 2018-08-15 |      6595 |
+|      3.4 | 2018-08-15 |     6,095 |
+|      3.5 | 2018-08-15 |    20,358 |
+|      3.6 | 2018-08-15 |    35,274 |
+|      3.7 | 2018-08-15 |     6,595 |
 |      3.8 | 2018-08-15 |         3 |
-| null     | 2018-08-15 |      1019 |
+| null     | 2018-08-15 |     1,019 |
 """
 
         # Act
@@ -278,3 +278,18 @@ class TestPypiStats(unittest.TestCase):
 
         # Assert
         self.assertEqual(output, SAMPLE_DATA_RECENT)
+
+    def test__custom_list(self):
+        # Arrange
+        input_list = [1, 2, 3, 4]
+        special_item = 3
+        default_value = 0
+        special_value = 100
+
+        # Act
+        output = pypistats._custom_list(
+            input_list, special_item, default_value, special_value
+        )
+
+        # Assert
+        self.assertEqual(output, [0, 0, 100, 0])

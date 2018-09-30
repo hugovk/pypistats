@@ -171,6 +171,9 @@ def _last_month():
 
 
 def main():
+    cli.add_argument(
+        "-v", "--version", action="version", version=f"%(prog)s {pypistats.__version__}"
+    )
     args = cli.parse_args()
     if args.subcommand is None:
         cli.print_help()
