@@ -78,6 +78,7 @@ def recent(args):
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
         argument("-l", "--last-month", action="store_true"),
         argument("-j", "--json", action="store_true", help="Output JSON"),
+        argument("-d", "--daily", action="store_true", help="Show daily downloads"),
     ]
 )
 def overall(args):
@@ -90,6 +91,7 @@ def overall(args):
             start_date=args.start_date,
             end_date=args.end_date,
             output="json" if args.json else "table",
+            total=False if args.daily else True,
         )
     )
 
@@ -102,6 +104,7 @@ def overall(args):
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
         argument("-l", "--last-month", action="store_true"),
         argument("-j", "--json", action="store_true", help="Output JSON"),
+        argument("-d", "--daily", action="store_true", help="Show daily downloads"),
     ]
 )
 def python_major(args):
@@ -112,6 +115,7 @@ def python_major(args):
             start_date=args.start_date,
             end_date=args.end_date,
             output="json" if args.json else "table",
+            total=False if args.daily else True,
         )
     )
 
@@ -124,6 +128,7 @@ def python_major(args):
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
         argument("-l", "--last-month", action="store_true"),
         argument("-j", "--json", action="store_true", help="Output JSON"),
+        argument("-d", "--daily", action="store_true", help="Show daily downloads"),
     ]
 )
 def python_minor(args):
@@ -135,6 +140,7 @@ def python_minor(args):
             start_date=args.start_date,
             end_date=args.end_date,
             output="json" if args.json else "table",
+            total=False if args.daily else True,
         )
     )
 
@@ -147,6 +153,7 @@ def python_minor(args):
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
         argument("-l", "--last-month", action="store_true"),
         argument("-j", "--json", action="store_true", help="Output JSON"),
+        argument("-d", "--daily", action="store_true", help="Show daily downloads"),
     ]
 )
 def system(args):
@@ -157,6 +164,7 @@ def system(args):
             start_date=args.start_date,
             end_date=args.end_date,
             output="json" if args.json else "table",
+            total=False if args.daily else True,
         )
     )
 
