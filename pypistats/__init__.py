@@ -28,7 +28,7 @@ def pypi_stats_api(
         params = "?" + params
     else:
         params = ""
-    url = BASE_URL + endpoint + params
+    url = BASE_URL + endpoint.lower() + params
 
     r = requests.get(url)
 
