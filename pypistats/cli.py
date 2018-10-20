@@ -73,9 +73,10 @@ def recent(args):
 @subcommand(
     [
         argument("package"),
-        argument("-m", "--mirrors", choices=("true", "false", "with", "without")),
+        argument("--mirrors", choices=("true", "false", "with", "without")),
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
+        argument("-m", "--month", help="Shortcut for -sd & -ed for a yyyy-mm"),
         argument("-l", "--last-month", action="store_true"),
         argument("-j", "--json", action="store_true", help="Output JSON"),
         argument("-d", "--daily", action="store_true", help="Show daily downloads"),
@@ -99,9 +100,10 @@ def overall(args):
 @subcommand(
     [
         argument("package"),
-        argument("-v", "--version", help="e.g. 2 or 3"),
+        argument("-v", "--version", help="eg. 2 or 3"),
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
+        argument("-m", "--month", help="Shortcut for -sd & -ed for a yyyy-mm"),
         argument("-l", "--last-month", action="store_true"),
         argument("-j", "--json", action="store_true", help="Output JSON"),
         argument("-d", "--daily", action="store_true", help="Show daily downloads"),
@@ -123,9 +125,10 @@ def python_major(args):
 @subcommand(
     [
         argument("package"),
-        argument("-v", "--version", help="e.g. 2.7 or 3.6"),
+        argument("-v", "--version", help="eg. 2.7 or 3.6"),
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
+        argument("-m", "--month", help="Shortcut for -sd & -ed for a yyyy-mm"),
         argument("-l", "--last-month", action="store_true"),
         argument("-j", "--json", action="store_true", help="Output JSON"),
         argument("-d", "--daily", action="store_true", help="Show daily downloads"),
@@ -148,9 +151,10 @@ def python_minor(args):
 @subcommand(
     [
         argument("package"),
-        argument("-o", "--os", help="e.g. windows, linux, darwin or other"),
+        argument("-o", "--os", help="eg. windows, linux, darwin or other"),
         argument("-sd", "--start-date", help="yyyy-mm-dd"),
         argument("-ed", "--end-date", help="yyyy-mm-dd"),
+        argument("-m", "--month", help="Shortcut for -sd & -ed for a yyyy-mm"),
         argument("-l", "--last-month", action="store_true"),
         argument("-j", "--json", action="store_true", help="Output JSON"),
         argument("-d", "--daily", action="store_true", help="Show daily downloads"),
@@ -169,13 +173,19 @@ def system(args):
     )
 
 
+def _month(yyyy_mm):
+    """Helper to return start_date and end_date of a month as yyyy-mm-dd"""
+    year, month = map(int, yyyy_mm.split("-"))
+    first = date(year, month, 1)
+    last = date(year, month + 1, 1) - relativedelta(days=1)
+    return str(first), str(last)
+
+
 def _last_month():
     """Helper to return start_date and end_date of the previous month as yyyy-mm-dd"""
     today = date.today()
     d = today - relativedelta(months=1)
-    first = date(d.year, d.month, 1)
-    last = date(today.year, today.month, 1) - relativedelta(days=1)
-    return str(first), str(last)
+    return _month(d.isoformat()[:7])
 
 
 def main():
@@ -186,6 +196,8 @@ def main():
     if args.subcommand is None:
         cli.print_help()
     else:
+        if hasattr(args, "month") and args.month:
+            args.start_date, args.end_date = _month(args.month)
         if hasattr(args, "last_month") and args.last_month:
             args.start_date, args.end_date = _last_month()
 
