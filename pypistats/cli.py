@@ -185,9 +185,7 @@ def _last_month():
     """Helper to return start_date and end_date of the previous month as yyyy-mm-dd"""
     today = date.today()
     d = today - relativedelta(months=1)
-    first = date(d.year, d.month, 1)
-    last = date(today.year, today.month, 1) - relativedelta(days=1)
-    return str(first), str(last)
+    return _month(d.isoformat()[:7])
 
 
 def main():
