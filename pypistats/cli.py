@@ -19,7 +19,7 @@ def argument(*name_or_flags, **kwargs):
     subcommand decorator.
 
     """
-    return (list(name_or_flags), kwargs)
+    return list(name_or_flags), kwargs
 
 
 def subcommand(args=None, parent=subparsers):
