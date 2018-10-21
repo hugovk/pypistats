@@ -58,7 +58,12 @@ def subcommand(args=None, parent=subparsers):
 arg_start_date = argument("-sd", "--start-date", help="yyyy-mm-dd")
 arg_end_date = argument("-ed", "--end-date", help="yyyy-mm-dd")
 arg_month = argument("-m", "--month", help="Shortcut for -sd & -ed for a yyyy-mm")
-arg_last_month = argument("-l", "--last-month", action="store_true")
+arg_last_month = argument(
+    "-l",
+    "--last-month",
+    help="Shortcut for -sd & -ed for last month",
+    action="store_true",
+)
 arg_json = argument("-j", "--json", action="store_true", help="Output JSON")
 arg_daily = argument("-d", "--daily", action="store_true", help="Show daily downloads")
 
