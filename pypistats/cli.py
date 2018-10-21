@@ -55,6 +55,14 @@ def subcommand(args=None, parent=subparsers):
     return decorator
 
 
+arg_start_date = argument("-sd", "--start-date", help="yyyy-mm-dd")
+arg_end_date = argument("-ed", "--end-date", help="yyyy-mm-dd")
+arg_month = argument("-m", "--month", help="Shortcut for -sd & -ed for a yyyy-mm")
+arg_last_month = argument("-l", "--last-month", action="store_true")
+arg_json = argument("-j", "--json", action="store_true", help="Output JSON")
+arg_daily = argument("-d", "--daily", action="store_true", help="Show daily downloads")
+
+
 @subcommand(
     [
         argument("package"),
@@ -74,12 +82,12 @@ def recent(args):
     [
         argument("package"),
         argument("--mirrors", choices=("true", "false", "with", "without")),
-        argument("-sd", "--start-date", help="yyyy-mm-dd"),
-        argument("-ed", "--end-date", help="yyyy-mm-dd"),
-        argument("-m", "--month", help="Shortcut for -sd & -ed for a yyyy-mm"),
-        argument("-l", "--last-month", action="store_true"),
-        argument("-j", "--json", action="store_true", help="Output JSON"),
-        argument("-d", "--daily", action="store_true", help="Show daily downloads"),
+        arg_start_date,
+        arg_end_date,
+        arg_month,
+        arg_last_month,
+        arg_json,
+        arg_daily,
     ]
 )
 def overall(args):
@@ -101,12 +109,12 @@ def overall(args):
     [
         argument("package"),
         argument("-v", "--version", help="eg. 2 or 3"),
-        argument("-sd", "--start-date", help="yyyy-mm-dd"),
-        argument("-ed", "--end-date", help="yyyy-mm-dd"),
-        argument("-m", "--month", help="Shortcut for -sd & -ed for a yyyy-mm"),
-        argument("-l", "--last-month", action="store_true"),
-        argument("-j", "--json", action="store_true", help="Output JSON"),
-        argument("-d", "--daily", action="store_true", help="Show daily downloads"),
+        arg_start_date,
+        arg_end_date,
+        arg_month,
+        arg_last_month,
+        arg_json,
+        arg_daily,
     ]
 )
 def python_major(args):
@@ -126,12 +134,12 @@ def python_major(args):
     [
         argument("package"),
         argument("-v", "--version", help="eg. 2.7 or 3.6"),
-        argument("-sd", "--start-date", help="yyyy-mm-dd"),
-        argument("-ed", "--end-date", help="yyyy-mm-dd"),
-        argument("-m", "--month", help="Shortcut for -sd & -ed for a yyyy-mm"),
-        argument("-l", "--last-month", action="store_true"),
-        argument("-j", "--json", action="store_true", help="Output JSON"),
-        argument("-d", "--daily", action="store_true", help="Show daily downloads"),
+        arg_start_date,
+        arg_end_date,
+        arg_month,
+        arg_last_month,
+        arg_json,
+        arg_daily,
     ]
 )
 def python_minor(args):
@@ -152,12 +160,12 @@ def python_minor(args):
     [
         argument("package"),
         argument("-o", "--os", help="eg. windows, linux, darwin or other"),
-        argument("-sd", "--start-date", help="yyyy-mm-dd"),
-        argument("-ed", "--end-date", help="yyyy-mm-dd"),
-        argument("-m", "--month", help="Shortcut for -sd & -ed for a yyyy-mm"),
-        argument("-l", "--last-month", action="store_true"),
-        argument("-j", "--json", action="store_true", help="Output JSON"),
-        argument("-d", "--daily", action="store_true", help="Show daily downloads"),
+        arg_start_date,
+        arg_end_date,
+        arg_month,
+        arg_last_month,
+        arg_json,
+        arg_daily,
     ]
 )
 def system(args):
