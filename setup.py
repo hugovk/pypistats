@@ -21,6 +21,7 @@ setup(
     keywords=["PyPI", "downloads", "statistics", "stats", "BigQuery"],
     packages=find_packages(),
     entry_points={"console_scripts": ["pypistats = pypistats.cli:main"]},
+    zip_safe=True,
     install_requires=["pytablewriter>=0.33.0", "python-dateutil", "requests"],
     python_requires=">=3.6",
     classifiers=[
