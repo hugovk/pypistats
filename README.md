@@ -17,7 +17,120 @@ cd pypistats
 pip install .
 ```
 
-## Example use
+## Example command-line use
+
+Run `pypistats` with a subcommand (corresponding to PyPI Stats endpoints),
+then options for that subcommand.
+
+Top-level help:
+
+```console
+$ pypistats --help
+usage: pypistats [-h] [-v]
+                 {recent,overall,python_major,python_minor,system} ...
+
+positional arguments:
+  {recent,overall,python_major,python_minor,system}
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v, --version         show program's version number and exit
+```
+
+Help for a subcommand:
+
+```console
+$ pypistats recent --help
+usage: pypistats recent [-h] [-p {day,week,month}] [-j] package
+
+Retrieve the aggregate download quantities for the last day/week/month
+
+positional arguments:
+  package
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -p {day,week,month}, --period {day,week,month}
+  -j, --json            Output JSON
+```
+
+Get recent downloads:
+
+```console
+$ pypistats recent pillow
+| last_day | last_month | last_week |
+|---------:|-----------:|----------:|
+|    61877 |    3527341 |    865484 |
+```
+
+Help for another subcommand:
+
+```console
+$ pypistats python_minor --help
+usage: pypistats python_minor [-h] [-v VERSION] [-sd START_DATE]
+                              [-ed END_DATE] [-m MONTH] [-l] [-j] [-d]
+                              package
+
+Retrieve the aggregate daily download time series by Python minor version
+number
+
+positional arguments:
+  package
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -v VERSION, --version VERSION
+                        eg. 2.7 or 3.6
+  -sd START_DATE, --start-date START_DATE
+                        yyyy-mm-dd
+  -ed END_DATE, --end-date END_DATE
+                        yyyy-mm-dd
+  -m MONTH, --month MONTH
+                        Shortcut for -sd & -ed for a yyyy-mm
+  -l, --last-month      Shortcut for -sd & -ed for last month
+  -j, --json            Output JSON
+  -d, --daily           Show daily downloads
+```
+
+Get version downloads:
+
+```console
+$ pypistats python_minor pillow --last-month
+| category | percent | downloads |
+|----------|--------:|----------:|
+|      2.7 |  46.64% | 1,512,429 |
+|      3.6 |  30.34% |   983,838 |
+|      3.5 |  12.53% |   406,429 |
+|      3.7 |   6.12% |   198,558 |
+|      3.4 |   3.41% |   110,552 |
+| null     |   0.84% |    27,380 |
+|      3.3 |   0.05% |     1,599 |
+|      2.6 |   0.05% |     1,581 |
+|      3.2 |   0.01% |       246 |
+|      3.8 |   0.00% |       133 |
+|      2.4 |   0.00% |         7 |
+| Total    |         | 3,242,752 |
+```
+
+The table is Markdown, ready for pasting in GitHub issues and PRs:
+
+| category | percent | downloads |
+|----------|--------:|----------:|
+|      2.7 |  46.64% | 1,512,429 |
+|      3.6 |  30.34% |   983,838 |
+|      3.5 |  12.53% |   406,429 |
+|      3.7 |   6.12% |   198,558 |
+|      3.4 |   3.41% |   110,552 |
+| null     |   0.84% |    27,380 |
+|      3.3 |   0.05% |     1,599 |
+|      2.6 |   0.05% |     1,581 |
+|      3.2 |   0.01% |       246 |
+|      3.8 |   0.00% |       133 |
+|      2.4 |   0.00% |         7 |
+| Total    |         | 3,242,752 |
+
+
+## Example API use
 
 Return values are from the JSON responses documented in the API: 
 https://pypistats.org/api/
