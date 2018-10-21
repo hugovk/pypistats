@@ -1,5 +1,7 @@
 # pypistats
 
+[![PyPI version](https://img.shields.io/pypi/v/pypistats.svg)](https://pypi.org/project/pypistats/)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/pypistats.svg)](https://pypi.org/project/pypistats/)
 [![Build Status](https://travis-ci.org/hugovk/pypistats.svg?branch=master)](https://travis-ci.org/hugovk/pypistats)
 [![codecov](https://codecov.io/gh/hugovk/pypistats/branch/master/graph/badge.svg)](https://codecov.io/gh/hugovk/pypistats)
 [![GitHub](https://img.shields.io/github/license/hugovk/pypistats.svg)](LICENSE.txt)
@@ -8,6 +10,12 @@
 Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api).
 
 ## Installation
+
+### From PyPI
+
+```bash
+pip install -U pypistats
+```
 
 ### From source
 
@@ -132,7 +140,7 @@ The table is Markdown, ready for pasting in GitHub issues and PRs:
 
 ## Example API use
 
-Return values are from the JSON responses documented in the API: 
+Return values are from the JSON responses documented in the API:
 https://pypistats.org/api/
 
 ```python
