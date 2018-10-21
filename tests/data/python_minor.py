@@ -1,4 +1,4 @@
-data = [
+DATA = [
     {"category": "2.4", "date": "2018-04-28", "downloads": 1},
     {"category": "2.4", "date": "2018-06-08", "downloads": 1},
     {"category": "2.4", "date": "2018-09-02", "downloads": 1},

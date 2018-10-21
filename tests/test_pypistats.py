@@ -7,7 +7,7 @@ import copy
 import unittest
 
 import pypistats
-from data.python_minor import data as PYTHON_MINOR_DATA
+from data.python_minor import DATA as PYTHON_MINOR_DATA
 
 SAMPLE_DATA = [
     {"category": "2.6", "date": "2018-08-15", "downloads": 51},
