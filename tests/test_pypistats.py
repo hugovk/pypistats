@@ -4,7 +4,10 @@
 Unit tests for pypistats
 """
 import copy
+import json
 import unittest
+
+import requests_mock
 
 import pypistats
 from data.python_minor import DATA as PYTHON_MINOR_DATA
@@ -293,3 +296,21 @@ class TestPypiStats(unittest.TestCase):
 
         # Assert
         self.assertEqual(output, [0, 0, 100, 0])
+
+    def test_valid_json(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/recent?&period=day"
+        mocked_response = """
+        {"data": {"last_day": 1956060}, "package": "pip", "type": "recent_downloads"}
+        """.strip()
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.recent(package, period="day", output="json")
+
+        # Assert
+        # Should not raise any errors eg. TypeError
+        json.loads(output)
+        self.assertEqual(output, mocked_response)
