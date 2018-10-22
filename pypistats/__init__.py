@@ -4,6 +4,8 @@
 Python interface to PyPI Stats API
 https://pypistats.org/api
 """
+import json
+
 import requests
 from pytablewriter import Align, Format, MarkdownTableWriter
 
@@ -44,7 +46,7 @@ def pypi_stats_api(
         res["data"] = _total(res["data"])
 
     if output == "json":
-        return res
+        return json.dumps(res)
 
     # These only for table
     data = res["data"]
