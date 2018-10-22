@@ -24,6 +24,13 @@ script:
  - flake8 --statistics --count
  - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then black --check --diff .; fi
 
+ # Test runs
+ - pypistats --help
+ - pypistats recent --help
+ - pypistats recent pip
+ # Validate JSON
+ - pypistats recent pip --json | jq "."
+
 after_success:
   - coverage report
   - pip install -U codecov && codecov
