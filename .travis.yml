@@ -12,7 +12,7 @@ matrix:
 
 install:
  - pip install -U pip
- - pip install -U flake8 freezegun pytest pytest-cov requests_mock
+ - pip install -U flake8 freezegun pytest pytest-cov requests_mock black
  - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then pip install -U black; fi
  - pip install -e .
 
@@ -21,8 +21,8 @@ script:
  - pytest --cov pypistats
 
  # Static analysis
- - flake8 --statistics --count
- - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then black --check --diff .; fi
+ - flake8 --statistics --count --verbose pypistats/ tests/
+ - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then black --check --diff --verbose pypistats/ tests/; fi
 
  # Test runs
  - pypistats --help
