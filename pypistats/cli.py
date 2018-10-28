@@ -55,9 +55,13 @@ def subcommand(args=None, parent=subparsers):
     return decorator
 
 
-arg_start_date = argument("-sd", "--start-date", metavar="yyyy-mm-dd", help="Start date")
+arg_start_date = argument(
+    "-sd", "--start-date", metavar="yyyy-mm-dd", help="Start date"
+)
 arg_end_date = argument("-ed", "--end-date", metavar="yyyy-mm-dd", help="End date")
-arg_month = argument("-m", "--month", metavar="yyyy-mm", help="Shortcut for -sd & -ed for a single month")
+arg_month = argument(
+    "-m", "--month", metavar="yyyy-mm", help="Shortcut for -sd & -ed for a single month"
+)
 arg_last_month = argument(
     "-l",
     "--last-month",
