@@ -4,7 +4,7 @@
 CLI with subcommands for pypistats
 """
 import argparse
-from datetime import date
+from datetime import date, datetime
 
 from dateutil.relativedelta import relativedelta
 
@@ -55,12 +55,39 @@ def subcommand(args=None, parent=subparsers):
     return decorator
 
 
+def _valid_date(date_string, date_format):
+    try:
+        datetime.strptime(date_string, date_format)
+        return date_string
+    except ValueError:
+        msg = f"Not a valid date: '{date_string}'."
+        raise argparse.ArgumentTypeError(msg)
+
+
+def _valid_yyyy_mm_dd(date_string):
+    return _valid_date(date_string, "%Y-%m-%d")
+
+
+def _valid_yyyy_mm(date_string):
+    return _valid_date(date_string, "%Y-%m")
+
+
 arg_start_date = argument(
-    "-sd", "--start-date", metavar="yyyy-mm-dd", help="Start date"
+    "-sd",
+    "--start-date",
+    metavar="yyyy-mm-dd",
+    type=_valid_yyyy_mm_dd,
+    help="Start date",
 )
-arg_end_date = argument("-ed", "--end-date", metavar="yyyy-mm-dd", help="End date")
+arg_end_date = argument(
+    "-ed", "--end-date", metavar="yyyy-mm-dd", type=_valid_yyyy_mm_dd, help="End date"
+)
 arg_month = argument(
-    "-m", "--month", metavar="yyyy-mm", help="Shortcut for -sd & -ed for a single month"
+    "-m",
+    "--month",
+    metavar="yyyy-mm",
+    type=_valid_yyyy_mm,
+    help="Shortcut for -sd & -ed for a single month",
 )
 arg_last_month = argument(
     "-l",
