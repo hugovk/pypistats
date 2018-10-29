@@ -138,7 +138,7 @@ The table is Markdown, ready for pasting in GitHub issues and PRs:
 | Total    |         | 3,242,752 |
 
 
-## Example API use
+## Example programmatic use
 
 Return values are from the JSON responses documented in the API:
 https://pypistats.org/api/
