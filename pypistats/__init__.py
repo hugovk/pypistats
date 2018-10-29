@@ -15,10 +15,7 @@ __version__ = version.__version__
 
 BASE_URL = "https://pypistats.org/api/"
 
-FORMATS = (
-    "json",
-    "markdown"
-)  # only used for printing to terminal
+FORMATS = ("json", "markdown")  # only used for printing to terminal
 
 
 def pypi_stats_api(
