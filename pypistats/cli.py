@@ -126,8 +126,7 @@ arg_format = argument("-f", "--format", default="markdown", choices=FORMATS, hel
     ]
 )
 def recent(args):  # pragma: no cover
-    _format = _define_format(args)
-    print(pypistats.recent(args.package, period=args.period, output=_format))
+    print(pypistats.recent(args.package, period=args.period, output=args.format))
 
 
 @subcommand(
@@ -147,14 +146,13 @@ def overall(args):  # pragma: no cover
     if args.mirrors in ["with", "without"]:
         args.mirrors = args.mirrors == "with"
 
-    _format = _define_format(args)
     print(
         pypistats.overall(
             args.package,
             mirrors=args.mirrors,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=_format,
+            output=args.format,
             total=False if args.daily else True,
         )
     )
@@ -174,14 +172,13 @@ def overall(args):  # pragma: no cover
     ]
 )
 def python_major(args):  # pragma: no cover
-    _format = _define_format(args)
     print(
         pypistats.python_major(
             args.package,
             version=args.version,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=_format,
+            output=args.format,
             total=False if args.daily else True,
         )
     )
@@ -201,14 +198,13 @@ def python_major(args):  # pragma: no cover
     ]
 )
 def python_minor(args):  # pragma: no cover
-    _format = _define_format(args)
     print(
         pypistats.python_minor(
             args.package,
             version=args.version,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=_format,
+            output=args.format,
             total=False if args.daily else True,
         )
     )
@@ -228,15 +224,13 @@ def python_minor(args):  # pragma: no cover
     ]
 )
 def system(args):  # pragma: no cover
-    _format = _define_format(args)
-
     print(
         pypistats.system(
             args.package,
             os=args.os,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=_format,
+            output=args.format,
             total=False if args.daily else True,
         )
     )
@@ -269,6 +263,8 @@ def main():
             args.start_date, args.end_date = _month(args.month)
         if hasattr(args, "last_month") and args.last_month:
             args.start_date, args.end_date = _last_month()
+
+        args.format = _define_format(args)
 
         args.func(args)
 
