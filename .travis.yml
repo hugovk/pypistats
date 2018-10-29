@@ -21,8 +21,8 @@ script:
  - pytest --cov pypistats
 
  # Static analysis
- - flake8 --statistics --count --verbose pypistats/ tests/
- - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then black --check --diff --verbose pypistats/ tests/; fi
+ - flake8 --statistics --count .
+ - if [[ $TRAVIS_PYTHON_VERSION == 3.6 ]]; then black --check --diff .; fi
 
  # Test runs
  - pypistats --help
