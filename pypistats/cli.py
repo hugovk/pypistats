@@ -113,6 +113,8 @@ arg_last_month = argument(
 arg_json = argument("-j", "--json", action="store_true", help="Output JSON")
 arg_daily = argument("-d", "--daily", action="store_true", help="Show daily downloads")
 
+FORMATS = ("json", "markdown")  # only used for printing to terminal
+
 
 @subcommand(
     [
@@ -128,7 +130,7 @@ arg_daily = argument("-d", "--daily", action="store_true", help="Show daily down
             "-f",
             "--format",
             default="markdown",
-            choices=pypistats.FORMATS,
+            choices=FORMATS,
             help="The format of output.",
         ),
     ]
@@ -146,7 +148,7 @@ def recent(args):
             "-f",
             "--format",
             default="markdown",
-            choices=pypistats.FORMATS,
+            choices=FORMATS,
             help="The format of output.",
         ),
         arg_start_date,
@@ -162,7 +164,6 @@ def overall(args):
         args.mirrors = args.mirrors == "with"
 
     _format = _define_format(args)
-
     print(
         pypistats.overall(
             args.package,
@@ -183,7 +184,7 @@ def overall(args):
             "-f",
             "--format",
             default="markdown",
-            choices=pypistats.FORMATS,
+            choices=FORMATS,
             help="The format of output.",
         ),
         arg_start_date,
@@ -196,7 +197,6 @@ def overall(args):
 )
 def python_major(args):
     _format = _define_format(args)
-
     print(
         pypistats.python_major(
             args.package,
@@ -217,7 +217,7 @@ def python_major(args):
             "-f",
             "--format",
             default="markdown",
-            choices=pypistats.FORMATS,
+            choices=FORMATS,
             help="The format of output.",
         ),
         arg_start_date,
@@ -230,7 +230,6 @@ def python_major(args):
 )
 def python_minor(args):
     _format = _define_format(args)
-
     print(
         pypistats.python_minor(
             args.package,
@@ -251,7 +250,7 @@ def python_minor(args):
             "-f",
             "--format",
             default="markdown",
-            choices=pypistats.FORMATS,
+            choices=FORMATS,
             help="The format of output.",
         ),
         arg_start_date,
