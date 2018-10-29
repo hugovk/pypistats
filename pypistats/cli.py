@@ -4,6 +4,7 @@
 CLI with subcommands for pypistats
 """
 import argparse
+import warnings
 from datetime import date, datetime
 
 from dateutil.relativedelta import relativedelta
@@ -72,6 +73,20 @@ def _valid_yyyy_mm(date_string):
     return _valid_date(date_string, "%Y-%m")
 
 
+def _define_format(args) -> str:
+    # "table" means "markdown". legacy.
+
+    if args.json or args.format == "json":
+        output = "json"
+    elif args.format == "markdown":
+        output = "table"
+    else:
+        warnings.warn(f'Unknown format: {args.format}. Using "markdown".')
+        output = "table"
+
+    return output
+
+
 arg_start_date = argument(
     "-sd",
     "--start-date",
@@ -113,32 +128,27 @@ arg_daily = argument("-d", "--daily", action="store_true", help="Show daily down
             "-f",
             "--format",
             default="markdown",
-            help="The format of output. Supported: "
-            f'{", ".join(pypistats.FORMATS)}. '
-            'Default is "markdown".',
+            choices=pypistats.FORMATS,
+            help="The format of output."
         ),
     ]
 )
 def recent(args):
-    # "table" means "markdown". legacy.
-
-    if args.json or args.format == "json":
-        output = "json"
-    elif args.format == "markdown":
-        output = "table"
-    else:
-        import warnings
-
-        warnings.warn(f'Unknown format: {args.format}. Using "markdown".')
-        output = "table"
-
-    print(pypistats.recent(args.package, period=args.period, output=output))
+    _format = _define_format(args)
+    print(pypistats.recent(args.package, period=args.period, output=_format))
 
 
 @subcommand(
     [
         argument("package"),
         argument("--mirrors", choices=("true", "false", "with", "without")),
+        argument(
+            "-f",
+            "--format",
+            default="markdown",
+            choices=pypistats.FORMATS,
+            help="The format of output."
+        ),
         arg_start_date,
         arg_end_date,
         arg_month,
@@ -151,15 +161,7 @@ def overall(args):
     if args.mirrors in ["with", "without"]:
         args.mirrors = args.mirrors == "with"
 
-    if args.json or args.format == "json":
-        output = "json"
-    elif args.format == "markdown":
-        output = "table"
-    else:
-        import warnings
-
-        warnings.warn(f'Unknown format: {args.format}. Using "markdown".')
-        output = "table"
+    _format = _define_format(args)
 
     print(
         pypistats.overall(
@@ -167,7 +169,7 @@ def overall(args):
             mirrors=args.mirrors,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=output,
+            output=_format,
             total=False if args.daily else True,
         )
     )
@@ -177,6 +179,13 @@ def overall(args):
     [
         argument("package"),
         argument("-v", "--version", help="eg. 2 or 3"),
+        argument(
+            "-f",
+            "--format",
+            default="markdown",
+            choices=pypistats.FORMATS,
+            help="The format of output."
+        ),
         arg_start_date,
         arg_end_date,
         arg_month,
@@ -186,15 +195,7 @@ def overall(args):
     ]
 )
 def python_major(args):
-    if args.json or args.format == "json":
-        output = "json"
-    elif args.format == "markdown":
-        output = "table"
-    else:
-        import warnings
-
-        warnings.warn(f'Unknown format: {args.format}. Using "markdown".')
-        output = "table"
+    _format = _define_format(args)
 
     print(
         pypistats.python_major(
@@ -202,7 +203,7 @@ def python_major(args):
             version=args.version,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=output,
+            output=_format,
             total=False if args.daily else True,
         )
     )
@@ -212,6 +213,13 @@ def python_major(args):
     [
         argument("package"),
         argument("-v", "--version", help="eg. 2.7 or 3.6"),
+        argument(
+            "-f",
+            "--format",
+            default="markdown",
+            choices=pypistats.FORMATS,
+            help="The format of output."
+        ),
         arg_start_date,
         arg_end_date,
         arg_month,
@@ -221,15 +229,7 @@ def python_major(args):
     ]
 )
 def python_minor(args):
-    if args.json or args.format == "json":
-        output = "json"
-    elif args.format == "markdown":
-        output = "table"
-    else:
-        import warnings
-
-        warnings.warn(f'Unknown format: {args.format}. Using "markdown".')
-        output = "table"
+    _format = _define_format(args)
 
     print(
         pypistats.python_minor(
@@ -237,7 +237,7 @@ def python_minor(args):
             version=args.version,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=output,
+            output=_format,
             total=False if args.daily else True,
         )
     )
@@ -247,6 +247,13 @@ def python_minor(args):
     [
         argument("package"),
         argument("-o", "--os", help="eg. windows, linux, darwin or other"),
+        argument(
+            "-f",
+            "--format",
+            default="markdown",
+            choices=pypistats.FORMATS,
+            help="The format of output."
+        ),
         arg_start_date,
         arg_end_date,
         arg_month,
@@ -256,15 +263,7 @@ def python_minor(args):
     ]
 )
 def system(args):
-    if args.json or args.format == "json":
-        output = "json"
-    elif args.format == "markdown":
-        output = "table"
-    else:
-        import warnings
-
-        warnings.warn(f'Unknown format: {args.format}. Using "markdown".')
-        output = "table"
+    _format = _define_format(args)
 
     print(
         pypistats.system(
@@ -272,7 +271,7 @@ def system(args):
             os=args.os,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=output,
+            output=_format,
             total=False if args.daily else True,
         )
     )
