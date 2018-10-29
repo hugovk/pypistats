@@ -87,6 +87,8 @@ def _define_format(args) -> str:
     return output
 
 
+FORMATS = ("json", "markdown")
+
 arg_start_date = argument(
     "-sd",
     "--start-date",
@@ -112,27 +114,15 @@ arg_last_month = argument(
 )
 arg_json = argument("-j", "--json", action="store_true", help="Output JSON")
 arg_daily = argument("-d", "--daily", action="store_true", help="Show daily downloads")
-
-FORMATS = ("json", "markdown")  # only used for printing to terminal
+arg_format = argument("-f", "--format", default="markdown", choices=FORMATS, help="The format of output.")
 
 
 @subcommand(
     [
         argument("package"),
         argument("-p", "--period", choices=("day", "week", "month")),
-        argument(
-            "-j",
-            "--json",
-            action="store_true",
-            help='Output JSON. Shortcut for "-f json".',
-        ),
-        argument(
-            "-f",
-            "--format",
-            default="markdown",
-            choices=FORMATS,
-            help="The format of output.",
-        ),
+        arg_json,
+        arg_format,
     ]
 )
 def recent(args):  # pragma: no cover
@@ -144,13 +134,7 @@ def recent(args):  # pragma: no cover
     [
         argument("package"),
         argument("--mirrors", choices=("true", "false", "with", "without")),
-        argument(
-            "-f",
-            "--format",
-            default="markdown",
-            choices=FORMATS,
-            help="The format of output.",
-        ),
+        arg_format,
         arg_start_date,
         arg_end_date,
         arg_month,
@@ -180,13 +164,7 @@ def overall(args):  # pragma: no cover
     [
         argument("package"),
         argument("-v", "--version", help="eg. 2 or 3"),
-        argument(
-            "-f",
-            "--format",
-            default="markdown",
-            choices=FORMATS,
-            help="The format of output.",
-        ),
+        arg_format,
         arg_start_date,
         arg_end_date,
         arg_month,
@@ -213,13 +191,7 @@ def python_major(args):  # pragma: no cover
     [
         argument("package"),
         argument("-v", "--version", help="eg. 2.7 or 3.6"),
-        argument(
-            "-f",
-            "--format",
-            default="markdown",
-            choices=FORMATS,
-            help="The format of output.",
-        ),
+        arg_format,
         arg_start_date,
         arg_end_date,
         arg_month,
@@ -246,13 +218,7 @@ def python_minor(args):  # pragma: no cover
     [
         argument("package"),
         argument("-o", "--os", help="eg. windows, linux, darwin or other"),
-        argument(
-            "-f",
-            "--format",
-            default="markdown",
-            choices=FORMATS,
-            help="The format of output.",
-        ),
+        arg_format,
         arg_start_date,
         arg_end_date,
         arg_month,
