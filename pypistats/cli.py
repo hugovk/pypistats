@@ -129,7 +129,7 @@ arg_daily = argument("-d", "--daily", action="store_true", help="Show daily down
             "--format",
             default="markdown",
             choices=pypistats.FORMATS,
-            help="The format of output."
+            help="The format of output.",
         ),
     ]
 )
@@ -147,7 +147,7 @@ def recent(args):
             "--format",
             default="markdown",
             choices=pypistats.FORMATS,
-            help="The format of output."
+            help="The format of output.",
         ),
         arg_start_date,
         arg_end_date,
@@ -184,7 +184,7 @@ def overall(args):
             "--format",
             default="markdown",
             choices=pypistats.FORMATS,
-            help="The format of output."
+            help="The format of output.",
         ),
         arg_start_date,
         arg_end_date,
@@ -218,7 +218,7 @@ def python_major(args):
             "--format",
             default="markdown",
             choices=pypistats.FORMATS,
-            help="The format of output."
+            help="The format of output.",
         ),
         arg_start_date,
         arg_end_date,
@@ -252,7 +252,7 @@ def python_minor(args):
             "--format",
             default="markdown",
             choices=pypistats.FORMATS,
-            help="The format of output."
+            help="The format of output.",
         ),
         arg_start_date,
         arg_end_date,

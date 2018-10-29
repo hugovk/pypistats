@@ -16,7 +16,7 @@ class TestCli(unittest.TestCase):
         def __init__(self):
             self.json = False  # type: bool
             self.format = None  # type: str
-    
+
     def test__month(self):
         # Arrange
         yyyy_mm = "2018-07"
