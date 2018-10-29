@@ -112,7 +112,7 @@ arg_last_month = argument(
     help="Shortcut for -sd & -ed for last month",
     action="store_true",
 )
-arg_json = argument("-j", "--json", action="store_true", help="Output JSON")
+arg_json = argument("-j", "--json", action="store_true", help="Shortcut for \"-f json\"")
 arg_daily = argument("-d", "--daily", action="store_true", help="Show daily downloads")
 arg_format = argument("-f", "--format", default="markdown", choices=FORMATS, help="The format of output.")
 
