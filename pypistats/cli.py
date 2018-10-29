@@ -103,10 +103,20 @@ arg_daily = argument("-d", "--daily", action="store_true", help="Show daily down
     [
         argument("package"),
         argument("-p", "--period", choices=("day", "week", "month")),
-        argument("-j", "--json", action="store_true", help='Output JSON. Shortcut for "-f json".'),
-        argument("-f", "--format", default="markdown", help="The format of output. Supported: "
-                                                            f'{", ".join(pypistats.FORMATS)}. '
-                                                            'Default is "markdown".'),
+        argument(
+            "-j",
+            "--json",
+            action="store_true",
+            help='Output JSON. Shortcut for "-f json".',
+        ),
+        argument(
+            "-f",
+            "--format",
+            default="markdown",
+            help="The format of output. Supported: "
+            f'{", ".join(pypistats.FORMATS)}. '
+            'Default is "markdown".',
+        ),
     ]
 )
 def recent(args):
