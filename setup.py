@@ -24,9 +24,9 @@ setup(
     zip_safe=True,
     install_requires=["pytablewriter>=0.33.0", "python-dateutil", "requests"],
     tests_require=[
-        "freezegun",
-        "flake8",
         "black",
+        "flake8",
+        "freezegun",
         "pytest",
         "pytest-cov",
         "requests_mock",
