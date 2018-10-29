@@ -135,7 +135,7 @@ FORMATS = ("json", "markdown")  # only used for printing to terminal
         ),
     ]
 )
-def recent(args):
+def recent(args):  # pragma: no cover
     _format = _define_format(args)
     print(pypistats.recent(args.package, period=args.period, output=_format))
 
@@ -159,7 +159,7 @@ def recent(args):
         arg_daily,
     ]
 )
-def overall(args):
+def overall(args):  # pragma: no cover
     if args.mirrors in ["with", "without"]:
         args.mirrors = args.mirrors == "with"
 
@@ -195,7 +195,7 @@ def overall(args):
         arg_daily,
     ]
 )
-def python_major(args):
+def python_major(args):  # pragma: no cover
     _format = _define_format(args)
     print(
         pypistats.python_major(
@@ -228,7 +228,7 @@ def python_major(args):
         arg_daily,
     ]
 )
-def python_minor(args):
+def python_minor(args):  # pragma: no cover
     _format = _define_format(args)
     print(
         pypistats.python_minor(
@@ -261,7 +261,7 @@ def python_minor(args):
         arg_daily,
     ]
 )
-def system(args):
+def system(args):  # pragma: no cover
     _format = _define_format(args)
 
     print(
