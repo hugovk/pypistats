@@ -74,17 +74,11 @@ def _valid_yyyy_mm(date_string):
 
 
 def _define_format(args) -> str:
-    # "table" means "markdown". legacy.
+    if args.json:
+        return "json"
 
-    if args.json or args.format == "json":
-        output = "json"
-    elif args.format == "markdown":
-        output = "table"
-    else:
-        warnings.warn(f'Unknown format: {args.format}. Using "markdown".')
-        output = "table"
-
-    return output
+    _format = args.format
+    return _format
 
 
 FORMATS = ("json", "markdown")

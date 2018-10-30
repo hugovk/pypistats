@@ -19,7 +19,7 @@ BASE_URL = "https://pypistats.org/api/"
 def pypi_stats_api(
     endpoint,
     params=None,
-    output="table",
+    output="markdown",
     start_date=None,
     end_date=None,
     sort=True,
