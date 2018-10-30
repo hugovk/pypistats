@@ -123,8 +123,8 @@ arg_format = argument(
     [
         argument("package"),
         argument("-p", "--period", choices=("day", "week", "month")),
-        arg_json,
         arg_format,
+        arg_json,
     ]
 )
 def recent(args):  # pragma: no cover
@@ -136,11 +136,11 @@ def recent(args):  # pragma: no cover
         argument("package"),
         argument("--mirrors", choices=("true", "false", "with", "without")),
         arg_format,
+        arg_json,
         arg_start_date,
         arg_end_date,
         arg_month,
         arg_last_month,
-        arg_json,
         arg_daily,
     ]
 )
@@ -165,11 +165,11 @@ def overall(args):  # pragma: no cover
         argument("package"),
         argument("-v", "--version", help="eg. 2 or 3"),
         arg_format,
+        arg_json,
         arg_start_date,
         arg_end_date,
         arg_month,
         arg_last_month,
-        arg_json,
         arg_daily,
     ]
 )
@@ -191,11 +191,11 @@ def python_major(args):  # pragma: no cover
         argument("package"),
         argument("-v", "--version", help="eg. 2.7 or 3.6"),
         arg_format,
+        arg_json,
         arg_start_date,
         arg_end_date,
         arg_month,
         arg_last_month,
-        arg_json,
         arg_daily,
     ]
 )
@@ -217,11 +217,11 @@ def python_minor(args):  # pragma: no cover
         argument("package"),
         argument("-o", "--os", help="eg. windows, linux, darwin or other"),
         arg_format,
+        arg_json,
         arg_start_date,
         arg_end_date,
         arg_month,
         arg_last_month,
-        arg_json,
         arg_daily,
     ]
 )
