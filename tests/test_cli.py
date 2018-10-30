@@ -15,7 +15,7 @@ class TestCli(unittest.TestCase):
     class __Args:
         def __init__(self):
             self.json = False  # type: bool
-            self.format = None  # type: str
+            self.format = "markdown"  # type: str
 
     def test__month(self):
         # Arrange
@@ -94,10 +94,9 @@ class TestCli(unittest.TestCase):
         # Setup
         args = self.__Args()
         args.json = False
-        args.format = None
 
         _format = cli._define_format(args)
-        self.assertEqual(_format, "table")
+        self.assertEqual(_format, "markdown")
 
     def test__define_format_json_flag(self):
         args = self.__Args()
@@ -120,4 +119,4 @@ class TestCli(unittest.TestCase):
         args.format = "markdown"
 
         _format = cli._define_format(args)
-        self.assertEqual(_format, "table")
+        self.assertEqual(_format, "markdown")
