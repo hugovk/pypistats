@@ -121,7 +121,7 @@ arg_format = argument(
     ]
 )
 def recent(args):  # pragma: no cover
-    print(pypistats.recent(args.package, period=args.period, output=args.format))
+    print(pypistats.recent(args.package, period=args.period, format=args.format))
 
 
 @subcommand(
@@ -147,7 +147,7 @@ def overall(args):  # pragma: no cover
             mirrors=args.mirrors,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=args.format,
+            format=args.format,
             total=False if args.daily else True,
         )
     )
@@ -173,7 +173,7 @@ def python_major(args):  # pragma: no cover
             version=args.version,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=args.format,
+            format=args.format,
             total=False if args.daily else True,
         )
     )
@@ -199,7 +199,7 @@ def python_minor(args):  # pragma: no cover
             version=args.version,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=args.format,
+            format=args.format,
             total=False if args.daily else True,
         )
     )
@@ -225,7 +225,7 @@ def system(args):  # pragma: no cover
             os=args.os,
             start_date=args.start_date,
             end_date=args.end_date,
-            output=args.format,
+            format=args.format,
             total=False if args.daily else True,
         )
     )
