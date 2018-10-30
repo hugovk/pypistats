@@ -19,24 +19,24 @@ if __name__ == "__main__":
 
     # Call the API
     print(pypistats.recent("pillow"))
-    # print(pypistats.recent("pillow", "day", output="markdown"))
-    # pprint(pypistats.recent("pillow", "week", output="json"))
+    # print(pypistats.recent("pillow", "day", format="markdown"))
+    # pprint(pypistats.recent("pillow", "week", format="json"))
     # print(pypistats.recent("pillow", "month"))
 
     # print(pypistats.overall("pillow"))
-    # print(pypistats.overall("pillow", mirrors=True, output="markdown"))
-    # pprint(pypistats.overall("pillow", mirrors=False, output="json"))
+    # print(pypistats.overall("pillow", mirrors=True, format="markdown"))
+    # pprint(pypistats.overall("pillow", mirrors=False, format="json"))
 
     # print(pypistats.python_major("pillow"))
-    # print(pypistats.python_major("pillow", version=2, output="markdown"))
-    # pprint(pypistats.python_major("pillow", version="3", output="json"))
+    # print(pypistats.python_major("pillow", version=2, format="markdown"))
+    # pprint(pypistats.python_major("pillow", version="3", format="json"))
 
     # print(pypistats.python_minor("pillow"))
-    # print(pypistats.python_minor("pillow", version=2.7, output="markdown"))
-    # pprint(pypistats.python_minor("pillow", version="3.7", output="json"))
+    # print(pypistats.python_minor("pillow", version=2.7, format="markdown"))
+    # pprint(pypistats.python_minor("pillow", version="3.7", format="json"))
     # print(
     #     pypistats.python_minor(
-    #         "pillow", output="json", start_date="2018-09-20", end_date="2018-09-22"
+    #         "pillow", format="json", start_date="2018-09-20", end_date="2018-09-22"
     #     )
     # )
     # print(
@@ -46,5 +46,5 @@ if __name__ == "__main__":
     # )
 
     # print(pypistats.system("pillow"))
-    # print(pypistats.system("pillow", os="darwin", output="markdown"))
-    # pprint(pypistats.system("pillow", os="linux", output="json"))
+    # print(pypistats.system("pillow", os="darwin", format="markdown"))
+    # pprint(pypistats.system("pillow", os="linux", format="json"))

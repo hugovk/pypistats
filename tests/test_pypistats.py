@@ -308,7 +308,7 @@ class TestPypiStats(unittest.TestCase):
         # Act
         with requests_mock.Mocker() as m:
             m.get(mocked_url, text=mocked_response)
-            output = pypistats.recent(package, period="day", output="json")
+            output = pypistats.recent(package, period="day", format="json")
 
         # Assert
         # Should not raise any errors eg. TypeError

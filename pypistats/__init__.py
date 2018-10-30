@@ -19,7 +19,7 @@ BASE_URL = "https://pypistats.org/api/"
 def pypi_stats_api(
     endpoint,
     params=None,
-    output="markdown",
+    format="markdown",
     start_date=None,
     end_date=None,
     sort=True,
@@ -45,10 +45,10 @@ def pypi_stats_api(
     if total:
         res["data"] = _total(res["data"])
 
-    if output == "json":
+    if format == "json":
         return json.dumps(res)
 
-    # These only for table
+    # These only for markdown
     data = res["data"]
     if sort:
         data = _sort(data)
