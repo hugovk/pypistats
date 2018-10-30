@@ -4,7 +4,6 @@
 CLI with subcommands for pypistats
 """
 import argparse
-import warnings
 from datetime import date, datetime
 
 from dateutil.relativedelta import relativedelta
