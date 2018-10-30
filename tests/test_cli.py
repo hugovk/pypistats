@@ -12,6 +12,11 @@ from pypistats import cli
 
 
 class TestCli(unittest.TestCase):
+    class __Args:
+        def __init__(self):
+            self.json = False  # type: bool
+            self.format = None  # type: str
+
     def test__month(self):
         # Arrange
         yyyy_mm = "2018-07"
@@ -84,3 +89,35 @@ class TestCli(unittest.TestCase):
         # Act / Assert
         with self.assertRaises(argparse.ArgumentTypeError):
             cli._valid_yyyy_mm(input)
+
+    def test__define_format_default(self):
+        # Setup
+        args = self.__Args()
+        args.json = False
+        args.format = None
+
+        _format = cli._define_format(args)
+        self.assertEqual(_format, "table")
+
+    def test__define_format_json_flag(self):
+        args = self.__Args()
+        args.json = True
+
+        _format = cli._define_format(args)
+        self.assertEqual(_format, "json")
+
+    def test__define_format_json(self):
+        args = self.__Args()
+        args.json = False
+        args.format = "json"
+
+        _format = cli._define_format(args)
+        self.assertEqual(_format, "json")
+
+    def test__define_format_markdown(self):
+        args = self.__Args()
+        args.json = False
+        args.format = "markdown"
+
+        _format = cli._define_format(args)
+        self.assertEqual(_format, "table")

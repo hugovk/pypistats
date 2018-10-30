@@ -4,6 +4,7 @@
 CLI with subcommands for pypistats
 """
 import argparse
+import warnings
 from datetime import date, datetime
 
 from dateutil.relativedelta import relativedelta
@@ -72,6 +73,22 @@ def _valid_yyyy_mm(date_string):
     return _valid_date(date_string, "%Y-%m")
 
 
+def _define_format(args) -> str:
+    # "table" means "markdown". legacy.
+
+    if args.json or args.format == "json":
+        output = "json"
+    elif args.format == "markdown":
+        output = "table"
+    else:
+        warnings.warn(f'Unknown format: {args.format}. Using "markdown".')
+        output = "table"
+
+    return output
+
+
+FORMATS = ("json", "markdown")
+
 arg_start_date = argument(
     "-sd",
     "--start-date",
@@ -95,47 +112,49 @@ arg_last_month = argument(
     help="Shortcut for -sd & -ed for last month",
     action="store_true",
 )
-arg_json = argument("-j", "--json", action="store_true", help="Output JSON")
+arg_json = argument("-j", "--json", action="store_true", help='Shortcut for "-f json"')
 arg_daily = argument("-d", "--daily", action="store_true", help="Show daily downloads")
+arg_format = argument(
+    "-f", "--format", default="markdown", choices=FORMATS, help="The format of output"
+)
 
 
 @subcommand(
     [
         argument("package"),
         argument("-p", "--period", choices=("day", "week", "month")),
-        argument("-j", "--json", action="store_true", help="Output JSON"),
+        arg_format,
+        arg_json,
     ]
 )
-def recent(args):
-    print(
-        pypistats.recent(
-            args.package, period=args.period, output="json" if args.json else "table"
-        )
-    )
+def recent(args):  # pragma: no cover
+    print(pypistats.recent(args.package, period=args.period, output=args.format))
 
 
 @subcommand(
     [
         argument("package"),
         argument("--mirrors", choices=("true", "false", "with", "without")),
+        arg_format,
+        arg_json,
         arg_start_date,
         arg_end_date,
         arg_month,
         arg_last_month,
-        arg_json,
         arg_daily,
     ]
 )
-def overall(args):
+def overall(args):  # pragma: no cover
     if args.mirrors in ["with", "without"]:
         args.mirrors = args.mirrors == "with"
+
     print(
         pypistats.overall(
             args.package,
             mirrors=args.mirrors,
             start_date=args.start_date,
             end_date=args.end_date,
-            output="json" if args.json else "table",
+            output=args.format,
             total=False if args.daily else True,
         )
     )
@@ -145,22 +164,23 @@ def overall(args):
     [
         argument("package"),
         argument("-v", "--version", help="eg. 2 or 3"),
+        arg_format,
+        arg_json,
         arg_start_date,
         arg_end_date,
         arg_month,
         arg_last_month,
-        arg_json,
         arg_daily,
     ]
 )
-def python_major(args):
+def python_major(args):  # pragma: no cover
     print(
         pypistats.python_major(
             args.package,
             version=args.version,
             start_date=args.start_date,
             end_date=args.end_date,
-            output="json" if args.json else "table",
+            output=args.format,
             total=False if args.daily else True,
         )
     )
@@ -170,23 +190,23 @@ def python_major(args):
     [
         argument("package"),
         argument("-v", "--version", help="eg. 2.7 or 3.6"),
+        arg_format,
+        arg_json,
         arg_start_date,
         arg_end_date,
         arg_month,
         arg_last_month,
-        arg_json,
         arg_daily,
     ]
 )
-def python_minor(args):
-
+def python_minor(args):  # pragma: no cover
     print(
         pypistats.python_minor(
             args.package,
             version=args.version,
             start_date=args.start_date,
             end_date=args.end_date,
-            output="json" if args.json else "table",
+            output=args.format,
             total=False if args.daily else True,
         )
     )
@@ -196,22 +216,23 @@ def python_minor(args):
     [
         argument("package"),
         argument("-o", "--os", help="eg. windows, linux, darwin or other"),
+        arg_format,
+        arg_json,
         arg_start_date,
         arg_end_date,
         arg_month,
         arg_last_month,
-        arg_json,
         arg_daily,
     ]
 )
-def system(args):
+def system(args):  # pragma: no cover
     print(
         pypistats.system(
             args.package,
             os=args.os,
             start_date=args.start_date,
             end_date=args.end_date,
-            output="json" if args.json else "table",
+            output=args.format,
             total=False if args.daily else True,
         )
     )
@@ -244,6 +265,8 @@ def main():
             args.start_date, args.end_date = _month(args.month)
         if hasattr(args, "last_month") and args.last_month:
             args.start_date, args.end_date = _last_month()
+
+        args.format = _define_format(args)
 
         args.func(args)
 
