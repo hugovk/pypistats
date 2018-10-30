@@ -76,8 +76,7 @@ def _define_format(args) -> str:
     if args.json:
         return "json"
 
-    _format = args.format
-    return _format
+    return args.format
 
 
 FORMATS = ("json", "markdown")
