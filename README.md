@@ -49,7 +49,9 @@ Help for a subcommand:
 
 ```console
 $ pypistats recent --help
-usage: pypistats recent [-h] [-p {day,week,month}] [-j] package
+usage: pypistats recent [-h] [-p {day,week,month}]
+                        [-f {json,markdown,rst,html}] [-j]
+                        package
 
 Retrieve the aggregate download quantities for the last day/week/month
 
@@ -59,7 +61,9 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -p {day,week,month}, --period {day,week,month}
-  -j, --json            Output JSON
+  -f {json,markdown,rst,html}, --format {json,markdown,rst,html}
+                        The format of output (default: markdown)
+  -j, --json            Shortcut for "-f json" (default: False)
 ```
 
 Get recent downloads:
@@ -75,8 +79,9 @@ Help for another subcommand:
 
 ```console
 $ pypistats python_minor --help
-usage: pypistats python_minor [-h] [-v VERSION] [-sd START_DATE]
-                              [-ed END_DATE] [-m MONTH] [-l] [-j] [-d]
+usage: pypistats python_minor [-h] [-v VERSION] [-f {json,markdown,rst,html}]
+                              [-j] [-sd yyyy-mm-dd] [-ed yyyy-mm-dd]
+                              [-m yyyy-mm] [-l] [-d]
                               package
 
 Retrieve the aggregate daily download time series by Python minor version
@@ -88,16 +93,19 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -v VERSION, --version VERSION
-                        eg. 2.7 or 3.6
-  -sd START_DATE, --start-date START_DATE
-                        yyyy-mm-dd
-  -ed END_DATE, --end-date END_DATE
-                        yyyy-mm-dd
-  -m MONTH, --month MONTH
-                        Shortcut for -sd & -ed for a yyyy-mm
-  -l, --last-month      Shortcut for -sd & -ed for last month
-  -j, --json            Output JSON
-  -d, --daily           Show daily downloads
+                        eg. 2.7 or 3.6 (default: None)
+  -f {json,markdown,rst,html}, --format {json,markdown,rst,html}
+                        The format of output (default: markdown)
+  -j, --json            Shortcut for "-f json" (default: False)
+  -sd yyyy-mm-dd, --start-date yyyy-mm-dd
+                        Start date (default: None)
+  -ed yyyy-mm-dd, --end-date yyyy-mm-dd
+                        End date (default: None)
+  -m yyyy-mm, --month yyyy-mm
+                        Shortcut for -sd & -ed for a single month (default:
+                        None)
+  -l, --last-month      Shortcut for -sd & -ed for last month (default: False)
+  -d, --daily           Show daily downloads (default: False)
 ```
 
 Get version downloads:
@@ -150,22 +158,32 @@ from pprint import pprint
 # Call the API
 print(pypistats.recent("pillow"))
 print(pypistats.recent("pillow", "day", format="markdown"))
+print(pypistats.recent("pillow", "week", format="rst"))
+print(pypistats.recent("pillow", "month", format="html"))
 pprint(pypistats.recent("pillow", "week", format="json"))
-print(pypistats.recent("pillow", "month"))
+print(pypistats.recent("pillow", "day"))
 
 print(pypistats.overall("pillow"))
 print(pypistats.overall("pillow", mirrors=True, format="markdown"))
+print(pypistats.overall("pillow", mirrors=False, format="rst"))
+print(pypistats.overall("pillow", mirrors=True, format="html"))
 pprint(pypistats.overall("pillow", mirrors=False, format="json"))
 
 print(pypistats.python_major("pillow"))
 print(pypistats.python_major("pillow", version=2, format="markdown"))
+print(pypistats.python_major("pillow", version=3, format="rst"))
+print(pypistats.python_major("pillow", version="2", format="html"))
 pprint(pypistats.python_major("pillow", version="3", format="json"))
 
 print(pypistats.python_minor("pillow"))
 print(pypistats.python_minor("pillow", version=2.7, format="markdown"))
+print(pypistats.python_minor("pillow", version="2.7", format="rst"))
+print(pypistats.python_minor("pillow", version=3.7, format="html"))
 pprint(pypistats.python_minor("pillow", version="3.7", format="json"))
 
 print(pypistats.system("pillow"))
 print(pypistats.system("pillow", os="darwin", format="markdown"))
+print(pypistats.system("pillow", os="linux", format="rst"))
+print(pypistats.system("pillow", os="darwin", format="html"))
 pprint(pypistats.system("pillow", os="linux", format="json"))
 ```
