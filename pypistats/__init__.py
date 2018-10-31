@@ -7,7 +7,7 @@ https://pypistats.org/api
 import json
 
 import requests
-from pytablewriter import Align, Format, MarkdownTableWriter
+from pytablewriter import Align, Format, MarkdownTableWriter, RstSimpleTableWriter
 
 from . import version
 
@@ -56,7 +56,7 @@ def pypi_stats_api(
     data = _percent(data)
     data = _grand_total(data)
 
-    return _tabulate(data)
+    return _tabulate(data, format)
 
 
 def _filter(data, start_date=None, end_date=None):
@@ -166,10 +166,12 @@ def _custom_list(input_list, special_item, default_value, special_value):
     return new_list
 
 
-def _tabulate(data):
-    """Return data in table"""
+def _tabulate(data, format="markdown"):
+    """Return data in specified format"""
 
-    writer = MarkdownTableWriter()
+    format_writers = {"markdown": MarkdownTableWriter, "rst": RstSimpleTableWriter}
+
+    writer = format_writers[format]()
     writer.margin = 1
 
     if isinstance(data, dict):
