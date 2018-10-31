@@ -47,7 +47,11 @@ def subcommand(args=None, parent=subparsers):
 
     def decorator(func):
         func2 = getattr(pypistats, func.__name__)
-        parser = parent.add_parser(func.__name__, description=func2.__doc__)
+        parser = parent.add_parser(
+            func.__name__,
+            description=func2.__doc__,
+            formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        )
         for arg in args:
             parser.add_argument(*arg[0], **arg[1])
         parser.set_defaults(func=func)
