@@ -206,6 +206,79 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
+    def test__tabulate_html(self):
+        # Arrange
+        data = copy.deepcopy(SAMPLE_DATA)
+        expected_output = """
+<table>
+    <thead>
+        <tr>
+            <th>category</th>
+            <th>date</th>
+            <th>downloads</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td align="right">2.6</td>
+            <td align="left">2018-08-15</td>
+            <td align="right">51</td>
+        </tr>
+        <tr>
+            <td align="right">2.7</td>
+            <td align="left">2018-08-15</td>
+            <td align="right">63,749</td>
+        </tr>
+        <tr>
+            <td align="right">3.2</td>
+            <td align="left">2018-08-15</td>
+            <td align="right">2</td>
+        </tr>
+        <tr>
+            <td align="right">3.3</td>
+            <td align="left">2018-08-15</td>
+            <td align="right">40</td>
+        </tr>
+        <tr>
+            <td align="right">3.4</td>
+            <td align="left">2018-08-15</td>
+            <td align="right">6,095</td>
+        </tr>
+        <tr>
+            <td align="right">3.5</td>
+            <td align="left">2018-08-15</td>
+            <td align="right">20,358</td>
+        </tr>
+        <tr>
+            <td align="right">3.6</td>
+            <td align="left">2018-08-15</td>
+            <td align="right">35,274</td>
+        </tr>
+        <tr>
+            <td align="right">3.7</td>
+            <td align="left">2018-08-15</td>
+            <td align="right">6,595</td>
+        </tr>
+        <tr>
+            <td align="right">3.8</td>
+            <td align="left">2018-08-15</td>
+            <td align="right">3</td>
+        </tr>
+        <tr>
+            <td align="left">null</td>
+            <td align="left">2018-08-15</td>
+            <td align="right">1,019</td>
+        </tr>
+    </tbody>
+</table>
+        """
+
+        # Act
+        output = pypistats._tabulate(data, format="html")
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
+
     def test__sort(self):
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)

@@ -7,7 +7,13 @@ https://pypistats.org/api
 import json
 
 import requests
-from pytablewriter import Align, Format, MarkdownTableWriter, RstSimpleTableWriter
+from pytablewriter import (
+    Align,
+    Format,
+    MarkdownTableWriter,
+    RstSimpleTableWriter,
+    HtmlTableWriter,
+)
 
 from . import version
 
@@ -169,10 +175,15 @@ def _custom_list(input_list, special_item, default_value, special_value):
 def _tabulate(data, format="markdown"):
     """Return data in specified format"""
 
-    format_writers = {"markdown": MarkdownTableWriter, "rst": RstSimpleTableWriter}
+    format_writers = {
+        "markdown": MarkdownTableWriter,
+        "rst": RstSimpleTableWriter,
+        "html": HtmlTableWriter,
+    }
 
     writer = format_writers[format]()
-    writer.margin = 1
+    if format != "html":
+        writer.margin = 1
 
     if isinstance(data, dict):
         header_list = list(data.keys())
