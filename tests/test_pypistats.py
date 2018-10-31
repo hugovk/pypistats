@@ -130,7 +130,7 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(param, "&version=3.7")
 
-    def test__tabulate(self):
+    def test__tabulate_noarg(self):
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)
         expected_output = """
@@ -173,7 +173,7 @@ class TestPypiStats(unittest.TestCase):
 """
 
         # Act
-        output = pypistats._tabulate_markdown(data)
+        output = pypistats._tabulate(data, format="markdown")
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
@@ -201,7 +201,7 @@ class TestPypiStats(unittest.TestCase):
 """  # noqa: W291
 
         # Act
-        output = pypistats._tabulate_rst(data)
+        output = pypistats._tabulate(data, format="rst")
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
