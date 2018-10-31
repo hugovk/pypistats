@@ -198,7 +198,7 @@ class TestPypiStats(unittest.TestCase):
           3.8    2018-08-15            3 
      null        2018-08-15        1,019 
     ==========  ============  ===========
-"""
+"""  # noqa: W291
 
         # Act
         output = pypistats._tabulate_rst(data)
