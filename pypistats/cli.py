@@ -79,7 +79,7 @@ def _define_format(args) -> str:
     return args.format
 
 
-FORMATS = ("json", "markdown")
+FORMATS = ("json", "markdown", "rst")
 
 arg_start_date = argument(
     "-sd",

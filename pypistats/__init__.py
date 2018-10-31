@@ -7,7 +7,7 @@ https://pypistats.org/api
 import json
 
 import requests
-from pytablewriter import Align, Format, MarkdownTableWriter
+from pytablewriter import Align, Format, MarkdownTableWriter, RstSimpleTableWriter
 
 from . import version
 
@@ -56,7 +56,7 @@ def pypi_stats_api(
     data = _percent(data)
     data = _grand_total(data)
 
-    return _tabulate(data)
+    return _tabulate(data, format)
 
 
 def _filter(data, start_date=None, end_date=None):
@@ -166,8 +166,42 @@ def _custom_list(input_list, special_item, default_value, special_value):
     return new_list
 
 
-def _tabulate(data):
-    """Return data in table"""
+def _tabulate(data, format="markdown"):
+    """Return data in specified format"""
+
+    format_methods = {"markdown": _tabulate_markdown, "rst": _tabulate_rst}
+
+    return format_methods[format](data)
+
+
+def _tabulate_rst(data):
+    """Return data in RST table."""
+    writer = RstSimpleTableWriter()
+    writer.margin = 1
+
+    if isinstance(data, dict):
+        header_list = list(data.keys())
+        writer.value_matrix = [data]
+    else:  # isinstance(data, list):
+        header_list = sorted(set().union(*(d.keys() for d in data)))
+        writer.value_matrix = data
+
+    # Move downloads last
+    header_list.append("downloads")
+    header_list.remove("downloads")
+    writer.header_list = header_list
+
+    # Custom alignment and format
+    writer.align_list = _custom_list(header_list, "percent", Align.AUTO, Align.RIGHT)
+    writer.format_list = _custom_list(
+        header_list, "downloads", Format.NONE, Format.THOUSAND_SEPARATOR
+    )
+
+    return writer.dumps()
+
+
+def _tabulate_markdown(data):
+    """Return data in markdown table"""
 
     writer = MarkdownTableWriter()
     writer.margin = 1

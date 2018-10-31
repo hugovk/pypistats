@@ -154,6 +154,58 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
+    def test__tabulate_markdown(self):
+        # Arrange
+        data = copy.deepcopy(SAMPLE_DATA)
+        expected_output = """
+| category |    date    | downloads |
+|----------|------------|----------:|
+|      2.6 | 2018-08-15 |        51 |
+|      2.7 | 2018-08-15 |    63,749 |
+|      3.2 | 2018-08-15 |         2 |
+|      3.3 | 2018-08-15 |        40 |
+|      3.4 | 2018-08-15 |     6,095 |
+|      3.5 | 2018-08-15 |    20,358 |
+|      3.6 | 2018-08-15 |    35,274 |
+|      3.7 | 2018-08-15 |     6,595 |
+|      3.8 | 2018-08-15 |         3 |
+| null     | 2018-08-15 |     1,019 |
+"""
+
+        # Act
+        output = pypistats._tabulate_markdown(data)
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
+
+    def test__tabulate_rst(self):
+        # Arrange
+        data = copy.deepcopy(SAMPLE_DATA)
+        expected_output = """
+.. table:: 
+
+    ==========  ============  ===========
+     category       date       downloads 
+    ==========  ============  ===========
+          2.6    2018-08-15           51 
+          2.7    2018-08-15       63,749 
+          3.2    2018-08-15            2 
+          3.3    2018-08-15           40 
+          3.4    2018-08-15        6,095 
+          3.5    2018-08-15       20,358 
+          3.6    2018-08-15       35,274 
+          3.7    2018-08-15        6,595 
+          3.8    2018-08-15            3 
+     null        2018-08-15        1,019 
+    ==========  ============  ===========
+"""
+
+        # Act
+        output = pypistats._tabulate_rst(data)
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
+
     def test__sort(self):
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)
