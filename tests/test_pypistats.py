@@ -440,6 +440,29 @@ class TestPypiStats(unittest.TestCase):
         json.loads(output)
         self.assertEqual(output, mocked_response)
 
+    def test_recent_tabular(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/recent"
+        mocked_response = """{
+            "data":
+                {"last_day": 2295765, "last_month": 67759913, "last_week": 15706750},
+            "package": "pip", "type": "recent_downloads"
+        }""".strip()
+        expected_output = """
+| last_day | last_month | last_week |
+|---------:|-----------:|----------:|
+|  2295765 |   67759913 |  15706750 |
+"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.recent(package)
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
+
     def test_overall_tabular(self):
         # Arrange
         package = "pip"
