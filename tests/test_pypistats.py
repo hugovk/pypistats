@@ -439,3 +439,30 @@ class TestPypiStats(unittest.TestCase):
         # Should not raise any errors eg. TypeError
         json.loads(output)
         self.assertEqual(output, mocked_response)
+
+    def test_overall(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/overall"
+        mocked_response = """{
+            "data": [
+                {"category": "with_mirrors", "downloads": 286030162},
+                {"category": "without_mirrors", "downloads": 284455414}
+            ],
+            "package": "pip",
+            "type": "overall_downloads"
+        }""".strip()
+        expected_output = """
+|    category     | percent |  downloads  |
+|-----------------|--------:|------------:|
+| with_mirrors    |  50.14% | 286,030,162 |
+| without_mirrors |  49.86% | 284,455,414 |
+| Total           |         | 570,485,576 |"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.overall(package)
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
