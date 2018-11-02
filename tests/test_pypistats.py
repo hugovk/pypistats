@@ -440,7 +440,7 @@ class TestPypiStats(unittest.TestCase):
         json.loads(output)
         self.assertEqual(output, mocked_response)
 
-    def test_overall(self):
+    def test_overall_tabular(self):
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
@@ -457,12 +457,47 @@ class TestPypiStats(unittest.TestCase):
 |-----------------|--------:|------------:|
 | with_mirrors    |  50.14% | 286,030,162 |
 | without_mirrors |  49.86% | 284,455,414 |
-| Total           |         | 570,485,576 |"""
+| Total           |         | 570,485,576 |
+"""
 
         # Act
         with requests_mock.Mocker() as m:
             m.get(mocked_url, text=mocked_response)
             output = pypistats.overall(package)
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
+
+    def test_system_tabular(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/system"
+        mocked_response = """{
+            "data": [
+                {"category": "Darwin", "downloads": 10734594},
+                {"category": "Linux", "downloads": 236502274},
+                {"category": "null", "downloads": 30579325},
+                {"category": "other", "downloads": 111243},
+                {"category": "Windows", "downloads": 6527978}
+            ],
+            "package": "pip",
+            "type": "system_downloads"
+        }""".strip()
+        expected_output = """
+| category | percent |  downloads  |
+|----------|--------:|------------:|
+| Linux    |  83.14% | 236,502,274 |
+| null     |  10.75% |  30,579,325 |
+| Darwin   |   3.77% |  10,734,594 |
+| Windows  |   2.29% |   6,527,978 |
+| other    |   0.04% |     111,243 |
+| Total    |         | 284,455,414 |
+"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.system(package)
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
