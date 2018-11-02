@@ -54,7 +54,7 @@ def pypi_stats_api(
     if format == "json":
         return json.dumps(res)
 
-    # These only for markdown
+    # These only for tables, like markdown and rst
     data = res["data"]
     if sort:
         data = _sort(data)
