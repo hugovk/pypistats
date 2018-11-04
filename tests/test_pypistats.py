@@ -463,30 +463,28 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
-    def test_overall_tabular(self):
+    def test_overall_tabular_start_date(self):
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = """{
-            "data": [
-                {"category": "with_mirrors", "downloads": 286030162},
-                {"category": "without_mirrors", "downloads": 284455414}
-            ],
-            "package": "pip",
-            "type": "overall_downloads"
+          "data": [
+            {"category": "without_mirrors", "date": "2018-11-01", "downloads": 2295765},
+            {"category": "without_mirrors", "date": "2018-11-02", "downloads": 2297591}
+          ],
+          "package": "pip",
+          "type": "overall_downloads"
         }""".strip()
         expected_output = """
-|    category     | percent |  downloads  |
-|-----------------|--------:|------------:|
-| with_mirrors    |  50.14% | 286,030,162 |
-| without_mirrors |  49.86% | 284,455,414 |
-| Total           |         | 570,485,576 |
+|    category     | downloads |
+|-----------------|----------:|
+| without_mirrors | 2,297,591 |
 """
 
         # Act
         with requests_mock.Mocker() as m:
             m.get(mocked_url, text=mocked_response)
-            output = pypistats.overall(package)
+            output = pypistats.overall(package, mirrors=False, start_date="2018-11-02")
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
