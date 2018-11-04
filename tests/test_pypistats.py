@@ -450,9 +450,9 @@ class TestPypiStats(unittest.TestCase):
             "package": "pip", "type": "recent_downloads"
         }""".strip()
         expected_output = """
-| last_day | last_month | last_week |
-|---------:|-----------:|----------:|
-|  2295765 |   67759913 |  15706750 |
+| last_day  | last_month | last_week  |
+|----------:|-----------:|-----------:|
+| 2,295,765 | 67,759,913 | 15,706,750 |
 """
 
         # Act
