@@ -200,10 +200,12 @@ def _tabulate(data, format="markdown"):
     # Custom alignment and format
     if header_list[0] in ["last_day", "last_month", "last_week"]:
         # Special case for 'recent'
-        writer.align_list =  len(header_list) * [Align.AUTO]
-        writer.format_list =  len(header_list) * [Format.THOUSAND_SEPARATOR]
+        writer.align_list = len(header_list) * [Align.AUTO]
+        writer.format_list = len(header_list) * [Format.THOUSAND_SEPARATOR]
     else:
-        writer.align_list = _custom_list(header_list, "percent", Align.AUTO, Align.RIGHT)
+        writer.align_list = _custom_list(
+            header_list, "percent", Align.AUTO, Align.RIGHT
+        )
         writer.format_list = _custom_list(
             header_list, "downloads", Format.NONE, Format.THOUSAND_SEPARATOR
         )
