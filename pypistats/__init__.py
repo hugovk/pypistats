@@ -54,7 +54,7 @@ def pypi_stats_api(
     if format == "json":
         return json.dumps(res)
 
-    # These only for markdown
+    # These only for tables, like markdown and rst
     data = res["data"]
     if sort:
         data = _sort(data)
@@ -198,10 +198,17 @@ def _tabulate(data, format="markdown"):
     writer.header_list = header_list
 
     # Custom alignment and format
-    writer.align_list = _custom_list(header_list, "percent", Align.AUTO, Align.RIGHT)
-    writer.format_list = _custom_list(
-        header_list, "downloads", Format.NONE, Format.THOUSAND_SEPARATOR
-    )
+    if header_list[0] in ["last_day", "last_month", "last_week"]:
+        # Special case for 'recent'
+        writer.align_list = len(header_list) * [Align.AUTO]
+        writer.format_list = len(header_list) * [Format.THOUSAND_SEPARATOR]
+    else:
+        writer.align_list = _custom_list(
+            header_list, "percent", Align.AUTO, Align.RIGHT
+        )
+        writer.format_list = _custom_list(
+            header_list, "downloads", Format.NONE, Format.THOUSAND_SEPARATOR
+        )
 
     return writer.dumps()
 

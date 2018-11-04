@@ -439,3 +439,86 @@ class TestPypiStats(unittest.TestCase):
         # Should not raise any errors eg. TypeError
         json.loads(output)
         self.assertEqual(output, mocked_response)
+
+    def test_recent_tabular(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/recent"
+        mocked_response = """{
+            "data":
+                {"last_day": 2295765, "last_month": 67759913, "last_week": 15706750},
+            "package": "pip", "type": "recent_downloads"
+        }""".strip()
+        expected_output = """
+| last_day  | last_month | last_week  |
+|----------:|-----------:|-----------:|
+| 2,295,765 | 67,759,913 | 15,706,750 |
+"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.recent(package)
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
+
+    def test_overall_tabular_start_date(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/overall"
+        mocked_response = """{
+          "data": [
+            {"category": "without_mirrors", "date": "2018-11-01", "downloads": 2295765},
+            {"category": "without_mirrors", "date": "2018-11-02", "downloads": 2297591}
+          ],
+          "package": "pip",
+          "type": "overall_downloads"
+        }""".strip()
+        expected_output = """
+|    category     | downloads |
+|-----------------|----------:|
+| without_mirrors | 2,297,591 |
+"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.overall(package, mirrors=False, start_date="2018-11-02")
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
+
+    def test_system_tabular(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/system"
+        mocked_response = """{
+            "data": [
+                {"category": "Darwin", "downloads": 10734594},
+                {"category": "Linux", "downloads": 236502274},
+                {"category": "null", "downloads": 30579325},
+                {"category": "other", "downloads": 111243},
+                {"category": "Windows", "downloads": 6527978}
+            ],
+            "package": "pip",
+            "type": "system_downloads"
+        }""".strip()
+        expected_output = """
+| category | percent |  downloads  |
+|----------|--------:|------------:|
+| Linux    |  83.14% | 236,502,274 |
+| null     |  10.75% |  30,579,325 |
+| Darwin   |   3.77% |  10,734,594 |
+| Windows  |   2.29% |   6,527,978 |
+| other    |   0.04% |     111,243 |
+| Total    |         | 284,455,414 |
+"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.system(package)
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
