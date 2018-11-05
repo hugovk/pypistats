@@ -489,7 +489,7 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
-    def test_python_minor_json(self):
+    def test_python_major_json(self):
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/python_major"
@@ -516,6 +516,51 @@ class TestPypiStats(unittest.TestCase):
         with requests_mock.Mocker() as m:
             m.get(mocked_url, text=mocked_response)
             output = pypistats.python_major(package, format="json")
+
+        # Assert
+        self.assertEqual(json.loads(output), json.loads(expected_output))
+
+    def test_python_minor_json(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/python_minor"
+        mocked_response = """{
+            "data": [
+                {"category": "2.6", "date": "2018-11-01", "downloads": 6863},
+                {"category": "2.7", "date": "2018-11-01", "downloads": 2001481},
+                {"category": "3.2", "date": "2018-11-01", "downloads": 9},
+                {"category": "3.3", "date": "2018-11-01", "downloads": 414},
+                {"category": "3.4", "date": "2018-11-01", "downloads": 62166},
+                {"category": "3.5", "date": "2018-11-01", "downloads": 79425},
+                {"category": "3.6", "date": "2018-11-01", "downloads": 112266},
+                {"category": "3.7", "date": "2018-11-01", "downloads": 25961},
+                {"category": "3.8", "date": "2018-11-01", "downloads": 58},
+                {"category": "null", "date": "2018-11-01", "downloads": 7122}
+            ],
+            "package": "pip",
+            "type": "python_minor_downloads"
+        }"""
+        expected_output = """{
+            "data": [
+                {"category": "2.6", "downloads": 6863},
+                {"category": "2.7", "downloads": 2001481},
+                {"category": "3.2", "downloads": 9},
+                {"category": "3.3", "downloads": 414},
+                {"category": "3.4", "downloads": 62166},
+                {"category": "3.5", "downloads": 79425},
+                {"category": "3.6", "downloads": 112266},
+                {"category": "3.7", "downloads": 25961},
+                {"category": "3.8", "downloads": 58},
+                {"category": "null", "downloads": 7122}
+            ],
+            "package": "pip",
+            "type": "python_minor_downloads"
+        }"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.python_minor(package, format="json")
 
         # Assert
         self.assertEqual(json.loads(output), json.loads(expected_output))
