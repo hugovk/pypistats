@@ -489,6 +489,37 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
+    def test_python_minor_json(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/python_major"
+        mocked_response = """{
+            "data": [
+                {"category": "2", "date": "2018-11-01", "downloads": 2008344},
+                {"category": "3", "date": "2018-11-01", "downloads": 280299},
+                {"category": "null", "date": "2018-11-01", "downloads": 7122}
+            ],
+            "package": "pip",
+            "type": "python_major_downloads"
+        }"""
+        expected_output = """{
+            "data": [
+                {"category": "2", "downloads": 2008344},
+                {"category": "3", "downloads": 280299},
+                {"category": "null", "downloads": 7122}
+            ],
+            "package": "pip",
+            "type": "python_major_downloads"
+        }"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.python_major(package, format="json")
+
+        # Assert
+        self.assertEqual(json.loads(output), json.loads(expected_output))
+
     def test_system_tabular(self):
         # Arrange
         package = "pip"
