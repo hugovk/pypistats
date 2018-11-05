@@ -428,7 +428,7 @@ class TestPypiStats(unittest.TestCase):
         mocked_url = "https://pypistats.org/api/packages/pip/recent?&period=day"
         mocked_response = """
         {"data": {"last_day": 1956060}, "package": "pip", "type": "recent_downloads"}
-        """.strip()
+        """
 
         # Act
         with requests_mock.Mocker() as m:
@@ -438,7 +438,7 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         # Should not raise any errors eg. TypeError
         json.loads(output)
-        self.assertEqual(output, mocked_response)
+        self.assertEqual(json.loads(output), json.loads(mocked_response))
 
     def test_recent_tabular(self):
         # Arrange
@@ -448,7 +448,7 @@ class TestPypiStats(unittest.TestCase):
             "data":
                 {"last_day": 2295765, "last_month": 67759913, "last_week": 15706750},
             "package": "pip", "type": "recent_downloads"
-        }""".strip()
+        }"""
         expected_output = """
 | last_day  | last_month | last_week  |
 |----------:|-----------:|-----------:|
@@ -474,7 +474,7 @@ class TestPypiStats(unittest.TestCase):
           ],
           "package": "pip",
           "type": "overall_downloads"
-        }""".strip()
+        }"""
         expected_output = """
 |    category     | downloads |
 |-----------------|----------:|
@@ -534,7 +534,7 @@ class TestPypiStats(unittest.TestCase):
             ],
             "package": "pip",
             "type": "system_downloads"
-        }""".strip()
+        }"""
         expected_output = """
 | category | percent |  downloads  |
 |----------|--------:|------------:|
