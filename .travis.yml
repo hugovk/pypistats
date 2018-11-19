@@ -1,6 +1,5 @@
 language: python
 cache: pip
-sudo: false
 
 matrix:
   fast_finish: true
