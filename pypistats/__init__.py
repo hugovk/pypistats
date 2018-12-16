@@ -40,8 +40,8 @@ def pypi_stats_api(
 
     r = requests.get(url)
 
-    if r.status_code != 200:
-        return None
+    # Raise if we made a bad request (a 4XX client error or 5XX server error response)
+    r.raise_for_status()
 
     res = r.json()
 
