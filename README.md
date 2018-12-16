@@ -27,7 +27,7 @@ pip install .
 
 ## Example command-line use
 
-Run `pypistats` with a subcommand (corresponding to PyPI Stats endpoints),
+Run `pypistats` with a subcommand (corresponding to [PyPI Stats endpoints](https://pypistats.org/api/#endpoints)),
 then options for that subcommand.
 
 Top-level help:
