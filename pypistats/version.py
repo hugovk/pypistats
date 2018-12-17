@@ -1,2 +1,2 @@
 # Master version
-__version__ = "0.2.2.dev0"
+__version__ = "0.3.0"
