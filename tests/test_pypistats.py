@@ -311,6 +311,24 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output, SAMPLE_DATA_RECENT)
 
+    def test_monthly_total(self):
+        # Arrange
+        data = copy.deepcopy(PYTHON_MINOR_DATA)
+
+        # Act
+        output = pypistats._monthly_total(data)
+
+        # Assert
+        self.assertEqual(len(output), 64)
+
+        self.assertEqual(output[0]["category"], "2.4")
+        self.assertEqual(output[0]["downloads"], 1)
+        self.assertEqual(output[0]["date"], "2018-04")
+
+        self.assertEqual(output[10]["category"], "2.7")
+        self.assertEqual(output[10]["downloads"], 489163)
+        self.assertEqual(output[10]["date"], "2018-05")
+
     def test__total(self):
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)

@@ -110,6 +110,7 @@ arg_last_month = argument(
 )
 arg_json = argument("-j", "--json", action="store_true", help='Shortcut for "-f json"')
 arg_daily = argument("-d", "--daily", action="store_true", help="Show daily downloads")
+arg_monthy = argument("--monthly", action="store_true", help="Show monthly downloads")
 arg_format = argument(
     "-f", "--format", default="markdown", choices=FORMATS, help="The format of output"
 )
@@ -138,6 +139,7 @@ def recent(args):  # pragma: no cover
         arg_month,
         arg_last_month,
         arg_daily,
+        arg_monthy,
     ]
 )
 def overall(args):  # pragma: no cover
@@ -151,7 +153,7 @@ def overall(args):  # pragma: no cover
             start_date=args.start_date,
             end_date=args.end_date,
             format=args.format,
-            total=False if args.daily else True,
+            total="daily" if args.daily else ("monthly" if args.monthly else "all"),
         )
     )
 
@@ -167,6 +169,7 @@ def overall(args):  # pragma: no cover
         arg_month,
         arg_last_month,
         arg_daily,
+        arg_monthy,
     ]
 )
 def python_major(args):  # pragma: no cover
@@ -177,7 +180,7 @@ def python_major(args):  # pragma: no cover
             start_date=args.start_date,
             end_date=args.end_date,
             format=args.format,
-            total=False if args.daily else True,
+            total="daily" if args.daily else ("monthly" if args.monthly else "all"),
         )
     )
 
@@ -193,6 +196,7 @@ def python_major(args):  # pragma: no cover
         arg_month,
         arg_last_month,
         arg_daily,
+        arg_monthy,
     ]
 )
 def python_minor(args):  # pragma: no cover
@@ -203,7 +207,7 @@ def python_minor(args):  # pragma: no cover
             start_date=args.start_date,
             end_date=args.end_date,
             format=args.format,
-            total=False if args.daily else True,
+            total="daily" if args.daily else ("monthly" if args.monthly else "all"),
         )
     )
 
@@ -219,6 +223,7 @@ def python_minor(args):  # pragma: no cover
         arg_month,
         arg_last_month,
         arg_daily,
+        arg_monthy,
     ]
 )
 def system(args):  # pragma: no cover
@@ -229,7 +234,7 @@ def system(args):  # pragma: no cover
             start_date=args.start_date,
             end_date=args.end_date,
             format=args.format,
-            total=False if args.daily else True,
+            total="daily" if args.daily else ("monthly" if args.monthly else "all"),
         )
     )
 
