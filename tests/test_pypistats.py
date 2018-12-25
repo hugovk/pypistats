@@ -24,8 +24,12 @@ SAMPLE_DATA = [
     {"category": "3.8", "date": "2018-08-15", "downloads": 3},
     {"category": "null", "date": "2018-08-15", "downloads": 1019},
 ]
-SAMPLE_DATA_ONE_ROW = [{"category": "with_mirrors", "downloads": 11497042}]
-SAMPLE_DATA_RECENT = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
+SAMPLE_DATA_ONE_ROW = [{"category": "with_mirrors", "downloads": 11_497_042}]
+SAMPLE_DATA_RECENT = {
+    "last_day": 123_002,
+    "last_month": 3_254_221,
+    "last_week": 761_649,
+}
 
 
 class TestPypiStats(unittest.TestCase):
@@ -326,7 +330,7 @@ class TestPypiStats(unittest.TestCase):
         self.assertEqual(output[0]["date"], "2018-04")
 
         self.assertEqual(output[10]["category"], "2.7")
-        self.assertEqual(output[10]["downloads"], 489163)
+        self.assertEqual(output[10]["downloads"], 489_163)
         self.assertEqual(output[10]["date"], "2018-05")
 
     def test__total(self):
@@ -362,7 +366,7 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(len(output), original_len + 1)
         self.assertEqual(output[-1]["category"], "Total")
-        self.assertEqual(output[-1]["downloads"], 9355317)
+        self.assertEqual(output[-1]["downloads"], 9_355_317)
 
     def test__grand_total_one_row(self):
         # Arrange
