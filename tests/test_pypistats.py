@@ -315,7 +315,7 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output, SAMPLE_DATA_RECENT)
 
-    def test_monthly_total(self):
+    def test__monthly_total(self):
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
 

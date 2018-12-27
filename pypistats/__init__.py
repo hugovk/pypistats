@@ -100,10 +100,6 @@ def _sort(data):
 def _monthly_total(data):
     """Sum all downloads per category, by month"""
 
-    # Only for lists of dicts, not a single dict
-    if isinstance(data, dict):
-        return data
-
     totalled = {}
     for row in data:
         category = row["category"]
