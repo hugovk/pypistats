@@ -29,7 +29,7 @@ def pypi_stats_api(
     start_date=None,
     end_date=None,
     sort=True,
-    total=True,
+    total="all",
 ):
     """Call the API and return JSON"""
     if params:
@@ -48,7 +48,9 @@ def pypi_stats_api(
     if start_date or end_date:
         res["data"] = _filter(res["data"], start_date, end_date)
 
-    if total:
+    if total == "monthly":
+        res["data"] = _monthly_total(res["data"])
+    elif total == "all":
         res["data"] = _total(res["data"])
 
     if format == "json":
@@ -92,6 +94,31 @@ def _sort(data):
         return data
 
     data = sorted(data, key=lambda k: k["downloads"], reverse=True)
+    return data
+
+
+def _monthly_total(data):
+    """Sum all downloads per category, by month"""
+
+    totalled = {}
+    for row in data:
+        category = row["category"]
+        downloads = row["downloads"]
+        month = row["date"][:7]
+
+        if category in totalled:
+            if month in totalled[category]:
+                totalled[category][month] += downloads
+            else:
+                totalled[category][month] = downloads
+        else:
+            totalled[category] = {month: downloads}
+
+    data = []
+    for category, month_downloads in totalled.items():
+        for month, downloads in month_downloads.items():
+            data.append({"category": category, "date": month, "downloads": downloads})
+
     return data
 
 

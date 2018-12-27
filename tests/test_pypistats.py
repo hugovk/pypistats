@@ -24,8 +24,12 @@ SAMPLE_DATA = [
     {"category": "3.8", "date": "2018-08-15", "downloads": 3},
     {"category": "null", "date": "2018-08-15", "downloads": 1019},
 ]
-SAMPLE_DATA_ONE_ROW = [{"category": "with_mirrors", "downloads": 11497042}]
-SAMPLE_DATA_RECENT = {"last_day": 123002, "last_month": 3254221, "last_week": 761649}
+SAMPLE_DATA_ONE_ROW = [{"category": "with_mirrors", "downloads": 11_497_042}]
+SAMPLE_DATA_RECENT = {
+    "last_day": 123_002,
+    "last_month": 3_254_221,
+    "last_week": 761_649,
+}
 
 
 class TestPypiStats(unittest.TestCase):
@@ -311,6 +315,24 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output, SAMPLE_DATA_RECENT)
 
+    def test__monthly_total(self):
+        # Arrange
+        data = copy.deepcopy(PYTHON_MINOR_DATA)
+
+        # Act
+        output = pypistats._monthly_total(data)
+
+        # Assert
+        self.assertEqual(len(output), 64)
+
+        self.assertEqual(output[0]["category"], "2.4")
+        self.assertEqual(output[0]["downloads"], 1)
+        self.assertEqual(output[0]["date"], "2018-04")
+
+        self.assertEqual(output[10]["category"], "2.7")
+        self.assertEqual(output[10]["downloads"], 489_163)
+        self.assertEqual(output[10]["date"], "2018-05")
+
     def test__total(self):
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
@@ -344,7 +366,7 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(len(output), original_len + 1)
         self.assertEqual(output[-1]["category"], "Total")
-        self.assertEqual(output[-1]["downloads"], 9355317)
+        self.assertEqual(output[-1]["downloads"], 9_355_317)
 
     def test__grand_total_one_row(self):
         # Arrange
@@ -598,3 +620,40 @@ class TestPypiStats(unittest.TestCase):
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
+
+    def test_python_minor_monthly(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/python_minor"
+        mocked_response = """{
+            "data": [
+                {"category": "2.6", "date": "2018-11-01", "downloads": 1},
+                {"category": "2.6", "date": "2018-11-02", "downloads": 2},
+                {"category": "2.6", "date": "2018-12-11", "downloads": 3},
+                {"category": "2.6", "date": "2018-12-12", "downloads": 4},
+                {"category": "2.7", "date": "2018-11-01", "downloads": 10},
+                {"category": "2.7", "date": "2018-11-02", "downloads": 20},
+                {"category": "2.7", "date": "2018-12-11", "downloads": 30},
+                {"category": "2.7", "date": "2018-12-12", "downloads": 40}
+            ],
+            "package": "pip",
+            "type": "python_minor_downloads"
+        }"""
+        expected_output = """{
+            "data": [
+                {"category": "2.6", "date": "2018-11", "downloads": 3},
+                {"category": "2.6", "date": "2018-12", "downloads": 7},
+                {"category": "2.7", "date": "2018-11", "downloads": 30},
+                {"category": "2.7", "date": "2018-12", "downloads": 70}
+            ],
+            "package": "pip",
+            "type": "python_minor_downloads"
+        }"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.python_minor(package, total="monthly", format="json")
+
+        # Assert
+        self.assertEqual(json.loads(output), json.loads(expected_output))
