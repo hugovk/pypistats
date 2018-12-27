@@ -620,3 +620,40 @@ class TestPypiStats(unittest.TestCase):
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
+
+    def test_python_minor_monthly(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/python_minor"
+        mocked_response = """{
+            "data": [
+                {"category": "2.6", "date": "2018-11-01", "downloads": 1},
+                {"category": "2.6", "date": "2018-11-02", "downloads": 2},
+                {"category": "2.6", "date": "2018-12-11", "downloads": 3},
+                {"category": "2.6", "date": "2018-12-12", "downloads": 4},
+                {"category": "2.7", "date": "2018-11-01", "downloads": 10},
+                {"category": "2.7", "date": "2018-11-02", "downloads": 20},
+                {"category": "2.7", "date": "2018-12-11", "downloads": 30},
+                {"category": "2.7", "date": "2018-12-12", "downloads": 40}
+            ],
+            "package": "pip",
+            "type": "python_minor_downloads"
+        }"""
+        expected_output = """{
+            "data": [
+                {"category": "2.6", "date": "2018-11", "downloads": 3},
+                {"category": "2.6", "date": "2018-12", "downloads": 7},
+                {"category": "2.7", "date": "2018-11", "downloads": 30},
+                {"category": "2.7", "date": "2018-12", "downloads": 70}
+            ],
+            "package": "pip",
+            "type": "python_minor_downloads"
+        }"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.python_minor(package, total="monthly", format="json")
+
+        # Assert
+        self.assertEqual(json.loads(output), json.loads(expected_output))
