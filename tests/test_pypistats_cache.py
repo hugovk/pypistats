@@ -7,6 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import requests_mock
 from freezegun import freeze_time
 
 import pypistats
@@ -86,3 +87,31 @@ class TestPypiStatsCache(unittest.TestCase):
 
         # Assert
         self.assertFalse(cache_file.exists())
+
+    def test_subcommand_with_cache(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/overall"
+        mocked_response = """{
+          "data": [
+            {"category": "without_mirrors", "date": "2018-11-01", "downloads": 2295765}
+          ],
+          "package": "pip",
+          "type": "overall_downloads"
+        }"""
+        expected_output = """
+|    category     | downloads |
+|-----------------|----------:|
+| without_mirrors | 2,295,765 |
+"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            # First time to save to cache
+            pypistats.overall(package)
+            # Second time to read from cache
+            output = pypistats.overall(package)
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
