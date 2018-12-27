@@ -78,7 +78,7 @@ class TestPypiStatsCache(unittest.TestCase):
     def test__clear_cache(self):
         # Arrange
         # Create old cache file
-        cache_file = pypistats.CACHE_DIR / "2018-12-26-old-cache-file.json"
+        cache_file = pypistats.CACHE_DIR / "2018-11-26-old-cache-file.json"
         pypistats._save_cache(cache_file, data={})
         self.assertTrue(cache_file.exists())
 
