@@ -7,6 +7,7 @@ https://pypistats.org/api
 import json
 from datetime import datetime
 from pathlib import Path
+import atexit
 
 import requests
 from appdirs import user_cache_dir
@@ -61,7 +62,16 @@ def _save_cache(cache_file, data):
         pass
 
 
-# TODO delete old cache files, do as very last task
+def _clear_cache():
+    """Delete old cache files, run as last task"""
+    cache_files = CACHE_DIR.glob("**/*.json")
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+    for cache_file in cache_files:
+        if not cache_file.name.startswith(today):
+            cache_file.unlink()
+
+
+atexit.register(_clear_cache)
 
 
 def pypi_stats_api(
