@@ -5,21 +5,63 @@ Python interface to PyPI Stats API
 https://pypistats.org/api
 """
 import json
+from datetime import datetime
+from pathlib import Path
 
 import requests
+from appdirs import user_cache_dir
 from pytablewriter import (
     Align,
     Format,
+    HtmlTableWriter,
     MarkdownTableWriter,
     RstSimpleTableWriter,
-    HtmlTableWriter,
 )
+from slugify import slugify
 
 from . import version
 
 __version__ = version.__version__
 
 BASE_URL = "https://pypistats.org/api/"
+CACHE_DIR = Path(user_cache_dir("pypistats"))
+
+
+def _cache_filename(url):
+    """yyyy-mm-dd-url-slug.json"""
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+    slug = slugify(url)
+    filename = CACHE_DIR / f"{today}-{slug}.json"
+
+    return filename
+
+
+def _load_cache(cache_file):
+    if not cache_file.exists():
+        return {}
+
+    with cache_file.open("r") as f:
+        try:
+            data = json.load(f)
+        except json.decoder.JSONDecodeError:
+            return {}
+
+    return data
+
+
+def _save_cache(cache_file, data):
+    try:
+        if not CACHE_DIR.exists():
+            CACHE_DIR.mkdir(parents=True)
+
+        with cache_file.open("w") as f:
+            json.dump(data, f)
+
+    except OSError:
+        pass
+
+
+# TODO delete old cache files, do as very last task
 
 
 def pypi_stats_api(
@@ -37,13 +79,23 @@ def pypi_stats_api(
     else:
         params = ""
     url = BASE_URL + endpoint.lower() + params
+    cache_file = _cache_filename(url)
 
-    r = requests.get(url)
+    res = {}
+    if cache_file.is_file():
+        res = _load_cache(cache_file)
 
-    # Raise if we made a bad request (a 4XX client error or 5XX server error response)
-    r.raise_for_status()
+    if res == {}:
+        # No cache, or couldn't load cache
+        r = requests.get(url)
 
-    res = r.json()
+        # Raise if we made a bad request
+        # (4XX client error or 5XX server error response)
+        r.raise_for_status()
+
+        res = r.json()
+
+        _save_cache(cache_file, res)
 
     if start_date or end_date:
         res["data"] = _filter(res["data"], start_date, end_date)
