@@ -10,6 +10,7 @@ import unittest
 import requests_mock
 
 import pypistats
+
 from .data.python_minor import DATA as PYTHON_MINOR_DATA
 
 SAMPLE_DATA = [
@@ -32,7 +33,20 @@ SAMPLE_DATA_RECENT = {
 }
 
 
+def stub_save_cache(cache_file, data):
+    pass
+
+
 class TestPypiStats(unittest.TestCase):
+    def setUp(self):
+        # Stub caching. Caches are tested in another class.
+        self.original_save_cache = pypistats._save_cache
+        pypistats._save_cache = stub_save_cache
+
+    def tearDown(self):
+        # Unstub caching
+        pypistats._save_cache = self.original_save_cache
+
     def test__filter_no_filters_no_change(self):
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)

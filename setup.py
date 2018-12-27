@@ -22,7 +22,13 @@ setup(
     packages=find_packages(),
     entry_points={"console_scripts": ["pypistats = pypistats.cli:main"]},
     zip_safe=True,
-    install_requires=["pytablewriter>=0.33.0", "python-dateutil", "requests"],
+    install_requires=[
+        "appdirs",
+        "pytablewriter>=0.33.0",
+        "python-dateutil",
+        "python-slugify",
+        "requests",
+    ],
     tests_require=[
         "black",
         "flake8",
