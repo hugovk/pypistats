@@ -28,6 +28,17 @@ class TestCli(unittest.TestCase):
         self.assertEqual(first, "2018-07-01")
         self.assertEqual(last, "2018-07-31")
 
+    def test__month_12(self):
+        # Arrange
+        yyyy_mm = "2018-12"
+
+        # Act
+        first, last = cli._month(yyyy_mm)
+
+        # Assert
+        self.assertEqual(first, "2018-12-01")
+        self.assertEqual(last, "2018-12-31")
+
     @freeze_time("2018-09-25")
     def test__last_month(self):
         # Arrange

@@ -243,7 +243,7 @@ def _month(yyyy_mm):
     """Helper to return start_date and end_date of a month as yyyy-mm-dd"""
     year, month = map(int, yyyy_mm.split("-"))
     first = date(year, month, 1)
-    last = date(year, month + 1, 1) - relativedelta(days=1)
+    last = first + relativedelta(months=1) - relativedelta(days=1)
     return str(first), str(last)
 
 
