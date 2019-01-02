@@ -443,21 +443,6 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output, SAMPLE_DATA_RECENT)
 
-    def test__custom_list(self):
-        # Arrange
-        input_list = [1, 2, 3, 4]
-        special_item = 3
-        default_value = 0
-        special_value = 100
-
-        # Act
-        output = pypistats._custom_list(
-            input_list, special_item, default_value, special_value
-        )
-
-        # Assert
-        self.assertEqual(output, [0, 0, 100, 0])
-
     def test_valid_json(self):
         # Arrange
         package = "pip"
