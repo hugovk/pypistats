@@ -4,20 +4,15 @@
 Python interface to PyPI Stats API
 https://pypistats.org/api
 """
+import atexit
 import json
 from datetime import datetime
 from pathlib import Path
-import atexit
 
 import requests
 from appdirs import user_cache_dir
-from pytablewriter import (
-    Align,
-    Format,
-    HtmlTableWriter,
-    MarkdownTableWriter,
-    RstSimpleTableWriter,
-)
+from pytablewriter import HtmlTableWriter, MarkdownTableWriter, RstSimpleTableWriter
+from pytablewriter.style import Align, Style
 from slugify import slugify
 
 from . import version
@@ -242,25 +237,6 @@ def _percent(data):
     return data
 
 
-def _custom_list(input_list, special_item, default_value, special_value):
-    """Given:
-        input_list = [1, 2, 3, 4]
-        special_item = 3
-        default_value = 0
-        special_value = 100
-    Return:
-        [0, 0, 100, 0]
-    """
-    new_list = [default_value] * len(input_list)
-
-    try:
-        new_list[input_list.index(special_item)] = special_value
-    except ValueError:
-        pass
-
-    return new_list
-
-
 def _tabulate(data, format="markdown"):
     """Return data in specified format"""
 
@@ -289,15 +265,21 @@ def _tabulate(data, format="markdown"):
     # Custom alignment and format
     if header_list[0] in ["last_day", "last_month", "last_week"]:
         # Special case for 'recent'
-        writer.align_list = len(header_list) * [Align.AUTO]
-        writer.format_list = len(header_list) * [Format.THOUSAND_SEPARATOR]
+        writer.style_list = len(header_list) * [Style(thousand_separator=",")]
     else:
-        writer.align_list = _custom_list(
-            header_list, "percent", Align.AUTO, Align.RIGHT
-        )
-        writer.format_list = _custom_list(
-            header_list, "downloads", Format.NONE, Format.THOUSAND_SEPARATOR
-        )
+        style_list = []
+
+        for item in header_list:
+            align = None
+            thousand_separator = None
+            if item == "percent":
+                align = Align.RIGHT
+            elif item == "downloads":
+                thousand_separator = ","
+            style = Style(align=align, thousand_separator=thousand_separator)
+            style_list.append(style)
+
+        writer.style_list = style_list
 
     return writer.dumps()
 

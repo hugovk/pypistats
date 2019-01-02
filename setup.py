@@ -24,7 +24,7 @@ setup(
     zip_safe=True,
     install_requires=[
         "appdirs",
-        "pytablewriter>=0.33.0",
+        "pytablewriter>=0.37.0",
         "python-dateutil",
         "python-slugify",
         "requests",
