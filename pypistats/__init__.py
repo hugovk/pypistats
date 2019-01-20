@@ -6,6 +6,7 @@ https://pypistats.org/api
 """
 import atexit
 import json
+import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -21,6 +22,17 @@ __version__ = version.__version__
 
 BASE_URL = "https://pypistats.org/api/"
 CACHE_DIR = Path(user_cache_dir("pypistats"))
+
+
+def _print_verbose(verbose, *args, **kwargs):
+    """Print if verbose"""
+    if verbose:
+        _print_stderr(*args, **kwargs)
+
+
+def _print_stderr(*args, **kwargs):
+    """Print to stderr"""
+    print(*args, file=sys.stderr, **kwargs)
 
 
 def _cache_filename(url):
@@ -77,6 +89,7 @@ def pypi_stats_api(
     end_date=None,
     sort=True,
     total="all",
+    verbose=False,
 ):
     """Call the API and return JSON"""
     if params:
@@ -85,9 +98,12 @@ def pypi_stats_api(
         params = ""
     url = BASE_URL + endpoint.lower() + params
     cache_file = _cache_filename(url)
+    _print_verbose(verbose, "API URL:", url)
+    _print_verbose(verbose, "Cache file:", cache_file)
 
     res = {}
     if cache_file.is_file():
+        _print_verbose(verbose, "Cache file exists")
         res = _load_cache(cache_file)
 
     if res == {}:
@@ -96,6 +112,7 @@ def pypi_stats_api(
 
         # Raise if we made a bad request
         # (4XX client error or 5XX server error response)
+        _print_verbose(verbose, "HTTP status code:", r.status_code)
         r.raise_for_status()
 
         res = r.json()

@@ -114,6 +114,9 @@ arg_monthly = argument("--monthly", action="store_true", help="Show monthly down
 arg_format = argument(
     "-f", "--format", default="markdown", choices=FORMATS, help="The format of output"
 )
+arg_verbose = argument(
+    "-v", "--verbose", action="store_true", help="Print debug messages to stderr"
+)
 
 
 @subcommand(
@@ -122,10 +125,15 @@ arg_format = argument(
         argument("-p", "--period", choices=("day", "week", "month")),
         arg_format,
         arg_json,
+        arg_verbose,
     ]
 )
 def recent(args):  # pragma: no cover
-    print(pypistats.recent(args.package, period=args.period, format=args.format))
+    print(
+        pypistats.recent(
+            args.package, period=args.period, format=args.format, verbose=args.verbose
+        )
+    )
 
 
 @subcommand(
@@ -140,6 +148,7 @@ def recent(args):  # pragma: no cover
         arg_last_month,
         arg_daily,
         arg_monthly,
+        arg_verbose,
     ]
 )
 def overall(args):  # pragma: no cover
@@ -154,6 +163,7 @@ def overall(args):  # pragma: no cover
             end_date=args.end_date,
             format=args.format,
             total="daily" if args.daily else ("monthly" if args.monthly else "all"),
+            verbose=args.verbose,
         )
     )
 
@@ -161,7 +171,7 @@ def overall(args):  # pragma: no cover
 @subcommand(
     [
         argument("package"),
-        argument("-v", "--version", help="eg. 2 or 3"),
+        argument("-V", "--version", help="eg. 2 or 3"),
         arg_format,
         arg_json,
         arg_start_date,
@@ -170,6 +180,7 @@ def overall(args):  # pragma: no cover
         arg_last_month,
         arg_daily,
         arg_monthly,
+        arg_verbose,
     ]
 )
 def python_major(args):  # pragma: no cover
@@ -181,6 +192,7 @@ def python_major(args):  # pragma: no cover
             end_date=args.end_date,
             format=args.format,
             total="daily" if args.daily else ("monthly" if args.monthly else "all"),
+            verbose=args.verbose,
         )
     )
 
@@ -188,7 +200,7 @@ def python_major(args):  # pragma: no cover
 @subcommand(
     [
         argument("package"),
-        argument("-v", "--version", help="eg. 2.7 or 3.6"),
+        argument("-V", "--version", help="eg. 2.7 or 3.6"),
         arg_format,
         arg_json,
         arg_start_date,
@@ -197,6 +209,7 @@ def python_major(args):  # pragma: no cover
         arg_last_month,
         arg_daily,
         arg_monthly,
+        arg_verbose,
     ]
 )
 def python_minor(args):  # pragma: no cover
@@ -208,6 +221,7 @@ def python_minor(args):  # pragma: no cover
             end_date=args.end_date,
             format=args.format,
             total="daily" if args.daily else ("monthly" if args.monthly else "all"),
+            verbose=args.verbose,
         )
     )
 
@@ -224,6 +238,7 @@ def python_minor(args):  # pragma: no cover
         arg_last_month,
         arg_daily,
         arg_monthly,
+        arg_verbose,
     ]
 )
 def system(args):  # pragma: no cover
@@ -235,6 +250,7 @@ def system(args):  # pragma: no cover
             end_date=args.end_date,
             format=args.format,
             total="daily" if args.daily else ("monthly" if args.monthly else "all"),
+            verbose=args.verbose,
         )
     )
 
@@ -256,7 +272,7 @@ def _last_month():
 
 def main():
     cli.add_argument(
-        "-v", "--version", action="version", version=f"%(prog)s {pypistats.__version__}"
+        "-V", "--version", action="version", version=f"%(prog)s {pypistats.__version__}"
     )
     args = cli.parse_args()
     if args.subcommand is None:
