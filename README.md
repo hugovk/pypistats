@@ -35,7 +35,7 @@ Top-level help:
 
 ```console
 $ pypistats --help
-usage: pypistats [-h] [-v]
+usage: pypistats [-h] [-V]
                  {recent,overall,python_major,python_minor,system} ...
 
 positional arguments:
@@ -43,15 +43,15 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -v, --version         show program's version number and exit
-```
+  -V, --version         show program's version number and exit
+  ```
 
 Help for a subcommand:
 
 ```console
 $ pypistats recent --help
 usage: pypistats recent [-h] [-p {day,week,month}]
-                        [-f {json,markdown,rst,html}] [-j]
+                        [-f {json,markdown,rst,html}] [-j] [-v]
                         package
 
 Retrieve the aggregate download quantities for the last day/week/month
@@ -65,7 +65,8 @@ optional arguments:
   -f {json,markdown,rst,html}, --format {json,markdown,rst,html}
                         The format of output (default: markdown)
   -j, --json            Shortcut for "-f json" (default: False)
-```
+  -v, --verbose         Print debug messages to stderr (default: False)
+  ```
 
 Get recent downloads:
 
@@ -80,9 +81,9 @@ Help for another subcommand:
 
 ```console
 $ pypistats python_minor --help
-usage: pypistats python_minor [-h] [-v VERSION] [-f {json,markdown,rst,html}]
+usage: pypistats python_minor [-h] [-V VERSION] [-f {json,markdown,rst,html}]
                               [-j] [-sd yyyy-mm-dd] [-ed yyyy-mm-dd]
-                              [-m yyyy-mm] [-l] [-d]
+                              [-m yyyy-mm] [-l] [-d] [--monthly] [-v]
                               package
 
 Retrieve the aggregate daily download time series by Python minor version
@@ -93,7 +94,7 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -v VERSION, --version VERSION
+  -V VERSION, --version VERSION
                         eg. 2.7 or 3.6 (default: None)
   -f {json,markdown,rst,html}, --format {json,markdown,rst,html}
                         The format of output (default: markdown)
@@ -107,6 +108,8 @@ optional arguments:
                         None)
   -l, --last-month      Shortcut for -sd & -ed for last month (default: False)
   -d, --daily           Show daily downloads (default: False)
+  --monthly             Show monthly downloads (default: False)
+  -v, --verbose         Print debug messages to stderr (default: False)
 ```
 
 Get version downloads:
