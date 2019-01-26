@@ -4,6 +4,7 @@
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/pypistats.svg)](https://pypi.org/project/pypistats/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/pypistats.svg)](https://pypistats.org/packages/pypistats)
 [![Build Status](https://travis-ci.org/hugovk/pypistats.svg?branch=master)](https://travis-ci.org/hugovk/pypistats)
+[![Build Status](https://dev.azure.com/hugovk/hugovk/_apis/build/status/hugovk.pypistats?branchName=master)](https://dev.azure.com/hugovk/hugovk/_build/latest?definitionId=1?branchName=master)
 [![codecov](https://codecov.io/gh/hugovk/pypistats/branch/master/graph/badge.svg)](https://codecov.io/gh/hugovk/pypistats)
 [![GitHub](https://img.shields.io/github/license/hugovk/pypistats.svg)](LICENSE.txt)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
