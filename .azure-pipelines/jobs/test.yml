@@ -1,34 +1,44 @@
-strategy:
-  matrix:
-    Python36:
-      python.version: '3.6'
-    Python37:
-      python.version: '3.7'
+parameters:
+  name: ''  # defaults for any parameters that aren't specified
+  vmImage: ''
 
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '$(python.version)'
-    architecture: 'x64'
+jobs:
 
-- script: |
-    python -m pip install --upgrade pip
-    python -m pip install --upgrade black flake8 freezegun pytest pytest-cov requests_mock
-    python -m pip install  -e .
-  displayName: 'Install dependencies'
+- job:  ${{ parameters.name }}
+  pool:
+    vmImage: ${{ parameters.vmImage }}
 
-- script: |
-    pytest --cov pypistats --junitxml=junit/test-results.xml
-  displayName: 'Unit tests'
+  strategy:
+    matrix:
+      Python36:
+        python.version: '3.6'
+      Python37:
+        python.version: '3.7'
 
-- script: |
-    python -m pip install --upgrade codecov
-    codecov --name "Python $(python.version)" --build $(Build.BuildNumber)
-  condition: succeeded()
-  displayName: 'Upload to Codecov'
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+      architecture: 'x64'
 
-- task: PublishTestResults@2
-  inputs:
-    testResultsFiles: '**/test-results.xml'
-    testRunTitle: 'Python $(python.version)'
-  condition: succeededOrFailed()
+  - script: |
+      python -m pip install --upgrade pip
+      python -m pip install --upgrade black flake8 freezegun pytest pytest-cov requests_mock
+      python -m pip install  -e .
+    displayName: 'Install dependencies'
+
+  - script: |
+      pytest --cov pypistats --junitxml=junit/test-results.xml
+    displayName: 'Unit tests'
+
+  - script: |
+      python -m pip install --upgrade codecov
+      codecov --name "Python $(python.version)" --build $(Build.BuildNumber)
+    condition: succeeded()
+    displayName: 'Upload to Codecov'
+
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/test-results.xml'
+      testRunTitle: 'Python $(python.version)'
+    condition: succeededOrFailed()

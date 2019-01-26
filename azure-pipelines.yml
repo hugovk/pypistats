@@ -8,16 +8,14 @@ trigger:
 
 jobs:
 
-- job: Linux_test
-  displayName: 'Linux test'
-  template: .azure-pipelines/jobs/test.yml
-  pool:
+- template: .azure-pipelines/jobs/test.yml
+  parameters:
+    name: Linux
     vmImage: 'Ubuntu-16.04'
 
-- job: Windows_test
-  displayName: 'Windows test'
-  template: .azure-pipelines/jobs/test.yml
-  pool:
+- template: .azure-pipelines/jobs/test.yml
+  parameters:
+    name: Windows
     vmImage: 'vs2017-win2016'
 
 - job: Publish
