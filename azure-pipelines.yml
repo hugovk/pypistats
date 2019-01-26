@@ -9,6 +9,7 @@ trigger:
 jobs:
 
 - job: Linux_test
+  displayName: 'Linux test'
   pool:
     vmImage: 'Ubuntu-16.04'
   strategy:
@@ -47,6 +48,7 @@ jobs:
     condition: succeededOrFailed()
 
 - job: Windows_test
+  displayName: 'Windows test'
   pool:
     vmImage: 'vs2017-win2016'
   strategy:
