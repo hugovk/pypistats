@@ -36,8 +36,9 @@ jobs:
 
   - script: |
       python -m pip install --upgrade codecov
-      codecov --name "Python $(python.version)"
+      codecov --name "Python $(python.version)" --build $(Build.BuildNumber)
     condition: succeeded()
+    displayName: 'Upload to Codecov'
 
   - task: PublishTestResults@2
     inputs:
