@@ -31,7 +31,7 @@ jobs:
     displayName: 'Install dependencies'
 
   - script: |
-      pytest tests --doctest-modules --junitxml=junit/test-results.xml
+      pytest --cov pypistats --junitxml=junit/test-results.xml
     displayName: 'pytest'
 
   - task: PublishTestResults@2
