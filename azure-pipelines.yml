@@ -24,17 +24,18 @@ jobs:
       versionSpec: '$(python.version)'
       architecture: 'x64'
 
-  - script: |
+  - displayName: 'Install dependencies'
+    script: |
       python -m pip install --upgrade pip
       python -m pip install --upgrade black flake8 freezegun pytest pytest-cov requests_mock
       python -m pip install  -e .
-    displayName: 'Install dependencies'
 
-  - script: |
+  - displayName: 'Unit tests'
+    script: |
       pytest --cov pypistats --junitxml=junit/test-results.xml
-    displayName: 'Unit tests'
 
-  - script: |
+  - displayName: 'Upload to Codecov'
+    script: |
       python -m pip install --upgrade codecov
       codecov
     condition: succeeded()
@@ -56,5 +57,6 @@ jobs:
       versionSpec: '3.x'
       architecture: 'x64'
 
-  - script: python setup.py sdist
-    displayName: 'Build sdist'
+  - displayName: 'Build sdist'
+    script: python setup.py sdist
+
