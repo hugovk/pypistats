@@ -34,7 +34,9 @@ jobs:
       pytest --cov pypistats --junitxml=junit/test-results.xml
     displayName: 'Unit tests'
 
-  - script: codecov
+  - script: |
+      python -m pip install --upgrade codecov
+      codecov
     condition: succeeded()
 
   - task: PublishTestResults@2
