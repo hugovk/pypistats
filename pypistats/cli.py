@@ -76,6 +76,13 @@ def _valid_yyyy_mm(date_string):
     return _valid_date(date_string, "%Y-%m")
 
 
+def _valid_yyyy_mm_optional_dd(date_string):
+    try:
+        return _valid_yyyy_mm_dd(date_string)
+    except argparse.ArgumentTypeError:
+        return _valid_yyyy_mm(date_string)
+
+
 def _define_format(args) -> str:
     if args.json:
         return "json"
@@ -88,12 +95,16 @@ FORMATS = ("json", "markdown", "rst", "html")
 arg_start_date = argument(
     "-sd",
     "--start-date",
-    metavar="yyyy-mm-dd",
-    type=_valid_yyyy_mm_dd,
+    metavar="yyyy-mm[-dd]",
+    type=_valid_yyyy_mm_optional_dd,
     help="Start date",
 )
 arg_end_date = argument(
-    "-ed", "--end-date", metavar="yyyy-mm-dd", type=_valid_yyyy_mm_dd, help="End date"
+    "-ed",
+    "--end-date",
+    metavar="yyyy-mm[-dd]",
+    type=_valid_yyyy_mm_optional_dd,
+    help="End date",
 )
 arg_month = argument(
     "-m",
@@ -278,6 +289,25 @@ def main():
     if args.subcommand is None:
         cli.print_help()
     else:
+
+        # Convert yyyy-mm to yyyy-mm-dd
+        if hasattr(args, "start_date") and args.start_date:
+            try:
+                # yyyy-mm
+                args.start_date, _ = _month(args.start_date)
+            except ValueError:
+                # yyyy-mm-dd
+                pass
+
+        # Convert yyyy-mm to yyyy-mm-dd
+        if hasattr(args, "end_date") and args.end_date:
+            try:
+                # yyyy-mm
+                _, args.end_date = _month(args.end_date)
+            except ValueError:
+                # yyyy-mm-dd
+                pass
+
         if hasattr(args, "month") and args.month:
             args.start_date, args.end_date = _month(args.month)
         if hasattr(args, "last_month") and args.last_month:

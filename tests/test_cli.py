@@ -101,6 +101,34 @@ class TestCli(unittest.TestCase):
         with self.assertRaises(argparse.ArgumentTypeError):
             cli._valid_yyyy_mm(input)
 
+    def test__valid_yyyy_mm_optional_dd1(self):
+        # Arrange
+        input = "2019-01-21"
+
+        # Act
+        output = cli._valid_yyyy_mm_optional_dd(input)
+
+        # Assert
+        self.assertEqual(input, output)
+
+    def test__valid_yyyy_mm_optional_dd2(self):
+        # Arrange
+        input = "2019-01"
+
+        # Act
+        output = cli._valid_yyyy_mm_optional_dd(input)
+
+        # Assert
+        self.assertEqual(input, output)
+
+    def test__valid_yyyy_mm_optional_dd_invalid(self):
+        # Arrange
+        input = "dkvnf"
+
+        # Act / Assert
+        with self.assertRaises(argparse.ArgumentTypeError):
+            cli._valid_yyyy_mm_dd(input)
+
     def test__define_format_default(self):
         # Setup
         args = self.__Args()

@@ -67,7 +67,7 @@ optional arguments:
                         The format of output (default: markdown)
   -j, --json            Shortcut for "-f json" (default: False)
   -v, --verbose         Print debug messages to stderr (default: False)
-  ```
+```
 
 Get recent downloads:
 
@@ -83,7 +83,7 @@ Help for another subcommand:
 ```console
 $ pypistats python_minor --help
 usage: pypistats python_minor [-h] [-V VERSION] [-f {json,markdown,rst,html}]
-                              [-j] [-sd yyyy-mm-dd] [-ed yyyy-mm-dd]
+                              [-j] [-sd yyyy-mm[-dd]] [-ed yyyy-mm[-dd]]
                               [-m yyyy-mm] [-l] [-d] [--monthly] [-v]
                               package
 
@@ -100,9 +100,9 @@ optional arguments:
   -f {json,markdown,rst,html}, --format {json,markdown,rst,html}
                         The format of output (default: markdown)
   -j, --json            Shortcut for "-f json" (default: False)
-  -sd yyyy-mm-dd, --start-date yyyy-mm-dd
+  -sd yyyy-mm[-dd], --start-date yyyy-mm[-dd]
                         Start date (default: None)
-  -ed yyyy-mm-dd, --end-date yyyy-mm-dd
+  -ed yyyy-mm[-dd], --end-date yyyy-mm[-dd]
                         End date (default: None)
   -m yyyy-mm, --month yyyy-mm
                         Shortcut for -sd & -ed for a single month (default:
