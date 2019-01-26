@@ -54,8 +54,8 @@ class TestPypiStatsCache(unittest.TestCase):
         with tempfile.NamedTemporaryFile() as f:
             f.write(b"Invalid JSON!")
 
-            # Act
-            data = pypistats._load_cache(Path(f.name))
+        # Act
+        data = pypistats._load_cache(Path(f.name))
 
         # Assert
         self.assertEqual(data, {})
