@@ -32,7 +32,10 @@ jobs:
 
   - script: |
       pytest --cov pypistats --junitxml=junit/test-results.xml
-    displayName: 'pytest'
+    displayName: 'Unit tests'
+
+  - script: codecov
+    condition: succeeded()
 
   - task: PublishTestResults@2
     inputs:
