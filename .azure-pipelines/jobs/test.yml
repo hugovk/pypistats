@@ -23,7 +23,7 @@ jobs:
 
   - script: |
       python -m pip install --upgrade pip
-      python -m pip install --upgrade black flake8 freezegun pytest pytest-cov requests_mock
+      python -m pip install --upgrade freezegun pytest pytest-cov requests_mock
       python -m pip install  -e .
     displayName: 'Install dependencies'
 

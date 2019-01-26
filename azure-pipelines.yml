@@ -8,6 +8,11 @@ trigger:
 
 jobs:
 
+- template: .azure-pipelines/jobs/lint.yml
+  parameters:
+    name: Lint
+    vmImage: 'Ubuntu-16.04'
+
 - template: .azure-pipelines/jobs/test.yml
   parameters:
     name: Linux
@@ -25,7 +30,9 @@ jobs:
 
 - job: Publish
   dependsOn:
+  - Lint
   - Linux
+  - macOS
   - Windows
   pool:
     vmImage: 'Ubuntu-16.04'
