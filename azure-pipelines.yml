@@ -20,8 +20,8 @@ jobs:
 
 - job: Publish
   dependsOn:
-  - Linux_test
-  - Windows_test
+  - Linux
+  - Windows
   pool:
     vmImage: 'Ubuntu-16.04'
 
