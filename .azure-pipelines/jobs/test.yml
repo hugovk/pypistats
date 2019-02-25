@@ -39,8 +39,15 @@ jobs:
   - script: |
       python -m pip install --upgrade codecov
       codecov --name "Python $(python.version)" --build $(Build.BuildNumber) --token $(CODECOV_TOKEN)
+      coverage xml -o coverage.xml # For PublishCodeCoverageResults
     condition: succeeded()
     displayName: 'Upload to Codecov'
+
+  - task: PublishCodeCoverageResults@1
+    condition: succeeded()
+    inputs:
+      codeCoverageTool: cobertura
+      summaryFileLocation: coverage.xml
 
   - task: PublishTestResults@2
     inputs:
