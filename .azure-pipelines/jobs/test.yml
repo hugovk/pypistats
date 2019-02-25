@@ -28,7 +28,7 @@ jobs:
     displayName: 'Install dependencies'
 
   - script: |
-      pytest --cov pypistats --junitxml=junit/test-results.xml --cov-report xml
+      pytest --cov pypistats --junitxml=junit/test-results.xml --cov-report html --cov-report xml
     displayName: 'Unit tests'
 
   - script: |
@@ -47,6 +47,7 @@ jobs:
     inputs:
       codeCoverageTool: cobertura
       summaryFileLocation: coverage.xml
+      reportDirectory: '**/htmlcov'
 
   - task: PublishTestResults@2
     inputs:
