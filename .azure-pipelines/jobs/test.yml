@@ -28,7 +28,7 @@ jobs:
     displayName: 'Install dependencies'
 
   - script: |
-      pytest --cov pypistats --junitxml=junit/test-results.xml
+      pytest --cov pypistats --junitxml=junit/test-results.xml --cov-report xml
     displayName: 'Unit tests'
 
   - script: |
@@ -39,7 +39,6 @@ jobs:
   - script: |
       python -m pip install --upgrade codecov
       codecov --name "Python $(python.version)" --build $(Build.BuildNumber) --token $(CODECOV_TOKEN)
-      coverage xml -o coverage.xml # For PublishCodeCoverageResults
     condition: succeeded()
     displayName: 'Upload to Codecov'
 
