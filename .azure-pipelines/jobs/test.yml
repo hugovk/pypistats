@@ -28,7 +28,7 @@ jobs:
     displayName: 'Install dependencies'
 
   - script: |
-      pytest --cov pypistats --cov-report html
+      pytest --cov pypistats --cov-report html --test-run-title="${{ parameters.name }} Python $(python.version)"
     displayName: 'Unit tests'
 
   - script: |
