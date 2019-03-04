@@ -23,12 +23,12 @@ jobs:
 
   - script: |
       python -m pip install --upgrade pip
-      python -m pip install --upgrade freezegun pytest pytest-cov requests_mock
+      python -m pip install --upgrade freezegun pytest pytest-azurepipelines pytest-cov requests_mock
       python -m pip install  -e .
     displayName: 'Install dependencies'
 
   - script: |
-      pytest --cov pypistats --junitxml=junit/test-results.xml --cov-report html --cov-report xml
+      pytest --cov pypistats --cov-report html
     displayName: 'Unit tests'
 
   - script: |
@@ -41,16 +41,3 @@ jobs:
       codecov --name "Azure: ${{ parameters.name }} Python $(python.version)" --build $(Build.BuildNumber) --token $(CODECOV_TOKEN)
     condition: succeeded()
     displayName: 'Upload to Codecov'
-
-  - task: PublishCodeCoverageResults@1
-    condition: succeeded()
-    inputs:
-      codeCoverageTool: cobertura
-      summaryFileLocation: coverage.xml
-      reportDirectory: '**/htmlcov'
-
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFiles: '**/test-results.xml'
-      testRunTitle: 'Python $(python.version)'
-    condition: succeededOrFailed()
