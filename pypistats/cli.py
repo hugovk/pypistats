@@ -119,6 +119,9 @@ arg_last_month = argument(
     help="Shortcut for -sd & -ed for last month",
     action="store_true",
 )
+arg_this_month = argument(
+    "-t", "--this-month", help="Shortcut for -sd for this month", action="store_true"
+)
 arg_json = argument("-j", "--json", action="store_true", help='Shortcut for "-f json"')
 arg_daily = argument("-d", "--daily", action="store_true", help="Show daily downloads")
 arg_monthly = argument("--monthly", action="store_true", help="Show monthly downloads")
@@ -157,6 +160,7 @@ def recent(args):  # pragma: no cover
         arg_end_date,
         arg_month,
         arg_last_month,
+        arg_this_month,
         arg_daily,
         arg_monthly,
         arg_verbose,
@@ -189,6 +193,7 @@ def overall(args):  # pragma: no cover
         arg_end_date,
         arg_month,
         arg_last_month,
+        arg_this_month,
         arg_daily,
         arg_monthly,
         arg_verbose,
@@ -218,6 +223,7 @@ def python_major(args):  # pragma: no cover
         arg_end_date,
         arg_month,
         arg_last_month,
+        arg_this_month,
         arg_daily,
         arg_monthly,
         arg_verbose,
@@ -247,6 +253,7 @@ def python_minor(args):  # pragma: no cover
         arg_end_date,
         arg_month,
         arg_last_month,
+        arg_this_month,
         arg_daily,
         arg_monthly,
         arg_verbose,
@@ -281,6 +288,13 @@ def _last_month():
     return _month(d.isoformat()[:7])
 
 
+def _this_month():
+    """Helper to return start_date of the current month as yyyy-mm-dd.
+    No end_date needed."""
+    today = date.today()
+    return _month(today.isoformat()[:7])[0]
+
+
 def main():
     cli.add_argument(
         "-V", "--version", action="version", version=f"%(prog)s {pypistats.__version__}"
@@ -310,8 +324,10 @@ def main():
 
         if hasattr(args, "month") and args.month:
             args.start_date, args.end_date = _month(args.month)
-        if hasattr(args, "last_month") and args.last_month:
+        elif hasattr(args, "last_month") and args.last_month:
             args.start_date, args.end_date = _last_month()
+        elif hasattr(args, "this_month") and args.this_month:
+            args.start_date = _this_month()
 
         args.format = _define_format(args)
 

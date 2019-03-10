@@ -49,6 +49,15 @@ class TestCli(unittest.TestCase):
         self.assertEqual(first, "2018-08-01")
         self.assertEqual(last, "2018-08-31")
 
+    @freeze_time("2019-03-10")
+    def test_this_month(self):
+        # Arrange
+        # Act
+        first = cli._this_month()
+
+        # Assert
+        self.assertEqual(first, "2019-03-01")
+
     def test__valid_yyyy_mm_dd(self):
         # Arrange
         input = "2018-07-12"
