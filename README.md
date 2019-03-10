@@ -16,7 +16,7 @@ Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api).
 ### From PyPI
 
 ```bash
-pip install -U pypistats
+pip install --upgrade pypistats
 ```
 
 ### From source
@@ -84,7 +84,7 @@ Help for another subcommand:
 $ pypistats python_minor --help
 usage: pypistats python_minor [-h] [-V VERSION] [-f {json,markdown,rst,html}]
                               [-j] [-sd yyyy-mm[-dd]] [-ed yyyy-mm[-dd]]
-                              [-m yyyy-mm] [-l] [-d] [--monthly] [-v]
+                              [-m yyyy-mm] [-l] [-t] [-d] [--monthly] [-v]
                               package
 
 Retrieve the aggregate daily download time series by Python minor version
@@ -108,6 +108,7 @@ optional arguments:
                         Shortcut for -sd & -ed for a single month (default:
                         None)
   -l, --last-month      Shortcut for -sd & -ed for last month (default: False)
+  -t, --this-month      Shortcut for -sd for this month (default: False)
   -d, --daily           Show daily downloads (default: False)
   --monthly             Show monthly downloads (default: False)
   -v, --verbose         Print debug messages to stderr (default: False)
