@@ -132,6 +132,20 @@ arg_verbose = argument(
     "-v", "--verbose", action="store_true", help="Print debug messages to stderr"
 )
 
+# These are used by all except the 'recent' subcommand
+common_arguments = [
+    arg_format,
+    arg_json,
+    arg_start_date,
+    arg_end_date,
+    arg_month,
+    arg_last_month,
+    arg_this_month,
+    arg_daily,
+    arg_monthly,
+    arg_verbose,
+]
+
 
 @subcommand(
     [
@@ -154,16 +168,7 @@ def recent(args):  # pragma: no cover
     [
         argument("package"),
         argument("--mirrors", choices=("true", "false", "with", "without")),
-        arg_format,
-        arg_json,
-        arg_start_date,
-        arg_end_date,
-        arg_month,
-        arg_last_month,
-        arg_this_month,
-        arg_daily,
-        arg_monthly,
-        arg_verbose,
+        *common_arguments,
     ]
 )
 def overall(args):  # pragma: no cover
@@ -187,16 +192,7 @@ def overall(args):  # pragma: no cover
     [
         argument("package"),
         argument("-V", "--version", help="eg. 2 or 3"),
-        arg_format,
-        arg_json,
-        arg_start_date,
-        arg_end_date,
-        arg_month,
-        arg_last_month,
-        arg_this_month,
-        arg_daily,
-        arg_monthly,
-        arg_verbose,
+        *common_arguments,
     ]
 )
 def python_major(args):  # pragma: no cover
@@ -217,16 +213,7 @@ def python_major(args):  # pragma: no cover
     [
         argument("package"),
         argument("-V", "--version", help="eg. 2.7 or 3.6"),
-        arg_format,
-        arg_json,
-        arg_start_date,
-        arg_end_date,
-        arg_month,
-        arg_last_month,
-        arg_this_month,
-        arg_daily,
-        arg_monthly,
-        arg_verbose,
+        *common_arguments,
     ]
 )
 def python_minor(args):  # pragma: no cover
@@ -247,16 +234,7 @@ def python_minor(args):  # pragma: no cover
     [
         argument("package"),
         argument("-o", "--os", help="eg. windows, linux, darwin or other"),
-        arg_format,
-        arg_json,
-        arg_start_date,
-        arg_end_date,
-        arg_month,
-        arg_last_month,
-        arg_this_month,
-        arg_daily,
-        arg_monthly,
-        arg_verbose,
+        *common_arguments,
     ]
 )
 def system(args):  # pragma: no cover
