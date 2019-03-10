@@ -6,6 +6,7 @@ Unit tests for pypistats
 import copy
 import json
 import unittest
+from pathlib import Path
 
 import requests_mock
 
@@ -33,19 +34,26 @@ SAMPLE_DATA_RECENT = {
 }
 
 
-def stub_save_cache(cache_file, data):
+def stub__cache_filename(*args):
+    return Path("/this/does/not/exist")
+
+
+def stub__save_cache(*args):
     pass
 
 
 class TestPypiStats(unittest.TestCase):
     def setUp(self):
         # Stub caching. Caches are tested in another class.
-        self.original_save_cache = pypistats._save_cache
-        pypistats._save_cache = stub_save_cache
+        self.original__cache_filename = pypistats._cache_filename
+        self.original__save_cache = pypistats._save_cache
+        pypistats._cache_filename = stub__cache_filename
+        pypistats._save_cache = stub__save_cache
 
     def tearDown(self):
         # Unstub caching
-        pypistats._save_cache = self.original_save_cache
+        pypistats._cache_filename = self.original__cache_filename
+        pypistats._save_cache = self.original__save_cache
 
     def test__filter_no_filters_no_change(self):
         # Arrange
