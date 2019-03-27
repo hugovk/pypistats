@@ -119,6 +119,9 @@ arg_last_month = argument(
     help="Shortcut for -sd & -ed for last month",
     action="store_true",
 )
+arg_this_month = argument(
+    "-t", "--this-month", help="Shortcut for -sd for this month", action="store_true"
+)
 arg_json = argument("-j", "--json", action="store_true", help='Shortcut for "-f json"')
 arg_daily = argument("-d", "--daily", action="store_true", help="Show daily downloads")
 arg_monthly = argument("--monthly", action="store_true", help="Show monthly downloads")
@@ -128,6 +131,20 @@ arg_format = argument(
 arg_verbose = argument(
     "-v", "--verbose", action="store_true", help="Print debug messages to stderr"
 )
+
+# These are used by all except the 'recent' subcommand
+common_arguments = [
+    arg_format,
+    arg_json,
+    arg_start_date,
+    arg_end_date,
+    arg_month,
+    arg_last_month,
+    arg_this_month,
+    arg_daily,
+    arg_monthly,
+    arg_verbose,
+]
 
 
 @subcommand(
@@ -151,15 +168,7 @@ def recent(args):  # pragma: no cover
     [
         argument("package"),
         argument("--mirrors", choices=("true", "false", "with", "without")),
-        arg_format,
-        arg_json,
-        arg_start_date,
-        arg_end_date,
-        arg_month,
-        arg_last_month,
-        arg_daily,
-        arg_monthly,
-        arg_verbose,
+        *common_arguments,
     ]
 )
 def overall(args):  # pragma: no cover
@@ -183,15 +192,7 @@ def overall(args):  # pragma: no cover
     [
         argument("package"),
         argument("-V", "--version", help="eg. 2 or 3"),
-        arg_format,
-        arg_json,
-        arg_start_date,
-        arg_end_date,
-        arg_month,
-        arg_last_month,
-        arg_daily,
-        arg_monthly,
-        arg_verbose,
+        *common_arguments,
     ]
 )
 def python_major(args):  # pragma: no cover
@@ -212,15 +213,7 @@ def python_major(args):  # pragma: no cover
     [
         argument("package"),
         argument("-V", "--version", help="eg. 2.7 or 3.6"),
-        arg_format,
-        arg_json,
-        arg_start_date,
-        arg_end_date,
-        arg_month,
-        arg_last_month,
-        arg_daily,
-        arg_monthly,
-        arg_verbose,
+        *common_arguments,
     ]
 )
 def python_minor(args):  # pragma: no cover
@@ -241,15 +234,7 @@ def python_minor(args):  # pragma: no cover
     [
         argument("package"),
         argument("-o", "--os", help="eg. windows, linux, darwin or other"),
-        arg_format,
-        arg_json,
-        arg_start_date,
-        arg_end_date,
-        arg_month,
-        arg_last_month,
-        arg_daily,
-        arg_monthly,
-        arg_verbose,
+        *common_arguments,
     ]
 )
 def system(args):  # pragma: no cover
@@ -281,6 +266,13 @@ def _last_month():
     return _month(d.isoformat()[:7])
 
 
+def _this_month():
+    """Helper to return start_date of the current month as yyyy-mm-dd.
+    No end_date needed."""
+    today = date.today()
+    return _month(today.isoformat()[:7])[0]
+
+
 def main():
     cli.add_argument(
         "-V", "--version", action="version", version=f"%(prog)s {pypistats.__version__}"
@@ -310,8 +302,10 @@ def main():
 
         if hasattr(args, "month") and args.month:
             args.start_date, args.end_date = _month(args.month)
-        if hasattr(args, "last_month") and args.last_month:
+        elif hasattr(args, "last_month") and args.last_month:
             args.start_date, args.end_date = _last_month()
+        elif hasattr(args, "this_month") and args.this_month:
+            args.start_date = _this_month()
 
         args.format = _define_format(args)
 
