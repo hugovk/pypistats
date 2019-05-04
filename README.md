@@ -7,7 +7,7 @@
 [![Build Status](https://dev.azure.com/hugovk/hugovk/_apis/build/status/hugovk.pypistats?branchName=master)](https://dev.azure.com/hugovk/hugovk/_build/latest?definitionId=1?branchName=master)
 [![codecov](https://codecov.io/gh/hugovk/pypistats/branch/master/graph/badge.svg)](https://codecov.io/gh/hugovk/pypistats)
 [![GitHub](https://img.shields.io/github/license/hugovk/pypistats.svg)](LICENSE.txt)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 
 Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api).
 
