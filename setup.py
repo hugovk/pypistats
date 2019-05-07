@@ -5,7 +5,7 @@ with open("README.md") as f:
     long_description = f.read()
 
 version_dict = {}
-with open("pypistats/version.py") as f:
+with open("src/pypistats/version.py") as f:
     exec(f.read(), version_dict)
     version = version_dict["__version__"]
 
@@ -19,7 +19,8 @@ setup(
     url="https://github.com/hugovk/pypistats",
     license="MIT",
     keywords=["PyPI", "downloads", "statistics", "stats", "BigQuery"],
-    packages=find_packages(),
+    packages=find_packages(where="src"),
+    package_dir={"": "src"},
     entry_points={"console_scripts": ["pypistats = pypistats.cli:main"]},
     zip_safe=True,
     install_requires=[
