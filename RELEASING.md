@@ -5,12 +5,12 @@
 * [ ] Remove `.dev0` suffix from the version:
 ```bash
 git checkout master
-edit pypistats/version.py
+edit src/pypistats/version.py
 ```
 
 * [ ] Commit and tag with the version number:
 ```bash
-git add pypistats/version.py
+git add src/pypistats/version.py
 git commit -m "Release 0.1.0"
 git tag -a 0.1.0 -m "Release 0.1.0"
 ```
@@ -32,11 +32,11 @@ git push --tags
 * [ ] Increment version and append `.dev0`:
 ```bash
 git checkout master
-edit pypistats/version.py
+edit src/pypistats/version.py
 ```
 * [ ] Commit and push:
 ```bash
-git add pypistats/version.py
+git add src/pypistats/version.py
 git commit -m "Start new release cycle"
 git push
 ```
