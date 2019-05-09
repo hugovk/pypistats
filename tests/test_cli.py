@@ -85,7 +85,7 @@ def test__month_name_to_yyyy_mm(name, date_format, expected):
 
 
 @pytest.mark.parametrize("test_input", ["2018-01-12", "2018-07-12", "2018-12-12"])
-def test__valid_yyyy_mm_dd(test_input):
+def test__valid_yyyy_mm_dd_valid(test_input):
     assert test_input == cli._valid_yyyy_mm_dd(test_input)
 
 
@@ -93,6 +93,17 @@ def test__valid_yyyy_mm_dd(test_input):
 def test__valid_yyyy_mm_dd_invalid(test_input):
     with pytest.raises(argparse.ArgumentTypeError):
         cli._valid_yyyy_mm_dd(test_input)
+
+
+@pytest.mark.parametrize("test_input", ["2018-01", "2018-07", "2018-12"])
+def test__valid_yyyy_mm_valid(test_input):
+    assert test_input == cli._valid_yyyy_mm(test_input)
+
+
+@pytest.mark.parametrize("test_input", ["dfkgjskfjgk", "2018-99", "2018-xx"])
+def test__valid_yyyy_mm_invalid(test_input):
+    with pytest.raises(argparse.ArgumentTypeError):
+        cli._valid_yyyy_mm(test_input)
 
 
 @freeze_time("2019-05-08")
@@ -119,32 +130,6 @@ class TestCli(unittest.TestCase):
         def __init__(self):
             self.json = False  # type: bool
             self.format = "markdown"  # type: str
-
-    def test__valid_yyyy_mm(self):
-        # Arrange
-        input = "2018-07"
-
-        # Act
-        output = cli._valid_yyyy_mm(input)
-
-        # Assert
-        self.assertEqual(input, output)
-
-    def test__valid_yyyy_mm_invalid(self):
-        # Arrange
-        input = "dfkgjskfjgk"
-
-        # Act / Assert
-        with self.assertRaises(argparse.ArgumentTypeError):
-            cli._valid_yyyy_mm(input)
-
-    def test__valid_yyyy_mm_invalid2(self):
-        # Arrange
-        input = "2018-99"
-
-        # Act / Assert
-        with self.assertRaises(argparse.ArgumentTypeError):
-            cli._valid_yyyy_mm(input)
 
     def test__valid_yyyy_mm_optional_dd1(self):
         # Arrange
