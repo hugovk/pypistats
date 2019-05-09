@@ -33,6 +33,7 @@ def test__month(yyyy_mm, expected):
     [
         ("2018-01-25", ("2017-12-01", "2017-12-31")),
         ("2018-09-25", ("2018-08-01", "2018-08-31")),
+        ("2018-12-25", ("2018-11-01", "2018-11-30")),
     ],
 )
 def test__last_month(yyyy_mm_dd, expected):
@@ -42,6 +43,23 @@ def test__last_month(yyyy_mm_dd, expected):
 
     # Assert
     assert expected == (first, last)
+
+
+@pytest.mark.parametrize(
+    "yyyy_mm_dd, expected",
+    [
+        ("2019-03-10", "2019-03-01"),
+        ("2019-05-08", "2019-05-01"),
+        ("2019-12-25", "2019-12-01"),
+    ],
+)
+def test__this_month(yyyy_mm_dd, expected):
+    # Act
+    with freeze_time(yyyy_mm_dd):
+        first = cli._this_month()
+
+    # Assert
+    assert expected == first
 
 
 @freeze_time("2019-05-08")
@@ -69,15 +87,6 @@ class TestCli(unittest.TestCase):
         def __init__(self):
             self.json = False  # type: bool
             self.format = "markdown"  # type: str
-
-    @freeze_time("2019-03-10")
-    def test_this_month(self):
-        # Arrange
-        # Act
-        first = cli._this_month()
-
-        # Assert
-        self.assertEqual(first, "2019-03-01")
 
     @freeze_time("2019-05-08")
     def test__month_name_to_yyyy_mm_before_now(self):
