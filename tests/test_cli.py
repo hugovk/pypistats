@@ -58,6 +58,54 @@ class TestCli(unittest.TestCase):
         # Assert
         self.assertEqual(first, "2019-03-01")
 
+    @freeze_time("2019-05-08")
+    def test__month_name_to_yyyy_mm_before_now(self):
+        # Arrange
+        input = "jan"
+        date_format = "%b"
+
+        # Act
+        output = cli._month_name_to_yyyy_mm(input, date_format)
+
+        # Assert
+        self.assertEqual(output, "2019-01")
+
+    @freeze_time("2019-05-08")
+    def test__month_name_to_yyyy_mm_before_now2(self):
+        # Arrange
+        input = "january"
+        date_format = "%B"
+
+        # Act
+        output = cli._month_name_to_yyyy_mm(input, date_format)
+
+        # Assert
+        self.assertEqual(output, "2019-01")
+
+    @freeze_time("2019-05-08")
+    def test__month_name_to_yyyy_mm_after_now(self):
+        # Arrange
+        input = "dec"
+        date_format = "%b"
+
+        # Act
+        output = cli._month_name_to_yyyy_mm(input, date_format)
+
+        # Assert
+        self.assertEqual(output, "2018-12")
+
+    @freeze_time("2019-05-08")
+    def test__month_name_to_yyyy_mm_after_now2(self):
+        # Arrange
+        input = "december"
+        date_format = "%B"
+
+        # Act
+        output = cli._month_name_to_yyyy_mm(input, date_format)
+
+        # Assert
+        self.assertEqual(output, "2018-12")
+
     def test__valid_yyyy_mm_dd(self):
         # Arrange
         input = "2018-07-12"
