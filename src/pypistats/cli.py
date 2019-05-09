@@ -118,14 +118,14 @@ FORMATS = ("json", "markdown", "rst", "html")
 arg_start_date = argument(
     "-sd",
     "--start-date",
-    metavar="yyyy-mm[-dd]",
+    metavar="yyyy-mm[-dd]|name",
     type=_valid_yyyy_mm_optional_dd,
     help="Start date",
 )
 arg_end_date = argument(
     "-ed",
     "--end-date",
-    metavar="yyyy-mm[-dd]",
+    metavar="yyyy-mm[-dd]|name",
     type=_valid_yyyy_mm_optional_dd,
     help="End date",
 )
