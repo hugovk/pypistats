@@ -4,11 +4,32 @@
 Unit tests for cli
 """
 import argparse
+import pytest
 import unittest
 
 from freezegun import freeze_time
 
 from pypistats import cli
+
+
+@freeze_time("2019-05-08")
+@pytest.mark.parametrize(
+    "name, expected",
+    [
+        ("jan", "2019-01"),
+        ("Jan", "2019-01"),
+        ("january", "2019-01"),
+        ("January", "2019-01"),
+        ("feb", "2019-02"),
+        ("february", "2019-02"),
+        ("may", "2019-05"),
+        ("dec", "2018-12"),
+        ("december", "2018-12"),
+    ],
+)
+def test__valid_yyyy_mm(name, expected):
+    print(name, expected)
+    assert expected == cli._valid_yyyy_mm(name)
 
 
 class TestCli(unittest.TestCase):
