@@ -5,7 +5,6 @@ Unit tests for cli
 """
 import argparse
 import pytest
-import unittest
 
 from freezegun import freeze_time
 
@@ -136,39 +135,34 @@ def test__valid_yyyy_mm_optional_dd_invalid(test_input):
         cli._valid_yyyy_mm_optional_dd(test_input)
 
 
-class TestCli(unittest.TestCase):
-    class __Args:
-        def __init__(self):
-            self.json = False  # type: bool
-            self.format = "markdown"  # type: str
+class __Args:
+    def __init__(self):
+        self.json = False  # type: bool
+        self.format = "markdown"  # type: str
 
-    def test__define_format_default(self):
-        # Setup
-        args = self.__Args()
-        args.json = False
 
-        _format = cli._define_format(args)
-        self.assertEqual(_format, "markdown")
+@pytest.mark.parametrize("test_input, expected", [(False, "markdown"), (True, "json")])
+def test__define_format_json_flag(test_input, expected):
+    # Arrange
+    args = __Args()
+    args.json = test_input
 
-    def test__define_format_json_flag(self):
-        args = self.__Args()
-        args.json = True
+    # Act
+    _format = cli._define_format(args)
 
-        _format = cli._define_format(args)
-        self.assertEqual(_format, "json")
+    # Assert
+    assert expected == _format
 
-    def test__define_format_json(self):
-        args = self.__Args()
-        args.json = False
-        args.format = "json"
 
-        _format = cli._define_format(args)
-        self.assertEqual(_format, "json")
+@pytest.mark.parametrize("test_input", ["json", "markdown"])
+def test__define_format_format_flag(test_input):
+    # Arrange
+    args = __Args()
+    args.json = False
+    args.format = test_input
 
-    def test__define_format_markdown(self):
-        args = self.__Args()
-        args.json = False
-        args.format = "markdown"
+    # Act
+    _format = cli._define_format(args)
 
-        _format = cli._define_format(args)
-        self.assertEqual(_format, "markdown")
+    # Assert
+    assert test_input == _format
