@@ -12,6 +12,22 @@ from freezegun import freeze_time
 from pypistats import cli
 
 
+@pytest.mark.parametrize(
+    "yyyy_mm, expected",
+    [
+        ("2018-07", ("2018-07-01", "2018-07-31")),
+        ("2018-12", ("2018-12-01", "2018-12-31")),
+    ],
+)
+def test__month(yyyy_mm, expected):
+
+    # Act
+    first, last = cli._month(yyyy_mm)
+
+    # Assert
+    assert expected == (first, last)
+
+
 @freeze_time("2019-05-08")
 @pytest.mark.parametrize(
     "name, expected",
@@ -37,28 +53,6 @@ class TestCli(unittest.TestCase):
         def __init__(self):
             self.json = False  # type: bool
             self.format = "markdown"  # type: str
-
-    def test__month(self):
-        # Arrange
-        yyyy_mm = "2018-07"
-
-        # Act
-        first, last = cli._month(yyyy_mm)
-
-        # Assert
-        self.assertEqual(first, "2018-07-01")
-        self.assertEqual(last, "2018-07-31")
-
-    def test__month_12(self):
-        # Arrange
-        yyyy_mm = "2018-12"
-
-        # Act
-        first, last = cli._month(yyyy_mm)
-
-        # Assert
-        self.assertEqual(first, "2018-12-01")
-        self.assertEqual(last, "2018-12-31")
 
     @freeze_time("2018-09-25")
     def test__last_month(self):
