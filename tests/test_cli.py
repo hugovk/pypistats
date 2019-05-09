@@ -106,6 +106,17 @@ def test__valid_yyyy_mm_invalid(test_input):
         cli._valid_yyyy_mm(test_input)
 
 
+@pytest.mark.parametrize("test_input", ["2019-01-21", "2019-01"])
+def test__valid_yyyy_mm_optional_dd_valid(test_input):
+    assert test_input == cli._valid_yyyy_mm_optional_dd(test_input)
+
+
+@pytest.mark.parametrize("test_input", ["dkvnf", "2018-99", "2018-xx"])
+def test__valid_yyyy_mm_optional_dd_invalid(test_input):
+    with pytest.raises(argparse.ArgumentTypeError):
+        cli._valid_yyyy_mm_optional_dd(test_input)
+
+
 @freeze_time("2019-05-08")
 @pytest.mark.parametrize(
     "test_input, expected",
@@ -130,34 +141,6 @@ class TestCli(unittest.TestCase):
         def __init__(self):
             self.json = False  # type: bool
             self.format = "markdown"  # type: str
-
-    def test__valid_yyyy_mm_optional_dd1(self):
-        # Arrange
-        input = "2019-01-21"
-
-        # Act
-        output = cli._valid_yyyy_mm_optional_dd(input)
-
-        # Assert
-        self.assertEqual(input, output)
-
-    def test__valid_yyyy_mm_optional_dd2(self):
-        # Arrange
-        input = "2019-01"
-
-        # Act
-        output = cli._valid_yyyy_mm_optional_dd(input)
-
-        # Assert
-        self.assertEqual(input, output)
-
-    def test__valid_yyyy_mm_optional_dd_invalid(self):
-        # Arrange
-        input = "dkvnf"
-
-        # Act / Assert
-        with self.assertRaises(argparse.ArgumentTypeError):
-            cli._valid_yyyy_mm_dd(input)
 
     def test__define_format_default(self):
         # Setup
