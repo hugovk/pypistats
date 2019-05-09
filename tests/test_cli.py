@@ -100,23 +100,6 @@ def test__valid_yyyy_mm_valid(test_input):
     assert test_input == cli._valid_yyyy_mm(test_input)
 
 
-@pytest.mark.parametrize("test_input", ["dfkgjskfjgk", "2018-99", "2018-xx"])
-def test__valid_yyyy_mm_invalid(test_input):
-    with pytest.raises(argparse.ArgumentTypeError):
-        cli._valid_yyyy_mm(test_input)
-
-
-@pytest.mark.parametrize("test_input", ["2019-01-21", "2019-01"])
-def test__valid_yyyy_mm_optional_dd_valid(test_input):
-    assert test_input == cli._valid_yyyy_mm_optional_dd(test_input)
-
-
-@pytest.mark.parametrize("test_input", ["dkvnf", "2018-99", "2018-xx"])
-def test__valid_yyyy_mm_optional_dd_invalid(test_input):
-    with pytest.raises(argparse.ArgumentTypeError):
-        cli._valid_yyyy_mm_optional_dd(test_input)
-
-
 @freeze_time("2019-05-08")
 @pytest.mark.parametrize(
     "test_input, expected",
@@ -132,8 +115,25 @@ def test__valid_yyyy_mm_optional_dd_invalid(test_input):
         ("december", "2018-12"),
     ],
 )
-def test__valid_yyyy_mm(test_input, expected):
+def test__valid_yyyy_mm_valid_name(test_input, expected):
     assert expected == cli._valid_yyyy_mm(test_input)
+
+
+@pytest.mark.parametrize("test_input", ["dfkgjskfjgk", "2018-99", "2018-xx"])
+def test__valid_yyyy_mm_invalid(test_input):
+    with pytest.raises(argparse.ArgumentTypeError):
+        cli._valid_yyyy_mm(test_input)
+
+
+@pytest.mark.parametrize("test_input", ["2019-01-21", "2019-01"])
+def test__valid_yyyy_mm_optional_dd_valid(test_input):
+    assert test_input == cli._valid_yyyy_mm_optional_dd(test_input)
+
+
+@pytest.mark.parametrize("test_input", ["dkvnf", "2018-99", "2018-xx"])
+def test__valid_yyyy_mm_optional_dd_invalid(test_input):
+    with pytest.raises(argparse.ArgumentTypeError):
+        cli._valid_yyyy_mm_optional_dd(test_input)
 
 
 class TestCli(unittest.TestCase):
