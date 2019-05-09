@@ -13,32 +13,31 @@ from pypistats import cli
 
 
 @pytest.mark.parametrize(
-    "yyyy_mm, expected",
+    "input, expected",
     [
         ("2018-07", ("2018-07-01", "2018-07-31")),
         ("2018-12", ("2018-12-01", "2018-12-31")),
     ],
 )
-def test__month(yyyy_mm, expected):
-
+def test__month(input, expected):
     # Act
-    first, last = cli._month(yyyy_mm)
+    first, last = cli._month(input)
 
     # Assert
     assert expected == (first, last)
 
 
 @pytest.mark.parametrize(
-    "yyyy_mm_dd, expected",
+    "input, expected",
     [
         ("2018-01-25", ("2017-12-01", "2017-12-31")),
         ("2018-09-25", ("2018-08-01", "2018-08-31")),
         ("2018-12-25", ("2018-11-01", "2018-11-30")),
     ],
 )
-def test__last_month(yyyy_mm_dd, expected):
+def test__last_month(input, expected):
     # Act
-    with freeze_time(yyyy_mm_dd):
+    with freeze_time(input):
         first, last = cli._last_month()
 
     # Assert
@@ -46,16 +45,16 @@ def test__last_month(yyyy_mm_dd, expected):
 
 
 @pytest.mark.parametrize(
-    "yyyy_mm_dd, expected",
+    "input, expected",
     [
         ("2019-03-10", "2019-03-01"),
         ("2019-05-08", "2019-05-01"),
         ("2019-12-25", "2019-12-01"),
     ],
 )
-def test__this_month(yyyy_mm_dd, expected):
+def test__this_month(input, expected):
     # Act
-    with freeze_time(yyyy_mm_dd):
+    with freeze_time(input):
         first = cli._this_month()
 
     # Assert
@@ -64,7 +63,30 @@ def test__this_month(yyyy_mm_dd, expected):
 
 @freeze_time("2019-05-08")
 @pytest.mark.parametrize(
-    "name, expected",
+    "name, date_format, expected",
+    [
+        ("jan", "%b", "2019-01"),
+        ("Jan", "%b", "2019-01"),
+        ("january", "%B", "2019-01"),
+        ("January", "%B", "2019-01"),
+        ("feb", "%b", "2019-02"),
+        ("february", "%B", "2019-02"),
+        ("may", "%b", "2019-05"),
+        ("dec", "%b", "2018-12"),
+        ("december", "%B", "2018-12"),
+    ],
+)
+def test__month_name_to_yyyy_mm(name, date_format, expected):
+    # Act
+    output = cli._month_name_to_yyyy_mm(name, date_format)
+
+    # Assert
+    assert expected == output
+
+
+@freeze_time("2019-05-08")
+@pytest.mark.parametrize(
+    "input, expected",
     [
         ("jan", "2019-01"),
         ("Jan", "2019-01"),
@@ -77,9 +99,8 @@ def test__this_month(yyyy_mm_dd, expected):
         ("december", "2018-12"),
     ],
 )
-def test__valid_yyyy_mm(name, expected):
-    print(name, expected)
-    assert expected == cli._valid_yyyy_mm(name)
+def test__valid_yyyy_mm(input, expected):
+    assert expected == cli._valid_yyyy_mm(input)
 
 
 class TestCli(unittest.TestCase):
@@ -87,54 +108,6 @@ class TestCli(unittest.TestCase):
         def __init__(self):
             self.json = False  # type: bool
             self.format = "markdown"  # type: str
-
-    @freeze_time("2019-05-08")
-    def test__month_name_to_yyyy_mm_before_now(self):
-        # Arrange
-        input = "jan"
-        date_format = "%b"
-
-        # Act
-        output = cli._month_name_to_yyyy_mm(input, date_format)
-
-        # Assert
-        self.assertEqual(output, "2019-01")
-
-    @freeze_time("2019-05-08")
-    def test__month_name_to_yyyy_mm_before_now2(self):
-        # Arrange
-        input = "january"
-        date_format = "%B"
-
-        # Act
-        output = cli._month_name_to_yyyy_mm(input, date_format)
-
-        # Assert
-        self.assertEqual(output, "2019-01")
-
-    @freeze_time("2019-05-08")
-    def test__month_name_to_yyyy_mm_after_now(self):
-        # Arrange
-        input = "dec"
-        date_format = "%b"
-
-        # Act
-        output = cli._month_name_to_yyyy_mm(input, date_format)
-
-        # Assert
-        self.assertEqual(output, "2018-12")
-
-    @freeze_time("2019-05-08")
-    def test__month_name_to_yyyy_mm_after_now2(self):
-        # Arrange
-        input = "december"
-        date_format = "%B"
-
-        # Act
-        output = cli._month_name_to_yyyy_mm(input, date_format)
-
-        # Assert
-        self.assertEqual(output, "2018-12")
 
     def test__valid_yyyy_mm_dd(self):
         # Arrange
