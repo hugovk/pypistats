@@ -83,8 +83,9 @@ Help for another subcommand:
 ```console
 $ pypistats python_minor --help
 usage: pypistats python_minor [-h] [-V VERSION] [-f {json,markdown,rst,html}]
-                              [-j] [-sd yyyy-mm[-dd]] [-ed yyyy-mm[-dd]]
-                              [-m yyyy-mm] [-l] [-t] [-d] [--monthly] [-v]
+                              [-j] [-sd yyyy-mm[-dd]|name]
+                              [-ed yyyy-mm[-dd]|name] [-m yyyy-mm|name] [-l]
+                              [-t] [-d] [--monthly] [-v]
                               package
 
 Retrieve the aggregate daily download time series by Python minor version
@@ -100,11 +101,11 @@ optional arguments:
   -f {json,markdown,rst,html}, --format {json,markdown,rst,html}
                         The format of output (default: markdown)
   -j, --json            Shortcut for "-f json" (default: False)
-  -sd yyyy-mm[-dd], --start-date yyyy-mm[-dd]
+  -sd yyyy-mm[-dd]|name, --start-date yyyy-mm[-dd]|name
                         Start date (default: None)
-  -ed yyyy-mm[-dd], --end-date yyyy-mm[-dd]
+  -ed yyyy-mm[-dd]|name, --end-date yyyy-mm[-dd]|name
                         End date (default: None)
-  -m yyyy-mm, --month yyyy-mm
+  -m yyyy-mm|name, --month yyyy-mm|name
                         Shortcut for -sd & -ed for a single month (default:
                         None)
   -l, --last-month      Shortcut for -sd & -ed for last month (default: False)
@@ -151,6 +152,22 @@ The table is Markdown, ready for pasting in GitHub issues and PRs:
 |      2.4 |   0.00% |         7 |
 | Total    |         | 3,242,752 |
 
+These are equivalent (in May 2019):
+
+```sh
+pypistats python_major pip --last-month
+pypistats python_major pip --month april
+pypistats python_major pip --month apr
+pypistats python_major pip --month 2019-04
+```
+
+And:
+
+```sh
+pypistats python_major pip --start-date december --end-date january
+pypistats python_major pip --start-date dec      --end-date jan
+pypistats python_major pip --start-date 2018-12  --end-date 2019-01
+```
 
 ## Example programmatic use
 

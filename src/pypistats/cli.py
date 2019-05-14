@@ -59,6 +59,17 @@ def subcommand(args=None, parent=subparsers):
     return decorator
 
 
+def _month_name_to_yyyy_mm(date_string, date_format):
+    """Given a month name, return yyyy-dd for the most recent month in the past"""
+    today = date.today()
+    new = datetime.strptime(f"{date_string} {today.year}", f"{date_format} %Y").date()
+    if new < today:
+        return new.isoformat()[:7]
+
+    new = datetime.strptime(f"{date_string} {today.year-1}", f"{date_format} %Y").date()
+    return new.isoformat()[:7]
+
+
 def _valid_date(date_string, date_format):
     try:
         datetime.strptime(date_string, date_format)
@@ -73,6 +84,18 @@ def _valid_yyyy_mm_dd(date_string):
 
 
 def _valid_yyyy_mm(date_string):
+    try:
+        # eg. jan, feb
+        date_string = _month_name_to_yyyy_mm(date_string, "%b")
+    except ValueError:
+        pass
+
+    try:
+        # eg. january, february
+        date_string = _month_name_to_yyyy_mm(date_string, "%B")
+    except ValueError:
+        pass
+
     return _valid_date(date_string, "%Y-%m")
 
 
@@ -95,21 +118,21 @@ FORMATS = ("json", "markdown", "rst", "html")
 arg_start_date = argument(
     "-sd",
     "--start-date",
-    metavar="yyyy-mm[-dd]",
+    metavar="yyyy-mm[-dd]|name",
     type=_valid_yyyy_mm_optional_dd,
     help="Start date",
 )
 arg_end_date = argument(
     "-ed",
     "--end-date",
-    metavar="yyyy-mm[-dd]",
+    metavar="yyyy-mm[-dd]|name",
     type=_valid_yyyy_mm_optional_dd,
     help="End date",
 )
 arg_month = argument(
     "-m",
     "--month",
-    metavar="yyyy-mm",
+    metavar="yyyy-mm|name",
     type=_valid_yyyy_mm,
     help="Shortcut for -sd & -ed for a single month",
 )
