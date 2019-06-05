@@ -4,8 +4,8 @@
 Unit tests for cli
 """
 import argparse
-import pytest
 
+import pytest
 from freezegun import freeze_time
 
 from pypistats import cli
