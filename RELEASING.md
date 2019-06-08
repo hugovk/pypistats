@@ -2,22 +2,13 @@
 
 * [ ] Get master to the appropriate code release state. [Travis CI](https://travis-ci.org/hugovk/pypistats) and [Azure Pipelines](https://dev.azure.com/hugovk/hugovk/_build/latest?definitionId=1?branchName=master) should be running cleanly for all merges to master. [![Build Status](https://travis-ci.org/hugovk/pypistats.svg?branch=master)](https://travis-ci.org/hugovk/pypistats) [![Build Status](https://dev.azure.com/hugovk/hugovk/_apis/build/status/hugovk.pypistats?branchName=master)](https://dev.azure.com/hugovk/hugovk/_build/latest?definitionId=1?branchName=master)
 
-* [ ] Remove `.dev0` suffix from the version and check new version follows [SemVer](https://semver.org/):
+* [ ] Tag with the version number:
 ```bash
-git checkout master
-edit src/pypistats/version.py
-```
-
-* [ ] Commit and tag with the version number:
-```bash
-git add src/pypistats/version.py
-git commit -m "Release 0.1.0"
 git tag -a 0.1.0 -m "Release 0.1.0"
 ```
 
-* [ ] Push commits and tags:
+* [ ] Push tag:
  ```bash
-git push
 git push --tags
 ```
 
@@ -30,17 +21,4 @@ git push --tags
 * [ ] Check installation:
 ```bash
 pip3 uninstall -y pypistats && pip3 install -U pypistats
-```
-
-* [ ] Increment version and append `.dev0`:
-```bash
-git checkout master
-edit src/pypistats/version.py
-```
-
-* [ ] Commit and push:
-```bash
-git add src/pypistats/version.py
-git commit -m "Start new release cycle"
-git push
 ```

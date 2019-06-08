@@ -4,17 +4,12 @@ from setuptools import find_packages, setup
 with open("README.md") as f:
     long_description = f.read()
 
-version_dict = {}
-with open("src/pypistats/version.py") as f:
-    exec(f.read(), version_dict)
-    version = version_dict["__version__"]
 
 setup(
     name="pypistats",
     description="Python interface to PyPI Stats API https://pypistats.org/api",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version=version,
     author="hugovk",
     url="https://github.com/hugovk/pypistats",
     license="MIT",
@@ -23,6 +18,8 @@ setup(
     package_dir={"": "src"},
     entry_points={"console_scripts": ["pypistats = pypistats.cli:main"]},
     zip_safe=True,
+    use_scm_version=True,
+    setup_requires=["setuptools_scm"],
     install_requires=[
         "appdirs",
         "pytablewriter[html]>=0.41.2",

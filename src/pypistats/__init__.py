@@ -10,15 +10,14 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
+import pkg_resources
 import requests
 from appdirs import user_cache_dir
 from pytablewriter import HtmlTableWriter, MarkdownTableWriter, RstSimpleTableWriter
 from pytablewriter.style import Align, Style
 from slugify import slugify
 
-from . import version
-
-__version__ = version.__version__
+__version__ = pkg_resources.get_distribution(__name__).version
 
 BASE_URL = "https://pypistats.org/api/"
 CACHE_DIR = Path(user_cache_dir("pypistats"))
