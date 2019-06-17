@@ -5,6 +5,13 @@ with open("README.md") as f:
     long_description = f.read()
 
 
+def version_scheme(version):
+    from setuptools_scm.version import guess_next_dev_version
+
+    version = guess_next_dev_version(version)
+    return version.replace("+", ".")
+
+
 setup(
     name="pypistats",
     description="Python interface to PyPI Stats API https://pypistats.org/api",
@@ -18,7 +25,7 @@ setup(
     package_dir={"": "src"},
     entry_points={"console_scripts": ["pypistats = pypistats.cli:main"]},
     zip_safe=True,
-    use_scm_version=True,
+    use_scm_version={"version_scheme": version_scheme},
     setup_requires=["setuptools_scm"],
     install_requires=[
         "appdirs",
