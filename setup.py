@@ -5,11 +5,10 @@ with open("README.md") as f:
     long_description = f.read()
 
 
-def version_scheme(version):
-    from setuptools_scm.version import guess_next_dev_version
-
-    version = guess_next_dev_version(version)
-    return version.replace("+", ".")
+def local_scheme(version):
+    """Skip the local version (eg. +xyz of 0.6.1.dev4+gdf99fe2)
+    to be able to upload to Test PyPI"""
+    return ""
 
 
 setup(
@@ -25,7 +24,7 @@ setup(
     package_dir={"": "src"},
     entry_points={"console_scripts": ["pypistats = pypistats.cli:main"]},
     zip_safe=True,
-    use_scm_version={"version_scheme": version_scheme},
+    use_scm_version={"local_scheme": local_scheme},
     setup_requires=["setuptools_scm"],
     install_requires=[
         "appdirs",
