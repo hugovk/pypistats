@@ -24,6 +24,7 @@ script:
  - black --check --diff .
 
  # Test runs
+ - pypistats --version
  - pypistats --help
  - pypistats recent --help
 
