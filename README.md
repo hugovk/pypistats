@@ -9,7 +9,9 @@
 [![GitHub](https://img.shields.io/github/license/hugovk/pypistats.svg)](LICENSE.txt)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/python/black)
 
-Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api).
+Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api) to get aggregate
+download statistics on Python packages on the Python Package Index without having to
+execute queries directly against Google BigQuery.
 
 ## Installation
 
