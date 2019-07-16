@@ -12,7 +12,7 @@ matrix:
 
 install:
  - pip install -U pip
- - pip install -U black flake8 freezegun pytest pytest-cov requests_mock
+ - pip install -U black check-manifest flake8 freezegun pytest pytest-cov requests_mock
  - pip install -e .
 
 script:
@@ -22,6 +22,7 @@ script:
  # Static analysis
  - flake8 --statistics --count .
  - black --check --diff .
+ - check-manifest
 
  # Test runs
  - pypistats --version
