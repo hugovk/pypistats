@@ -15,15 +15,15 @@ matrix:
       env: TOXENV=py38
 
 install:
- - pip install -U pip
- - pip install -U tox
+  - pip install -U pip
+  - pip install -U tox
   - |
     if [ "$TOXENV" != "lint" ]; then
       pip install -e .
     fi
 
 script:
- - tox
+  - tox
 
 after_success:
   - |
