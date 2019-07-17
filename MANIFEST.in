@@ -1,3 +1,4 @@
+include LICENSE.txt
 prune .azure-pipelines
 prune example
 prune tests
@@ -8,3 +9,4 @@ exclude .travis.yml
 exclude azure-pipelines.yml
 exclude pyproject.toml
 exclude RELEASING.md
+exclude tox.ini
