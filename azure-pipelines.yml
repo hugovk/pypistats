@@ -9,6 +9,7 @@ jobs:
   parameters:
     name: Lint
     vmImage: 'Ubuntu-16.04'
+    toxenv: lint
 
 - template: .azure-pipelines/jobs/test.yml
   parameters:
