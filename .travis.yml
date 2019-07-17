@@ -17,14 +17,20 @@ matrix:
 install:
  - pip install -U pip
  - pip install -U tox
- - pip install -e .
+  - |
+    if [ "$TOXENV" != "lint" ]; then
+      pip install -e .
+    fi
 
 script:
  - tox
 
 after_success:
-  - coverage report
-  - pip install -U codecov && codecov
+  - |
+    if [ "$TOXENV" != "lint" ]; then
+      coverage report
+      pip install -U codecov && codecov
+    fi
 
 deploy:
   - provider: pypi
