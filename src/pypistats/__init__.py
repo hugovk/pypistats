@@ -21,6 +21,7 @@ __version__ = pkg_resources.get_distribution(__name__).version
 
 BASE_URL = "https://pypistats.org/api/"
 CACHE_DIR = Path(user_cache_dir("pypistats"))
+USER_AGENT = f"pypistats/{__version__}"
 
 
 def _print_verbose(verbose, *args, **kwargs):
@@ -107,7 +108,7 @@ def pypi_stats_api(
 
     if res == {}:
         # No cache, or couldn't load cache
-        r = requests.get(url)
+        r = requests.get(url, headers={"User-Agent": USER_AGENT})
 
         # Raise if we made a bad request
         # (4XX client error or 5XX server error response)
