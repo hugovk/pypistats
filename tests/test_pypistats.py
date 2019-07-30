@@ -32,6 +32,10 @@ SAMPLE_DATA_RECENT = {
     "last_month": 3_254_221,
     "last_week": 761_649,
 }
+SAMPLE_DATA_VERSION_STRINGS = [
+    {"category": "3.1", "date": "2018-08-15", "downloads": 10},
+    {"category": "3.10", "date": "2018-08-15", "downloads": 1},
+]
 
 
 def stub__cache_filename(*args):
@@ -162,15 +166,15 @@ class TestPypiStats(unittest.TestCase):
         expected_output = """
 | category |    date    | downloads |
 |----------|------------|----------:|
-|      2.6 | 2018-08-15 |        51 |
-|      2.7 | 2018-08-15 |    63,749 |
-|      3.2 | 2018-08-15 |         2 |
-|      3.3 | 2018-08-15 |        40 |
-|      3.4 | 2018-08-15 |     6,095 |
-|      3.5 | 2018-08-15 |    20,358 |
-|      3.6 | 2018-08-15 |    35,274 |
-|      3.7 | 2018-08-15 |     6,595 |
-|      3.8 | 2018-08-15 |         3 |
+| 2.6      | 2018-08-15 |        51 |
+| 2.7      | 2018-08-15 |    63,749 |
+| 3.2      | 2018-08-15 |         2 |
+| 3.3      | 2018-08-15 |        40 |
+| 3.4      | 2018-08-15 |     6,095 |
+| 3.5      | 2018-08-15 |    20,358 |
+| 3.6      | 2018-08-15 |    35,274 |
+| 3.7      | 2018-08-15 |     6,595 |
+| 3.8      | 2018-08-15 |         3 |
 | null     | 2018-08-15 |     1,019 |
 """
 
@@ -186,15 +190,15 @@ class TestPypiStats(unittest.TestCase):
         expected_output = """
 | category |    date    | downloads |
 |----------|------------|----------:|
-|      2.6 | 2018-08-15 |        51 |
-|      2.7 | 2018-08-15 |    63,749 |
-|      3.2 | 2018-08-15 |         2 |
-|      3.3 | 2018-08-15 |        40 |
-|      3.4 | 2018-08-15 |     6,095 |
-|      3.5 | 2018-08-15 |    20,358 |
-|      3.6 | 2018-08-15 |    35,274 |
-|      3.7 | 2018-08-15 |     6,595 |
-|      3.8 | 2018-08-15 |         3 |
+| 2.6      | 2018-08-15 |        51 |
+| 2.7      | 2018-08-15 |    63,749 |
+| 3.2      | 2018-08-15 |         2 |
+| 3.3      | 2018-08-15 |        40 |
+| 3.4      | 2018-08-15 |     6,095 |
+| 3.5      | 2018-08-15 |    20,358 |
+| 3.6      | 2018-08-15 |    35,274 |
+| 3.7      | 2018-08-15 |     6,595 |
+| 3.8      | 2018-08-15 |         3 |
 | null     | 2018-08-15 |     1,019 |
 """
 
@@ -213,15 +217,15 @@ class TestPypiStats(unittest.TestCase):
     ==========  ============  ===========
      category       date       downloads 
     ==========  ============  ===========
-          2.6    2018-08-15           51 
-          2.7    2018-08-15       63,749 
-          3.2    2018-08-15            2 
-          3.3    2018-08-15           40 
-          3.4    2018-08-15        6,095 
-          3.5    2018-08-15       20,358 
-          3.6    2018-08-15       35,274 
-          3.7    2018-08-15        6,595 
-          3.8    2018-08-15            3 
+     2.6         2018-08-15           51 
+     2.7         2018-08-15       63,749 
+     3.2         2018-08-15            2 
+     3.3         2018-08-15           40 
+     3.4         2018-08-15        6,095 
+     3.5         2018-08-15       20,358 
+     3.6         2018-08-15       35,274 
+     3.7         2018-08-15        6,595 
+     3.8         2018-08-15            3 
      null        2018-08-15        1,019 
     ==========  ============  ===========
 """  # noqa: W291
@@ -246,47 +250,47 @@ class TestPypiStats(unittest.TestCase):
     </thead>
     <tbody>
         <tr>
-            <td align="right">2.6</td>
+            <td align="left">2.6</td>
             <td align="left">2018-08-15</td>
             <td align="right">51</td>
         </tr>
         <tr>
-            <td align="right">2.7</td>
+            <td align="left">2.7</td>
             <td align="left">2018-08-15</td>
             <td align="right">63,749</td>
         </tr>
         <tr>
-            <td align="right">3.2</td>
+            <td align="left">3.2</td>
             <td align="left">2018-08-15</td>
             <td align="right">2</td>
         </tr>
         <tr>
-            <td align="right">3.3</td>
+            <td align="left">3.3</td>
             <td align="left">2018-08-15</td>
             <td align="right">40</td>
         </tr>
         <tr>
-            <td align="right">3.4</td>
+            <td align="left">3.4</td>
             <td align="left">2018-08-15</td>
             <td align="right">6,095</td>
         </tr>
         <tr>
-            <td align="right">3.5</td>
+            <td align="left">3.5</td>
             <td align="left">2018-08-15</td>
             <td align="right">20,358</td>
         </tr>
         <tr>
-            <td align="right">3.6</td>
+            <td align="left">3.6</td>
             <td align="left">2018-08-15</td>
             <td align="right">35,274</td>
         </tr>
         <tr>
-            <td align="right">3.7</td>
+            <td align="left">3.7</td>
             <td align="left">2018-08-15</td>
             <td align="right">6,595</td>
         </tr>
         <tr>
-            <td align="right">3.8</td>
+            <td align="left">3.8</td>
             <td align="left">2018-08-15</td>
             <td align="right">3</td>
         </tr>
@@ -664,6 +668,22 @@ class TestPypiStats(unittest.TestCase):
 
         # Assert
         self.assertEqual(json.loads(output), json.loads(expected_output))
+
+    def test_versions_are_strings(self):
+        # Arrange
+        data = copy.deepcopy(SAMPLE_DATA_VERSION_STRINGS)
+        expected_output = """
+| category |    date    | downloads |
+|----------|------------|----------:|
+| 3.1      | 2018-08-15 |        10 |
+| 3.10     | 2018-08-15 |         1 |
+"""
+
+        # Act
+        output = pypistats._tabulate(data, format="markdown")
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
 
 
 # pytest's capsys cannot be used in a unittest class

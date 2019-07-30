@@ -13,7 +13,12 @@ from pathlib import Path
 import pkg_resources
 import requests
 from appdirs import user_cache_dir
-from pytablewriter import HtmlTableWriter, MarkdownTableWriter, RstSimpleTableWriter
+from pytablewriter import (
+    HtmlTableWriter,
+    MarkdownTableWriter,
+    RstSimpleTableWriter,
+    String,
+)
 from pytablewriter.style import Align, Style
 from slugify import slugify
 
@@ -285,18 +290,24 @@ def _tabulate(data, format="markdown"):
         writer.style_list = len(header_list) * [Style(thousand_separator=",")]
     else:
         style_list = []
+        type_hints = []
 
         for item in header_list:
             align = None
             thousand_separator = None
+            type_hint = None
             if item == "percent":
                 align = Align.RIGHT
             elif item == "downloads":
                 thousand_separator = ","
+            elif item == "category":
+                type_hint = String
             style = Style(align=align, thousand_separator=thousand_separator)
             style_list.append(style)
+            type_hints.append(type_hint)
 
         writer.style_list = style_list
+        writer.type_hints = type_hints
 
     return writer.dumps()
 
