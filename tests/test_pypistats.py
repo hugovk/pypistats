@@ -32,6 +32,10 @@ SAMPLE_DATA_RECENT = {
     "last_month": 3_254_221,
     "last_week": 761_649,
 }
+SAMPLE_DATA_VERSION_STRINGS = [
+    {"category": "3.1", "date": "2018-08-15", "downloads": 10},
+    {"category": "3.10", "date": "2018-08-15", "downloads": 1},
+]
 
 
 def stub__cache_filename(*args):
@@ -664,6 +668,22 @@ class TestPypiStats(unittest.TestCase):
 
         # Assert
         self.assertEqual(json.loads(output), json.loads(expected_output))
+
+    def test_versions_are_strings(self):
+        # Arrange
+        data = copy.deepcopy(SAMPLE_DATA_VERSION_STRINGS)
+        expected_output = """
+| category |    date    | downloads |
+|----------|------------|----------:|
+| 3.1      | 2018-08-15 |        10 |
+| 3.10     | 2018-08-15 |         1 |
+"""
+
+        # Act
+        output = pypistats._tabulate(data, format="markdown")
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
 
 
 # pytest's capsys cannot be used in a unittest class
