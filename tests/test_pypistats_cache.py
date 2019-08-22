@@ -7,10 +7,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
+import pypistats
 import requests_mock
 from freezegun import freeze_time
-
-import pypistats
 
 
 class TestPypiStatsCache(unittest.TestCase):

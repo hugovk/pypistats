@@ -7,7 +7,6 @@ import argparse
 
 import pytest
 from freezegun import freeze_time
-
 from pypistats import cli
 
 

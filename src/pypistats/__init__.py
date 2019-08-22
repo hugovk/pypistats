@@ -11,6 +11,7 @@ from datetime import datetime
 from pathlib import Path
 
 import pkg_resources
+
 import requests
 from appdirs import user_cache_dir
 from pytablewriter import (

@@ -6,9 +6,8 @@ CLI with subcommands for pypistats
 import argparse
 from datetime import date, datetime
 
-from dateutil.relativedelta import relativedelta
-
 import pypistats
+from dateutil.relativedelta import relativedelta
 
 cli = argparse.ArgumentParser()
 subparsers = cli.add_subparsers(dest="subcommand")

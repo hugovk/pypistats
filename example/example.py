@@ -4,7 +4,7 @@
 Example use of pypistats
 """
 import argparse
-from pprint import pprint  # noqa
+from pprint import pprint  # noqa: F401
 
 import pypistats
 

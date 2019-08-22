@@ -8,9 +8,8 @@ import json
 import unittest
 from pathlib import Path
 
-import requests_mock
-
 import pypistats
+import requests_mock
 
 from .data.python_minor import DATA as PYTHON_MINOR_DATA
 
