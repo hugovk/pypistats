@@ -25,6 +25,7 @@ jobs:
         python -m pip install --upgrade tox
 
     - name: Unit tests
+      shell: bash
       # Drop the dot: py3.7 -> py37
       run: |
         tox -e py`echo ${{ matrix.python-version }} | tr -d .`
