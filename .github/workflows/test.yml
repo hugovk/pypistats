@@ -27,7 +27,7 @@ jobs:
     - name: Unit tests
       # Drop the dot: py3.7 -> py37
       run: |
-        tox -e `echo ${{ matrix.python-version }} | tr -d .`
+        tox -e py`echo ${{ matrix.python-version }} | tr -d .`
 
     - name: Test runs
       run: |
