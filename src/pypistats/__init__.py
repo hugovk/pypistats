@@ -223,6 +223,20 @@ def _total(data):
     return data
 
 
+def _date_range(data):
+    """Return the first and last dates in data"""
+    first = data[0]["date"]
+    last = data[0]["date"]
+    for row in data:
+        date = row["date"]
+        if date < first:
+            first = date
+        elif date > last:
+            last = date
+
+    return first, last
+
+
 def _grand_total(data):
     """Add a grand total row"""
 

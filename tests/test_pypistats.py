@@ -380,6 +380,17 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output, SAMPLE_DATA_RECENT)
 
+    def test__date_range(self):
+        # Arrange
+        data = copy.deepcopy(PYTHON_MINOR_DATA)
+
+        # Act
+        first, last = pypistats._date_range(data)
+
+        # Assert
+        self.assertEqual(first, "2018-04-16")
+        self.assertEqual(last, "2018-09-23")
+
     def test__grand_total(self):
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
