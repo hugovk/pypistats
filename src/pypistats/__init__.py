@@ -125,6 +125,8 @@ def pypi_stats_api(
 
         _save_cache(cache_file, res)
 
+    first, last = _date_range(res["data"])
+
     if start_date or end_date:
         res["data"] = _filter(res["data"], start_date, end_date)
 
@@ -144,7 +146,12 @@ def pypi_stats_api(
     data = _percent(data)
     data = _grand_total(data)
 
-    return _tabulate(data, format)
+    output = _tabulate(data, format)
+
+    if first:
+        return f"{output}\nDate range: {first} - {last}"
+    else:
+        return output
 
 
 def _filter(data, start_date=None, end_date=None):
@@ -225,8 +232,12 @@ def _total(data):
 
 def _date_range(data):
     """Return the first and last dates in data"""
-    first = data[0]["date"]
-    last = data[0]["date"]
+    try:
+        first = data[0]["date"]
+        last = data[0]["date"]
+    except KeyError:
+        # /recent has no dates
+        return None, None
     for row in data:
         date = row["date"]
         if date < first:

@@ -391,6 +391,24 @@ class TestPypiStats(unittest.TestCase):
         self.assertEqual(first, "2018-04-16")
         self.assertEqual(last, "2018-09-23")
 
+    def test__date_range_no_dates_in_data(self):
+        # Arrange
+        # recent
+        data = [
+            {
+                "data": {"last_day": 70, "last_month": 445, "last_week": 268},
+                "package": "dapy",
+                "type": "recent_downloads",
+            }
+        ]
+
+        # Act
+        first, last = pypistats._date_range(data)
+
+        # Assert
+        self.assertIsNone(first)
+        self.assertIsNone(last)
+
     def test__grand_total(self):
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
@@ -522,6 +540,8 @@ class TestPypiStats(unittest.TestCase):
 |    category     | downloads |
 |-----------------|----------:|
 | without_mirrors | 2,297,591 |
+
+Date range: 2018-11-01 - 2018-11-02
 """
 
         # Act
