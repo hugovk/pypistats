@@ -541,7 +541,7 @@ class TestPypiStats(unittest.TestCase):
 |-----------------|----------:|
 | without_mirrors | 2,297,591 |
 
-Date range: 2018-11-01 - 2018-11-02
+Date range: 2018-11-02 - 2018-11-02
 """
 
         # Act

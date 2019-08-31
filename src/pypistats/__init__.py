@@ -130,6 +130,11 @@ def pypi_stats_api(
     if start_date or end_date:
         res["data"] = _filter(res["data"], start_date, end_date)
 
+    if start_date:
+        first = start_date
+    if end_date:
+        last = end_date
+
     if total == "monthly":
         res["data"] = _monthly_total(res["data"])
     elif total == "all":
