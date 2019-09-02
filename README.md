@@ -217,3 +217,82 @@ print(pypistats.system("pillow", os="linux", format="rst"))
 print(pypistats.system("pillow", os="darwin", format="html"))
 pprint(pypistats.system("pillow", os="linux", format="json"))
 ```
+
+### Numpy and Pandas
+
+Return pre-formatted code to create NumPy arrays or Pandas DataFrames
+leveraging the [`pytablewriter`](https://github.com/thombashi/pytablewriter)
+package. Use the `table_name` argument to specify the variable name of the
+array/DataFrame.
+
+```python
+import pypistats
+import pandas as pd
+import numpy as np
+
+print(pypistats.overall("pyvista", total=True,
+                       format="pandas",
+                       table_name="downloads"))
+```
+```
+downloads = pd.DataFrame([
+    [ "with_mirrors" ,  "54.39%" ,  22408 ],
+    [ "without_mirrors" ,  "45.61%" ,  18789 ],
+    [ "Total" ,  None ,  41197 ],
+], columns=["category", "percent", "downloads"])
+```
+
+Instead of printing the result, call `exec()` to make the `table_name` variable
+live in the active Python session:
+
+```python
+exec(pypistats.overall("pyvista",
+                       format="pandas",
+                       table_name="downloads"))
+downloads.head()
+```
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>category</th>
+      <th>percent</th>
+      <th>downloads</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>with_mirrors</td>
+      <td>54.39%</td>
+      <td>22408</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>without_mirrors</td>
+      <td>45.61%</td>
+      <td>18789</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Total</td>
+      <td>None</td>
+      <td>41197</td>
+    </tr>
+  </tbody>
+</table>
+</div>
