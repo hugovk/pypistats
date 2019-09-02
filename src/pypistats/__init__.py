@@ -98,7 +98,7 @@ def pypi_stats_api(
     sort=True,
     total="all",
     verbose=False,
-    table_name="downloads",
+    table_name=None,
 ):
     """Call the API and return JSON"""
     if params:
@@ -263,7 +263,7 @@ def _percent(data):
     return data
 
 
-def _tabulate(data, format="markdown", table_name="downloads"):
+def _tabulate(data, format="markdown", table_name=None):
     """Return data in specified format"""
 
     format_writers = {
@@ -284,6 +284,9 @@ def _tabulate(data, format="markdown", table_name="downloads"):
     else:  # isinstance(data, list):
         header_list = sorted(set().union(*(d.keys() for d in data)))
         writer.value_matrix = data
+
+    if format in ["numpy", "pandas"] and table_name is None:
+        table_name = "downloads"
 
     # Move downloads last
     header_list.append("downloads")
