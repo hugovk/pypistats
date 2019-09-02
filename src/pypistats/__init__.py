@@ -98,7 +98,7 @@ def pypi_stats_api(
     sort=True,
     total="all",
     verbose=False,
-    table_name="downloads"
+    table_name="downloads",
 ):
     """Call the API and return JSON"""
     if params:
