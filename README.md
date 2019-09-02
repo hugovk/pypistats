@@ -226,15 +226,12 @@ package. Use the `table_name` argument to specify the variable name of the
 array/DataFrame.
 
 ```python
-import pypistats
-import pandas as pd
-import numpy as np
-
-print(pypistats.overall("pyvista", total=True,
+>>> import pypistats
+>>> import pandas as pd
+>>> import numpy as np
+>>> print(pypistats.overall("pyvista", total=True,
                        format="pandas",
                        table_name="downloads"))
-```
-```
 downloads = pd.DataFrame([
     [ "with_mirrors" ,  "54.39%" ,  22408 ],
     [ "without_mirrors" ,  "45.61%" ,  18789 ],
@@ -246,10 +243,10 @@ Instead of printing the result, call `exec()` to make the `table_name` variable
 live in the active Python session:
 
 ```python
-exec(pypistats.overall("pyvista",
+>>> exec(pypistats.overall("pyvista",
                        format="pandas",
                        table_name="downloads"))
-downloads.head()
+>>> downloads.head()
 ```
 <table class="dataframe">
   <thead>
