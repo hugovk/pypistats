@@ -17,6 +17,8 @@ from appdirs import user_cache_dir
 from pytablewriter import (
     HtmlTableWriter,
     MarkdownTableWriter,
+    NumpyTableWriter,
+    PandasDataFrameWriter,
     RstSimpleTableWriter,
     String,
 )
@@ -260,13 +262,15 @@ def _percent(data):
     return data
 
 
-def _tabulate(data, format="markdown"):
+def _tabulate(data, format="markdown", table_name="downloads"):
     """Return data in specified format"""
 
     format_writers = {
         "markdown": MarkdownTableWriter,
         "rst": RstSimpleTableWriter,
         "html": HtmlTableWriter,
+        "pandas": PandasDataFrameWriter,
+        "numpy": NumpyTableWriter,
     }
 
     writer = format_writers[format]()
@@ -284,6 +288,7 @@ def _tabulate(data, format="markdown"):
     header_list.append("downloads")
     header_list.remove("downloads")
     writer.header_list = header_list
+    writer.table_name = table_name
 
     # Custom alignment and format
     if header_list[0] in ["last_day", "last_month", "last_week"]:
@@ -299,7 +304,7 @@ def _tabulate(data, format="markdown"):
             type_hint = None
             if item == "percent":
                 align = Align.RIGHT
-            elif item == "downloads":
+            elif item == "downloads" and (format not in ["numpy", "pandas"]):
                 thousand_separator = ","
             elif item == "category":
                 type_hint = String
