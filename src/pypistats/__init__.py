@@ -98,6 +98,7 @@ def pypi_stats_api(
     sort=True,
     total="all",
     verbose=False,
+    table_name="downloads"
 ):
     """Call the API and return JSON"""
     if params:
@@ -146,7 +147,7 @@ def pypi_stats_api(
     data = _percent(data)
     data = _grand_total(data)
 
-    return _tabulate(data, format)
+    return _tabulate(data, format, table_name)
 
 
 def _filter(data, start_date=None, end_date=None):
