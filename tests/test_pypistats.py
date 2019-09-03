@@ -552,6 +552,34 @@ Date range: 2018-11-02 - 2018-11-02
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
+    def test_overall_tabular_end_date(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/overall"
+        mocked_response = """{
+          "data": [
+            {"category": "without_mirrors", "date": "2018-11-01", "downloads": 2295765},
+            {"category": "without_mirrors", "date": "2018-11-02", "downloads": 2297591}
+          ],
+          "package": "pip",
+          "type": "overall_downloads"
+        }"""
+        expected_output = """
+|    category     | downloads |
+|-----------------|----------:|
+| without_mirrors | 2,295,765 |
+
+Date range: 2018-11-01 - 2018-11-01
+"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.overall(package, mirrors=False, end_date="2018-11-01")
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
+
     def test_python_major_json(self):
         # Arrange
         package = "pip"
