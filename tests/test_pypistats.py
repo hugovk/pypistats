@@ -35,6 +35,14 @@ SAMPLE_DATA_VERSION_STRINGS = [
     {"category": "3.1", "date": "2018-08-15", "downloads": 10},
     {"category": "3.10", "date": "2018-08-15", "downloads": 1},
 ]
+SAMPLE_RESPONSE_OVERALL = """{
+          "data": [
+            {"category": "without_mirrors", "date": "2018-11-01", "downloads": 2295765},
+            {"category": "without_mirrors", "date": "2018-11-02", "downloads": 2297591}
+          ],
+          "package": "pip",
+          "type": "overall_downloads"
+        }"""
 
 
 def stub__cache_filename(*args):
@@ -528,14 +536,7 @@ class TestPypiStats(unittest.TestCase):
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
-        mocked_response = """{
-          "data": [
-            {"category": "without_mirrors", "date": "2018-11-01", "downloads": 2295765},
-            {"category": "without_mirrors", "date": "2018-11-02", "downloads": 2297591}
-          ],
-          "package": "pip",
-          "type": "overall_downloads"
-        }"""
+        mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
 |    category     | downloads |
 |-----------------|----------:|
@@ -556,14 +557,7 @@ Date range: 2018-11-02 - 2018-11-02
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
-        mocked_response = """{
-          "data": [
-            {"category": "without_mirrors", "date": "2018-11-01", "downloads": 2295765},
-            {"category": "without_mirrors", "date": "2018-11-02", "downloads": 2297591}
-          ],
-          "package": "pip",
-          "type": "overall_downloads"
-        }"""
+        mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
 |    category     | downloads |
 |-----------------|----------:|
