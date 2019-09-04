@@ -25,15 +25,10 @@ jobs:
         python -m pip install --upgrade tox
         python -m pip install  -e .
 
-    - name: Unit tests
+    - name: Tox tests
       shell: bash
       # Drop the dot: py3.7 -> py37
       run: |
         tox -e py`echo ${{ matrix.python-version }} | tr -d .`
-
-    - name: Test runs
-      run: |
-        pypistats --help
-        pypistats recent --help
 
     # TODO Upload to Codecov
