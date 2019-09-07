@@ -31,4 +31,9 @@ jobs:
       run: |
         tox -e py`echo ${{ matrix.python-version }} | tr -d .`
 
-    # TODO Upload to Codecov
+    - name: Upload coverage to Codecov
+      run: |
+        python -m pip install --upgrade codecov
+        codecov --name "GH: ${{ matrix.os }} Python ${{ matrix.python-version }}"
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
