@@ -34,6 +34,14 @@ SAMPLE_DATA_VERSION_STRINGS = [
     {"category": "3.1", "date": "2018-08-15", "downloads": 10},
     {"category": "3.10", "date": "2018-08-15", "downloads": 1},
 ]
+SAMPLE_RESPONSE_OVERALL = """{
+          "data": [
+            {"category": "without_mirrors", "date": "2018-11-01", "downloads": 2295765},
+            {"category": "without_mirrors", "date": "2018-11-02", "downloads": 2297591}
+          ],
+          "package": "pip",
+          "type": "overall_downloads"
+        }"""
 
 
 def stub__cache_filename(*args):
@@ -379,6 +387,35 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output, SAMPLE_DATA_RECENT)
 
+    def test__date_range(self):
+        # Arrange
+        data = copy.deepcopy(PYTHON_MINOR_DATA)
+
+        # Act
+        first, last = pypistats._date_range(data)
+
+        # Assert
+        self.assertEqual(first, "2018-04-16")
+        self.assertEqual(last, "2018-09-23")
+
+    def test__date_range_no_dates_in_data(self):
+        # Arrange
+        # recent
+        data = [
+            {
+                "data": {"last_day": 70, "last_month": 445, "last_week": 268},
+                "package": "dapy",
+                "type": "recent_downloads",
+            }
+        ]
+
+        # Act
+        first, last = pypistats._date_range(data)
+
+        # Assert
+        self.assertIsNone(first)
+        self.assertIsNone(last)
+
     def test__grand_total(self):
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
@@ -498,24 +535,40 @@ class TestPypiStats(unittest.TestCase):
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
-        mocked_response = """{
-          "data": [
-            {"category": "without_mirrors", "date": "2018-11-01", "downloads": 2295765},
-            {"category": "without_mirrors", "date": "2018-11-02", "downloads": 2297591}
-          ],
-          "package": "pip",
-          "type": "overall_downloads"
-        }"""
+        mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
 |    category     | downloads |
 |-----------------|----------:|
 | without_mirrors | 2,297,591 |
+
+Date range: 2018-11-02 - 2018-11-02
 """
 
         # Act
         with requests_mock.Mocker() as m:
             m.get(mocked_url, text=mocked_response)
             output = pypistats.overall(package, mirrors=False, start_date="2018-11-02")
+
+        # Assert
+        self.assertEqual(output.strip(), expected_output.strip())
+
+    def test_overall_tabular_end_date(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/overall"
+        mocked_response = SAMPLE_RESPONSE_OVERALL
+        expected_output = """
+|    category     | downloads |
+|-----------------|----------:|
+| without_mirrors | 2,295,765 |
+
+Date range: 2018-11-01 - 2018-11-01
+"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.overall(package, mirrors=False, end_date="2018-11-01")
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
