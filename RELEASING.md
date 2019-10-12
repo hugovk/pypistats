@@ -1,6 +1,6 @@
 # Release Checklist
 
-* [ ] Get master to the appropriate code release state. [Travis CI](https://travis-ci.org/hugovk/pypistats) and [Azure Pipelines](https://dev.azure.com/hugovk/hugovk/_build/latest?definitionId=1?branchName=master) should be running cleanly for all merges to master. [![Build Status](https://travis-ci.org/hugovk/pypistats.svg?branch=master)](https://travis-ci.org/hugovk/pypistats) [![Build Status](https://dev.azure.com/hugovk/hugovk/_apis/build/status/hugovk.pypistats?branchName=master)](https://dev.azure.com/hugovk/hugovk/_build/latest?definitionId=1?branchName=master)
+* [ ] Get master to the appropriate code release state. [Travis CI](https://travis-ci.org/hugovk/pypistats) and [GitHub Actions](https://github.com/hugovk/pypistats/actions) should be running cleanly for all merges to master. [![Build Status](https://travis-ci.org/hugovk/pypistats.svg?branch=master)](https://travis-ci.org/hugovk/pypistats) [![GitHub Actions status](https://github.com/hugovk/pypistats/workflows/Test/badge.svg)](https://github.com/hugovk/pypistats/actions)
 
 * [ ] Tag with the version number:
 ```bash
