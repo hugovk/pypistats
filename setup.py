@@ -33,14 +33,16 @@ setup(
         "python-slugify",
         "requests",
     ],
-    tests_require=[
-        "black",
-        "flake8",
-        "freezegun",
-        "pytest",
-        "pytest-cov",
-        "requests_mock",
-    ],
+    extras_require={
+        "tests": [
+            "black",
+            "flake8",
+            "freezegun",
+            "pytest",
+            "pytest-cov",
+            "requests_mock",
+        ]
+    },
     python_requires=">=3.6",
     classifiers=[
         "Development Status :: 3 - Alpha",
