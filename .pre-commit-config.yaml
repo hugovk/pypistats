@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/asottile/pyupgrade
-    rev: v1.24.0
+    rev: v1.24.1
     hooks:
       - id: pyupgrade
         args: ["--py36-plus"]
@@ -32,4 +32,6 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.3.0
     hooks:
+      - id: check-merge-conflict
+      - id: check-toml
       - id: check-yaml
