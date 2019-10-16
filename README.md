@@ -1,6 +1,6 @@
 # pypistats
 
-[![PyPI version](https://img.shields.io/pypi/v/pypistats.svg)](https://pypi.org/project/pypistats/)
+[![PyPI version](https://img.shields.io/pypi/v/pypistats.svg?logo=pypi&logoColor=FFE873)](https://pypi.org/project/pypistats/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/pypistats.svg?logo=python&logoColor=FFE873)](https://pypi.org/project/pypistats/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/pypistats.svg)](https://pypistats.org/packages/pypistats)
 [![Travis CI status](https://img.shields.io/travis/hugovk/pypistats/master?label=Travis%20CI&logo=travis)](https://travis-ci.org/hugovk/pypistats)
