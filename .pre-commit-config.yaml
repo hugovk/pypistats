@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/asottile/pyupgrade
-    rev: v1.24.1
+    rev: v1.25.1
     hooks:
       - id: pyupgrade
         args: ["--py36-plus"]
@@ -25,7 +25,7 @@ repos:
       - id: isort
 
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.4.1
+    rev: v1.4.2
     hooks:
       - id: python-check-blanket-noqa
 
@@ -35,3 +35,9 @@ repos:
       - id: check-merge-conflict
       - id: check-toml
       - id: check-yaml
+
+  - repo: https://github.com/prettier/prettier
+    rev: 1.18.2
+    hooks:
+      - id: prettier
+        args: [--prose-wrap=always, --print-width=88]
