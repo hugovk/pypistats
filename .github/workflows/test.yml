@@ -9,7 +9,11 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [3.6, 3.7]
-        os: [ubuntu-latest, macOS-latest, windows-latest]
+        # Currently:
+        # ubuntu-latest  = ubuntu-18.04
+        # macOS-latest   = macOS-10.14
+        # windows-latest = windows-2019
+        os: [ubuntu-18.04, ubuntu-16.04, macOS-10.14, windows-2019, windows-2016]
 
     steps:
       - uses: actions/checkout@v1
