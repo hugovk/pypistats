@@ -4,9 +4,9 @@ Python interface to PyPI Stats API
 https://pypistats.org/api
 """
 import atexit
+import datetime as dt
 import json
 import sys
-from datetime import datetime
 from pathlib import Path
 
 import pkg_resources
@@ -42,7 +42,7 @@ def _print_stderr(*args, **kwargs):
 
 def _cache_filename(url):
     """yyyy-mm-dd-url-slug.json"""
-    today = datetime.utcnow().strftime("%Y-%m-%d")
+    today = dt.datetime.utcnow().strftime("%Y-%m-%d")
     slug = slugify(url)
     filename = CACHE_DIR / f"{today}-{slug}.json"
 
@@ -77,7 +77,7 @@ def _save_cache(cache_file, data):
 def _clear_cache():
     """Delete old cache files, run as last task"""
     cache_files = CACHE_DIR.glob("**/*.json")
-    this_month = datetime.utcnow().strftime("%Y-%m")
+    this_month = dt.datetime.utcnow().strftime("%Y-%m")
     for cache_file in cache_files:
         if not cache_file.name.startswith(this_month):
             cache_file.unlink()
