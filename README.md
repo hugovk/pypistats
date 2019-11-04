@@ -1,6 +1,6 @@
 # pypistats
 
-[![PyPI version](https://img.shields.io/pypi/v/pypistats.svg)](https://pypi.org/project/pypistats/)
+[![PyPI version](https://img.shields.io/pypi/v/pypistats.svg?logo=pypi&logoColor=FFE873)](https://pypi.org/project/pypistats/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/pypistats.svg?logo=python&logoColor=FFE873)](https://pypi.org/project/pypistats/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/pypistats.svg)](https://pypistats.org/packages/pypistats)
 [![Travis CI status](https://img.shields.io/travis/hugovk/pypistats/master?label=Travis%20CI&logo=travis)](https://travis-ci.org/hugovk/pypistats)
@@ -32,8 +32,9 @@ pip install .
 
 ## Example command-line use
 
-Run `pypistats` with a subcommand (corresponding to [PyPI Stats endpoints](https://pypistats.org/api/#endpoints)),
-then options for that subcommand.
+Run `pypistats` with a subcommand (corresponding to
+[PyPI Stats endpoints](https://pypistats.org/api/#endpoints)), then options for that
+subcommand.
 
 Top-level help:
 
@@ -48,7 +49,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -V, --version         show program's version number and exit
-  ```
+```
 
 Help for a subcommand:
 
@@ -143,7 +144,7 @@ $ pypistats python_minor pillow --last-month
 The table is Markdown, ready for pasting in GitHub issues and PRs:
 
 | category | percent | downloads |
-|----------|--------:|----------:|
+| -------- | ------: | --------: |
 | 2.7      |  35.94% | 2,189,327 |
 | 3.6      |  31.83% | 1,938,870 |
 | 3.7      |  18.71% | 1,139,642 |
