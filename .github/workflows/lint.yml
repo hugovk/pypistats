@@ -12,6 +12,18 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
+      - name: pip cache
+        uses: actions/cache@preview
+        with:
+          path: ~/.cache/pip
+          key: ${{ github.workflow }}-${{ matrix.python-version }}
+
+      - name: pre-commit cache
+        uses: actions/cache@preview
+        with:
+          path: ~/.cache/pre-commit
+          key: ${{ github.workflow }}-${{ matrix.python-version }}
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
