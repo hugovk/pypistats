@@ -32,6 +32,13 @@ jobs:
           path: ~/Library/Caches/pip
           key: ${{ github.workflow }}-${{ matrix.os }}-${{ matrix.python-version }}
 
+      - name: Windows cache
+        uses: actions/cache@preview
+        if: startsWith(matrix.os, 'windows')
+        with:
+          path: ~\AppData\Local\pip\Cache
+          key: ${{ github.workflow }}-${{ matrix.os }}-${{ matrix.python-version }}
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
