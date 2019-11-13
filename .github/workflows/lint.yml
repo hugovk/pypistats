@@ -7,22 +7,27 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7]
+        python-version: [3.8]
 
     steps:
       - uses: actions/checkout@v1
 
       - name: pip cache
-        uses: actions/cache@preview
+        uses: actions/cache@v1
         with:
           path: ~/.cache/pip
-          key: ${{ github.workflow }}-${{ matrix.python-version }}
+          key: ${{ matrix.os }}-pip-${{ hashFiles('**/setup.py') }}
+          restore-keys: |
+            ${{ matrix.os }}-pip-
 
       - name: pre-commit cache
-        uses: actions/cache@preview
+        uses: actions/cache@v1
         with:
           path: ~/.cache/pre-commit
-          key: ${{ github.workflow }}-${{ matrix.python-version }}
+          key:
+            ${{ matrix.os }}-pre-commit-${{ hashFiles('**/.pre-commit-config.yaml') }}
+          restore-keys: |
+            ${{ matrix.os }}-pre-commit-
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
