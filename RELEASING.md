@@ -22,7 +22,6 @@ git push --tags
 - [ ] Create new GitHub release: https://github.com/hugovk/pypistats/releases/new
 
   - Tag: Pick existing tag "0.1.0"
-  - Title: "Release 0.1.0"
 
 - [ ] Check the tagged [Travis CI build](https://travis-ci.org/hugovk/pypistats) has
       deployed to [PyPI](https://pypi.org/project/pypistats/#history)
