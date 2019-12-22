@@ -221,22 +221,23 @@ pprint(pypistats.system("pillow", os="linux", format="json"))
 
 ### Numpy and Pandas
 
-Return pre-formatted code to create NumPy arrays or Pandas DataFrames leveraging the
-[`pytablewriter`](https://github.com/thombashi/pytablewriter) package. Use the
+Return pre-formatted code to create NumPy arrays or Pandas DataFrames. Use the
 `table_name` argument to specify the variable name of the array/DataFrame.
 
 ```python
 >>> import pypistats
 >>> import pandas as pd
->>> import numpy as np
->>> print(pypistats.overall("pyvista", total=True,
-                       format="pandas",
-                       table_name="downloads"))
+>>> print(pypistats.overall("pyvista", total=True, format="pandas", table_name="downloads"))
 downloads = pd.DataFrame([
-    [ "with_mirrors" ,  "54.39%" ,  22408 ],
-    [ "without_mirrors" ,  "45.61%" ,  18789 ],
-    [ "Total" ,  None ,  41197 ],
-], columns=["category", "percent", "downloads"])
+    [ "with_mirrors" ,  "2019-09-20" ,  "2.10%" ,  1204 ],
+    [ "without_mirrors" ,  "2019-09-20" ,  "1.96%" ,  1122 ],
+    [ "with_mirrors" ,  "2019-09-19" ,  "0.87%" ,  496 ],
+...
+    [ "without_mirrors" ,  "2019-11-16" ,  "0.03%" ,  15 ],
+    [ "with_mirrors" ,  "2019-10-26" ,  "0.02%" ,  13 ],
+    [ "without_mirrors" ,  "2019-10-26" ,  "0.02%" ,  12 ],
+    [ "Total" ,  None ,  None ,  57305 ],
+], columns=["category", "date", "percent", "downloads"])
 ```
 
 Instead of printing the result, call `exec()` to make the `table_name` variable live in
@@ -246,36 +247,9 @@ the active Python session:
 >>> exec(pypistats.overall("pyvista",
                        format="pandas",
                        table_name="downloads"))
->>> downloads.head()
+>>> downloads
+          category percent  downloads
+0     with_mirrors  54.73%      31362
+1  without_mirrors  45.27%      25943
+2            Total    None      57305
 ```
-
-<table class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>category</th>
-      <th>percent</th>
-      <th>downloads</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>with_mirrors</td>
-      <td>54.39%</td>
-      <td>22408</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>without_mirrors</td>
-      <td>45.61%</td>
-      <td>18789</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>Total</td>
-      <td>None</td>
-      <td>41197</td>
-    </tr>
-  </tbody>
-</table>
