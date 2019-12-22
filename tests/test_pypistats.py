@@ -735,16 +735,3 @@ Date range: 2018-11-01 - 2018-11-01
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
-
-
-# pytest's capsys cannot be used in a unittest class
-def test__print_verbose_print(capsys):
-    # Arrange
-    verbose = True
-
-    # Act
-    pypistats._print_verbose(verbose, "test output")
-
-    # Assert
-    captured = capsys.readouterr()
-    assert captured.err == "test output\n"
