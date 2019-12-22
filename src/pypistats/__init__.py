@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
-# encoding: utf-8
 """
 Python interface to PyPI Stats API
 https://pypistats.org/api
 """
 import atexit
+import datetime as dt
 import json
 import sys
-from datetime import datetime
 from pathlib import Path
 
 import pkg_resources
@@ -45,7 +44,7 @@ def _print_stderr(*args, **kwargs):
 
 def _cache_filename(url):
     """yyyy-mm-dd-url-slug.json"""
-    today = datetime.utcnow().strftime("%Y-%m-%d")
+    today = dt.datetime.utcnow().strftime("%Y-%m-%d")
     slug = slugify(url)
     filename = CACHE_DIR / f"{today}-{slug}.json"
 
@@ -80,7 +79,7 @@ def _save_cache(cache_file, data):
 def _clear_cache():
     """Delete old cache files, run as last task"""
     cache_files = CACHE_DIR.glob("**/*.json")
-    this_month = datetime.utcnow().strftime("%Y-%m")
+    this_month = dt.datetime.utcnow().strftime("%Y-%m")
     for cache_file in cache_files:
         if not cache_file.name.startswith(this_month):
             cache_file.unlink()
@@ -128,8 +127,15 @@ def pypi_stats_api(
 
         _save_cache(cache_file, res)
 
+    first, last = _date_range(res["data"])
+
     if start_date or end_date:
         res["data"] = _filter(res["data"], start_date, end_date)
+
+    if start_date:
+        first = start_date
+    if end_date:
+        last = end_date
 
     if total == "monthly":
         res["data"] = _monthly_total(res["data"])
@@ -147,7 +153,12 @@ def pypi_stats_api(
     data = _percent(data)
     data = _grand_total(data)
 
-    return _tabulate(data, format, table_name)
+    output = _tabulate(data, format, table_name)
+
+    if first:
+        return f"{output}\nDate range: {first} - {last}\n"
+    else:
+        return output
 
 
 def _filter(data, start_date=None, end_date=None):
@@ -224,6 +235,24 @@ def _total(data):
         data.append({"category": k, "downloads": v})
 
     return data
+
+
+def _date_range(data):
+    """Return the first and last dates in data"""
+    try:
+        first = data[0]["date"]
+        last = data[0]["date"]
+    except KeyError:
+        # /recent has no dates
+        return None, None
+    for row in data:
+        date = row["date"]
+        if date < first:
+            first = date
+        elif date > last:
+            last = date
+
+    return first, last
 
 
 def _grand_total(data):

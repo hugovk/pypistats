@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-# encoding: utf-8
 """
 CLI with subcommands for pypistats
 """
 import argparse
-from datetime import date, datetime
+import datetime as dt
 
 import pypistats
 from dateutil.relativedelta import relativedelta
@@ -60,18 +59,22 @@ def subcommand(args=None, parent=subparsers):
 
 def _month_name_to_yyyy_mm(date_string, date_format):
     """Given a month name, return yyyy-dd for the most recent month in the past"""
-    today = date.today()
-    new = datetime.strptime(f"{date_string} {today.year}", f"{date_format} %Y").date()
+    today = dt.date.today()
+    new = dt.datetime.strptime(
+        f"{date_string} {today.year}", f"{date_format} %Y"
+    ).date()
     if new < today:
         return new.isoformat()[:7]
 
-    new = datetime.strptime(f"{date_string} {today.year-1}", f"{date_format} %Y").date()
+    new = dt.datetime.strptime(
+        f"{date_string} {today.year-1}", f"{date_format} %Y"
+    ).date()
     return new.isoformat()[:7]
 
 
 def _valid_date(date_string, date_format):
     try:
-        datetime.strptime(date_string, date_format)
+        dt.datetime.strptime(date_string, date_format)
         return date_string
     except ValueError:
         msg = f"Not a valid date: '{date_string}'."
@@ -276,14 +279,14 @@ def system(args):  # pragma: no cover
 def _month(yyyy_mm):
     """Helper to return start_date and end_date of a month as yyyy-mm-dd"""
     year, month = map(int, yyyy_mm.split("-"))
-    first = date(year, month, 1)
+    first = dt.date(year, month, 1)
     last = first + relativedelta(months=1) - relativedelta(days=1)
     return str(first), str(last)
 
 
 def _last_month():
     """Helper to return start_date and end_date of the previous month as yyyy-mm-dd"""
-    today = date.today()
+    today = dt.date.today()
     d = today - relativedelta(months=1)
     return _month(d.isoformat()[:7])
 
@@ -291,7 +294,7 @@ def _last_month():
 def _this_month():
     """Helper to return start_date of the current month as yyyy-mm-dd.
     No end_date needed."""
-    today = date.today()
+    today = dt.date.today()
     return _month(today.isoformat()[:7])[0]
 
 

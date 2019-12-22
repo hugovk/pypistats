@@ -1,15 +1,17 @@
-dist: xenial
 language: python
-cache: pip
+cache:
+  pip: true
+  directories:
+    - $HOME/.cache/pre-commit
 
 matrix:
   fast_finish: true
   include:
-    - python: 3.7
+    - python: 3.8
       env: TOXENV=lint
+    - python: 3.8
     - python: 3.7
     - python: 3.6
-    - python: 3.8-dev
 
 install:
   - pip install -U pip
@@ -32,9 +34,9 @@ deploy:
       repo: hugovk/pypistats
       branch: master
       condition: $TOXENV = lint
-    user: hugovk
+    user: __token__
     password:
-      secure: MR3i+/8ZscMkgDlAQkbZxnAuvmHebfGqZzih2nlL8DoINx063ewqISsxhFtAIuyuFPUFu1F2urz2oXVlhc5jxulwSMkjTRGEb4NCCGcZvvPrIQw7nazRXo57o4AkVYuFMne3Bu8YU1R5gugeJenG0WdDXtjZkHrSjX2YzWUyYgdRbC5/KG3XHaVLSNtRebICxMYNj4Py22qh/B9rvXoKMAcgJHYf/FeAZhnYf25xzZBK8oiRv2ELRPogbTCDaCuFz6XDFHcx5WfV5jNfjeYaKzKPiHZhcKbyVDGFODRKa98mVhDTaVOcq4oCysGP/uz96cu67FOxk7wHRzZf8HV6WTgh2n3Zvokkm+uXb4rQlteAdYPfgeqtcgKXIj9WmGL48dw2f72oGahLDjQEXfzJzX3LaRgAd99TMFsGpbKlU9mfmfz/SOXyUA7ZAB6iEw0TsYosoffblH/q+1BjE0nIhY9xoP3KOz44TtUUSdtW4ztRQXrGzZkCiNqbSmZwqL+IhJRSHHsxggDaUI0N2c2f10IJHVUDgMjz4IjutdXgcwRTe8UCzQ/maeRI0epZAtC9UQ6ix5zKlR20IIzhP0rOinhk3vKCpINzofk46fkgKC7tM7Lchip0URQ6vnQxhG99wn7MZbOgTNp7fZduaFEfe72oIjCfDv1nTrRkr0dI5Cc=
+      secure: "pG6CQh9N751gth+M0l2mdAJjlY/OMq4nYEgDwAgvtE+h4nPjGic34+ZG3jzxFQOtLgLEOeJq6AYg6Yytl/vCBBR1pUOYzqWdn0ekmJZQSsMPR7RRnjtzjXxrNiqtrtGPcr/51tCtMCZAEVPE/gApymED86bqZurcM2uWMSNlo3mVNSxU2UKVrvwuHvunQ1bzve76anTlIgGpAS+DbWgyGsP7zYErFTWmiJ5sVk0gIkpK3NTJyLgjv3vLGb3hx6oesiuT5o9NJ6A9pShLGtrUEgqDKWCdXgr6QxlLY6Zhvcs0mBEcfSJdV0aZi/AxSjIUr3AiqWHeyWn5OSUJfx+6+283Gp2CMFDRSvj1p3Ng3Tby8HN+JRyrMrtqFNZ0E3tKXYOeUF3pd27hLM596fbM+qAz37zsYqBjG18CeSBV8OrwEvF9M4Ot8A1ZPi+zfjU5nrPxhzm6VnInMI0ioMO/zUinIOtSkYSHRIohww5mm2yIE2xRAO/64H0papbrK1xz+xMrmzLkJMY0DwrgZQhMK2/vYHhVa0wytjop42tQ17EkWfHE8waXLD0MQFEB+H3TMGBnsqf+jrcKpfwnhVye3KwFnU/2geuPB1dI6ohf7ucy3b/oNLe4fB9Pf8DQK/noGLmNBXQ2lrtTD0pblRLzsRc8LSyVLXu0fZIWUovubLU="
     distributions: sdist --format=gztar bdist_wheel
     skip_existing: true
   - provider: pypi
@@ -43,8 +45,8 @@ deploy:
       repo: hugovk/pypistats
       branch: master
       condition: $TOXENV = lint
-    user: hugovk
+    user: __token__
     password:
-      secure: MR3i+/8ZscMkgDlAQkbZxnAuvmHebfGqZzih2nlL8DoINx063ewqISsxhFtAIuyuFPUFu1F2urz2oXVlhc5jxulwSMkjTRGEb4NCCGcZvvPrIQw7nazRXo57o4AkVYuFMne3Bu8YU1R5gugeJenG0WdDXtjZkHrSjX2YzWUyYgdRbC5/KG3XHaVLSNtRebICxMYNj4Py22qh/B9rvXoKMAcgJHYf/FeAZhnYf25xzZBK8oiRv2ELRPogbTCDaCuFz6XDFHcx5WfV5jNfjeYaKzKPiHZhcKbyVDGFODRKa98mVhDTaVOcq4oCysGP/uz96cu67FOxk7wHRzZf8HV6WTgh2n3Zvokkm+uXb4rQlteAdYPfgeqtcgKXIj9WmGL48dw2f72oGahLDjQEXfzJzX3LaRgAd99TMFsGpbKlU9mfmfz/SOXyUA7ZAB6iEw0TsYosoffblH/q+1BjE0nIhY9xoP3KOz44TtUUSdtW4ztRQXrGzZkCiNqbSmZwqL+IhJRSHHsxggDaUI0N2c2f10IJHVUDgMjz4IjutdXgcwRTe8UCzQ/maeRI0epZAtC9UQ6ix5zKlR20IIzhP0rOinhk3vKCpINzofk46fkgKC7tM7Lchip0URQ6vnQxhG99wn7MZbOgTNp7fZduaFEfe72oIjCfDv1nTrRkr0dI5Cc=
+      secure: "dNoI5yPvDksuDxh7go1sZhmpA94zrsNDYHA4nTj+HMgUx7ITZbeRkIna0QWMms29mI4j7JlywuopSE78cKkjG2aZjSGhT4h5AmrRmWFhJDV7Qj4wghevPHNRRkQkUK3+ciFRDkkBb0J6dxgylmtz0OGTxWePyCfFoO9gmQycrSkcwUi2S89aS701xFYFOQQVcAMud3J9GCM4qLURmD2PO6DFIUNTI2AjPgxlZqVh9zAkwmE3huwIdZNBwJ7Rz6pXxSvkZ0gLFD7324Nox2cJ24J2sXSyfTUDqV/FkvOXDqD8vFI/iDLplwwB8uWQgPCw3xX6Lu+SVY9E/ClhIfkPMvDBQwIwRRxtx16W27mqjOIw/vTloMym4KunEcsZIvNbFZcg9S5zUcCIoMblDLl0FbSlpuyEua1LlpxWrQ2+QR6clVdwY4kH/tjcDKyKxQQkaSOWLLsv5uYpRebsgRuXcCbnNi69Go2bYQpJrWSKRztgLn9uCWEivlsqN8DD3m1DD+/pdn7v79gH32W2lYwZ8vovOLMJZYZ9zg3k/0wLyRfarihd9TYrvPMAnXcut93BLBKq5aNXDsgsaswGZLEFDb+VVzwjucReEE8msUyYQvOl3qBVeKwoDaSK2LeuJHz45gUoODQeFI9l1UpI7ZZYbeQqdVzYp5WCRb6FUU1yq14="
     distributions: sdist --format=gztar bdist_wheel
     skip_existing: true

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# encoding: utf-8
 """
 Unit tests for pypistats cache
 """
@@ -102,6 +101,8 @@ class TestPypiStatsCache(unittest.TestCase):
 |    category     | downloads |
 |-----------------|----------:|
 | without_mirrors | 2,295,765 |
+
+Date range: 2018-11-01 - 2018-11-01
 """
 
         # Act

@@ -1,14 +1,14 @@
 # pypistats
 
-[![PyPI version](https://img.shields.io/pypi/v/pypistats.svg)](https://pypi.org/project/pypistats/)
-[![Supported Python versions](https://img.shields.io/pypi/pyversions/pypistats.svg)](https://pypi.org/project/pypistats/)
+[![PyPI version](https://img.shields.io/pypi/v/pypistats.svg?logo=pypi&logoColor=FFE873)](https://pypi.org/project/pypistats/)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/pypistats.svg?logo=python&logoColor=FFE873)](https://pypi.org/project/pypistats/)
 [![PyPI downloads](https://img.shields.io/pypi/dm/pypistats.svg)](https://pypistats.org/packages/pypistats)
-[![Build Status](https://travis-ci.org/hugovk/pypistats.svg?branch=master)](https://travis-ci.org/hugovk/pypistats)
-[![Build Status](https://dev.azure.com/hugovk/hugovk/_apis/build/status/hugovk.pypistats?branchName=master)](https://dev.azure.com/hugovk/hugovk/_build/latest?definitionId=1?branchName=master)
-[![Actions Status](https://github.com/hugovk/pypistats/workflows/test/badge.svg)](https://github.com/hugovk/pypistats/actions)
+[![Travis CI status](https://img.shields.io/travis/hugovk/pypistats/master?label=Travis%20CI&logo=travis)](https://travis-ci.org/hugovk/pypistats)
+[![Azure Pipelines status](https://dev.azure.com/hugovk/hugovk/_apis/build/status/hugovk.pypistats?branchName=master)](https://dev.azure.com/hugovk/hugovk/_build/latest?definitionId=1?branchName=master)
+[![GitHub Actions status](https://github.com/hugovk/pypistats/workflows/Test/badge.svg)](https://github.com/hugovk/pypistats/actions)
 [![codecov](https://codecov.io/gh/hugovk/pypistats/branch/master/graph/badge.svg)](https://codecov.io/gh/hugovk/pypistats)
 [![GitHub](https://img.shields.io/github/license/hugovk/pypistats.svg)](LICENSE.txt)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Code style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api) to get aggregate
 download statistics on Python packages on the Python Package Index without having to
@@ -32,8 +32,9 @@ pip install .
 
 ## Example command-line use
 
-Run `pypistats` with a subcommand (corresponding to [PyPI Stats endpoints](https://pypistats.org/api/#endpoints)),
-then options for that subcommand.
+Run `pypistats` with a subcommand (corresponding to
+[PyPI Stats endpoints](https://pypistats.org/api/#endpoints)), then options for that
+subcommand.
 
 Top-level help:
 
@@ -48,7 +49,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -V, --version         show program's version number and exit
-  ```
+```
 
 Help for a subcommand:
 
@@ -143,7 +144,7 @@ $ pypistats python_minor pillow --last-month
 The table is Markdown, ready for pasting in GitHub issues and PRs:
 
 | category | percent | downloads |
-|----------|--------:|----------:|
+| -------- | ------: | --------: |
 | 2.7      |  35.94% | 2,189,327 |
 | 3.6      |  31.83% | 1,938,870 |
 | 3.7      |  18.71% | 1,139,642 |
@@ -220,10 +221,9 @@ pprint(pypistats.system("pillow", os="linux", format="json"))
 
 ### Numpy and Pandas
 
-Return pre-formatted code to create NumPy arrays or Pandas DataFrames
-leveraging the [`pytablewriter`](https://github.com/thombashi/pytablewriter)
-package. Use the `table_name` argument to specify the variable name of the
-array/DataFrame.
+Return pre-formatted code to create NumPy arrays or Pandas DataFrames leveraging the
+[`pytablewriter`](https://github.com/thombashi/pytablewriter) package. Use the
+`table_name` argument to specify the variable name of the array/DataFrame.
 
 ```python
 >>> import pypistats
@@ -239,8 +239,8 @@ downloads = pd.DataFrame([
 ], columns=["category", "percent", "downloads"])
 ```
 
-Instead of printing the result, call `exec()` to make the `table_name` variable
-live in the active Python session:
+Instead of printing the result, call `exec()` to make the `table_name` variable live in
+the active Python session:
 
 ```python
 >>> exec(pypistats.overall("pyvista",
@@ -248,6 +248,7 @@ live in the active Python session:
                        table_name="downloads"))
 >>> downloads.head()
 ```
+
 <table class="dataframe">
   <thead>
     <tr style="text-align: right;">
