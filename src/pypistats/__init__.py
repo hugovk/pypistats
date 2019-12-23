@@ -155,7 +155,7 @@ def pypi_stats_api(
 
     output = _tabulate(data, format, table_name)
 
-    if first:
+    if first and format not in ["numpy", "pandas"]:
         return f"{output}\nDate range: {first} - {last}\n"
     else:
         return output
