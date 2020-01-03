@@ -10,7 +10,6 @@ import sys
 from pathlib import Path
 
 import pkg_resources
-
 import requests
 from appdirs import user_cache_dir
 from pytablewriter import (
@@ -97,7 +96,6 @@ def pypi_stats_api(
     sort=True,
     total="all",
     verbose=False,
-    table_name=None,
 ):
     """Call the API and return JSON"""
     if params:
@@ -153,7 +151,7 @@ def pypi_stats_api(
     data = _percent(data)
     data = _grand_total(data)
 
-    output = _tabulate(data, format, table_name)
+    output = _tabulate(data, format)
 
     if first and format not in ["numpy", "pandas"]:
         return f"{output}\nDate range: {first} - {last}\n"
@@ -292,7 +290,7 @@ def _percent(data):
     return data
 
 
-def _tabulate(data, format="markdown", table_name=None):
+def _tabulate(data, format="markdown"):
     """Return data in specified format"""
 
     format_writers = {
@@ -314,14 +312,10 @@ def _tabulate(data, format="markdown", table_name=None):
         header_list = sorted(set().union(*(d.keys() for d in data)))
         writer.value_matrix = data
 
-    if format in ["numpy", "pandas"] and table_name is None:
-        table_name = "downloads"
-
     # Move downloads last
     header_list.append("downloads")
     header_list.remove("downloads")
     writer.header_list = header_list
-    writer.table_name = table_name
 
     # Custom alignment and format
     if header_list[0] in ["last_day", "last_month", "last_week"]:
@@ -348,6 +342,10 @@ def _tabulate(data, format="markdown", table_name=None):
         writer.style_list = style_list
         writer.type_hints = type_hints
 
+    if format == "numpy":
+        return writer.tabledata.as_dataframe().values
+    elif format == "pandas":
+        return writer.tabledata.as_dataframe()
     return writer.dumps()
 
 

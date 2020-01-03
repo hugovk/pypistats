@@ -7,6 +7,8 @@ import json
 import unittest
 from pathlib import Path
 
+import numpy
+import pandas
 import pypistats
 import requests_mock
 
@@ -725,12 +727,7 @@ Date range: 2018-11-01 - 2018-11-01
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = SAMPLE_RESPONSE_OVERALL
-        expected_output = """
-downloads = np.array([
-    [ "category" ,  "downloads" ],
-    [ "without_mirrors" ,  4593356 ],
-])
-"""
+        expected_output = "[['without_mirrors' 4593356]]"
 
         # Act
         with requests_mock.Mocker() as m:
@@ -738,7 +735,8 @@ downloads = np.array([
             output = pypistats.overall(package, format="numpy")
 
         # Assert
-        self.assertEqual(output.strip(), expected_output.strip())
+        self.assertIsInstance(output, numpy.ndarray)
+        self.assertEqual(str(output), expected_output)
 
     def test_format_pandas(self):
         # Arrange
@@ -746,15 +744,15 @@ downloads = np.array([
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
-dl = pd.DataFrame([
-    [ "without_mirrors" ,  4593356 ],
-], columns=["category", "downloads"])
+          category  downloads
+0  without_mirrors    4593356
 """
 
         # Act
         with requests_mock.Mocker() as m:
             m.get(mocked_url, text=mocked_response)
-            output = pypistats.overall(package, format="pandas", table_name="dl")
+            output = pypistats.overall(package, format="pandas")
 
         # Assert
-        self.assertEqual(output.strip(), expected_output.strip())
+        self.assertIsInstance(output, pandas.DataFrame)
+        self.assertEqual(str(output).strip(), expected_output.strip())

@@ -219,37 +219,75 @@ print(pypistats.system("pillow", os="darwin", format="html"))
 pprint(pypistats.system("pillow", os="linux", format="json"))
 ```
 
-### Numpy and Pandas
+### NumPy and pandas
 
-Return pre-formatted code to create NumPy arrays or Pandas DataFrames. Use the
-`table_name` argument to specify the variable name of the array/DataFrame.
+To use with either NumPy or pandas, make sure they are first installed, or:
 
-```python
->>> import pypistats
->>> import pandas as pd
->>> print(pypistats.overall("pyvista", total=True, format="pandas", table_name="downloads"))
-downloads = pd.DataFrame([
-    [ "with_mirrors" ,  "2019-09-20" ,  "2.10%" ,  1204 ],
-    [ "without_mirrors" ,  "2019-09-20" ,  "1.96%" ,  1122 ],
-    [ "with_mirrors" ,  "2019-09-19" ,  "0.87%" ,  496 ],
-...
-    [ "without_mirrors" ,  "2019-11-16" ,  "0.03%" ,  15 ],
-    [ "with_mirrors" ,  "2019-10-26" ,  "0.02%" ,  13 ],
-    [ "without_mirrors" ,  "2019-10-26" ,  "0.02%" ,  12 ],
-    [ "Total" ,  None ,  None ,  57305 ],
-], columns=["category", "date", "percent", "downloads"])
+```bash
+pip install --upgrade "pypistats[numpy]"
+pip install --upgrade "pypistats[pandas]"
+pip install --upgrade "pypistats[numpy,pandas]"
 ```
 
-Instead of printing the result, call `exec()` to make the `table_name` variable live in
-the active Python session:
+Return data in a NumPy array for further processing:
 
 ```python
->>> exec(pypistats.overall("pyvista",
-                       format="pandas",
-                       table_name="downloads"))
->>> downloads
-          category percent  downloads
-0     with_mirrors  54.73%      31362
-1  without_mirrors  45.27%      25943
-2            Total    None      57305
+import pypistats
+numpy_array = pypistats.overall("pyvista", total=True, format="numpy")
+print(type(numpy_array))
+# <class 'numpy.ndarray'>
+print(numpy_array)
+# [['with_mirrors' '2019-09-20' '2.23%' 1204]
+#  ['without_mirrors' '2019-09-20' '2.08%' 1122]
+#  ['with_mirrors' '2019-09-19' '0.92%' 496]
+#  ...
+#  ['with_mirrors' '2019-10-26' '0.02%' 13]
+#  ['without_mirrors' '2019-10-26' '0.02%' 12]
+#  ['Total' None None 54041]]
+```
+
+Or in a pandas DataFrame:
+
+```python
+import pypistats
+pandas_dataframe = pypistats.overall("pyvista", total=True, format="pandas")
+print(type(pandas_dataframe))
+# <class 'pandas.core.frame.DataFrame'>
+print(pandas_dataframe)
+#             category        date percent  downloads
+# 0       with_mirrors  2019-09-20   2.23%       1204
+# 1    without_mirrors  2019-09-20   2.08%       1122
+# 2       with_mirrors  2019-09-19   0.92%        496
+# 3       with_mirrors  2019-08-22   0.90%        489
+# 4    without_mirrors  2019-09-19   0.86%        466
+# ..               ...         ...     ...        ...
+# 354  without_mirrors  2019-11-03   0.03%         15
+# 355  without_mirrors  2019-11-16   0.03%         15
+# 356     with_mirrors  2019-10-26   0.02%         13
+# 357  without_mirrors  2019-10-26   0.02%         12
+# 358            Total        None    None      54041
+#
+# [359 rows x 4 columns]
+```
+
+For example, create charts with pandas:
+
+```python
+import pypistats
+
+# Show overall downloads over time, excluding mirrors
+data = pypistats.overall("pillow", total=True, format="pandas")
+data = data.groupby("category").get_group("without_mirrors").sort_values("date")
+
+chart = data.plot(x="date", y="downloads", figsize=(10, 2))
+chart.figure.show()
+chart.figure.savefig("overall.png")  # alternatively
+
+# Show Python 3 downloads over time
+data = pypistats.python_major("pillow", total=True, format="pandas")
+data = data.groupby("category").get_group(3).sort_values("date")
+
+chart = data.plot(x="date", y="downloads", figsize=(10, 2))
+chart.figure.show()
+chart.figure.savefig("python3.png")  # alternatively
 ```
