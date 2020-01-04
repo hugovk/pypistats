@@ -14,6 +14,10 @@ Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api) to get aggr
 download statistics on Python packages on the Python Package Index without having to
 execute queries directly against Google BigQuery.
 
+Data is available for the [last 180 days](https://pypistats.org/about#data). (For longer
+time periods, [pypinfo](https://github.com/ofek/pypinfo) can help, you'll need an API
+key and get free quota.)
+
 ## Installation
 
 ### From PyPI
