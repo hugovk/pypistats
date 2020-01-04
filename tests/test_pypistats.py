@@ -119,6 +119,27 @@ class TestPypiStats(unittest.TestCase):
             self.assertGreaterEqual(row["date"], start_date)
             self.assertLessEqual(row["date"], end_date)
 
+    def test_warn_if_start_date_before_earliest_available(self):
+        # Arrange
+        start_date = "2000-01-01"
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/python_major"
+        mocked_response = """{
+            "data": [
+                {"category": "2", "date": "2018-11-01", "downloads": 2008344},
+                {"category": "3", "date": "2018-11-01", "downloads": 280299},
+                {"category": "null", "date": "2018-11-01", "downloads": 7122}
+            ],
+            "package": "pip",
+            "type": "python_major_downloads"
+        }"""
+
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            # Act / Assert
+            with self.assertWarns(UserWarning):
+                pypistats.python_major(package, start_date=start_date)
+
     def test__paramify_none(self):
         # Arrange
         period = None
