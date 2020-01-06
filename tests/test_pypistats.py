@@ -7,10 +7,13 @@ import json
 import unittest
 from pathlib import Path
 
+import numpy
+import pandas
 import pypistats
 import requests_mock
 
 from .data.python_minor import DATA as PYTHON_MINOR_DATA
+from .data.tabulated_rst import DATA as EXPECTED_TABULATED_RST
 
 SAMPLE_DATA = [
     {"category": "2.6", "date": "2018-08-15", "downloads": 51},
@@ -217,24 +220,7 @@ class TestPypiStats(unittest.TestCase):
     def test__tabulate_rst(self):
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)
-        expected_output = """
-.. table:: 
-
-    ==========  ============  ===========
-     category       date       downloads 
-    ==========  ============  ===========
-     2.6         2018-08-15           51 
-     2.7         2018-08-15       63,749 
-     3.2         2018-08-15            2 
-     3.3         2018-08-15           40 
-     3.4         2018-08-15        6,095 
-     3.5         2018-08-15       20,358 
-     3.6         2018-08-15       35,274 
-     3.7         2018-08-15        6,595 
-     3.8         2018-08-15            3 
-     null        2018-08-15        1,019 
-    ==========  ============  ===========
-"""  # noqa: W291
+        expected_output = EXPECTED_TABULATED_RST
 
         # Act
         output = pypistats._tabulate(data, format="rst")
@@ -736,15 +722,37 @@ Date range: 2018-11-01 - 2018-11-01
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
+    def test_format_numpy(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/overall"
+        mocked_response = SAMPLE_RESPONSE_OVERALL
+        expected_output = "[['without_mirrors' 4593356]]"
 
-# pytest's capsys cannot be used in a unittest class
-def test__print_verbose_print(capsys):
-    # Arrange
-    verbose = True
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.overall(package, format="numpy")
 
-    # Act
-    pypistats._print_verbose(verbose, "test output")
+        # Assert
+        self.assertIsInstance(output, numpy.ndarray)
+        self.assertEqual(str(output), expected_output)
 
-    # Assert
-    captured = capsys.readouterr()
-    assert captured.err == "test output\n"
+    def test_format_pandas(self):
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/overall"
+        mocked_response = SAMPLE_RESPONSE_OVERALL
+        expected_output = """
+          category  downloads
+0  without_mirrors    4593356
+"""
+
+        # Act
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            output = pypistats.overall(package, format="pandas")
+
+        # Assert
+        self.assertIsInstance(output, pandas.DataFrame)
+        self.assertEqual(str(output).strip(), expected_output.strip())

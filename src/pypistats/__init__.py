@@ -10,12 +10,13 @@ import sys
 from pathlib import Path
 
 import pkg_resources
-
 import requests
 from appdirs import user_cache_dir
 from pytablewriter import (
     HtmlTableWriter,
     MarkdownTableWriter,
+    NumpyTableWriter,
+    PandasDataFrameWriter,
     RstSimpleTableWriter,
     String,
 )
@@ -152,7 +153,7 @@ def pypi_stats_api(
 
     output = _tabulate(data, format)
 
-    if first:
+    if first and format not in ["numpy", "pandas"]:
         return f"{output}\nDate range: {first} - {last}\n"
     else:
         return output
@@ -296,6 +297,8 @@ def _tabulate(data, format="markdown"):
         "markdown": MarkdownTableWriter,
         "rst": RstSimpleTableWriter,
         "html": HtmlTableWriter,
+        "pandas": PandasDataFrameWriter,
+        "numpy": NumpyTableWriter,
     }
 
     writer = format_writers[format]()
@@ -328,7 +331,7 @@ def _tabulate(data, format="markdown"):
             type_hint = None
             if item == "percent":
                 align = Align.RIGHT
-            elif item == "downloads":
+            elif item == "downloads" and (format not in ["numpy", "pandas"]):
                 thousand_separator = ","
             elif item == "category":
                 type_hint = String
@@ -339,6 +342,10 @@ def _tabulate(data, format="markdown"):
         writer.style_list = style_list
         writer.type_hints = type_hints
 
+    if format == "numpy":
+        return writer.tabledata.as_dataframe().values
+    elif format == "pandas":
+        return writer.tabledata.as_dataframe()
     return writer.dumps()
 
 
