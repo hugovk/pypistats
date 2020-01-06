@@ -7,6 +7,7 @@ import atexit
 import datetime as dt
 import json
 import sys
+import warnings
 from pathlib import Path
 
 import pkg_resources
@@ -125,7 +126,16 @@ def pypi_stats_api(
 
         _save_cache(cache_file, res)
 
+    # Actual first and last dates of the fetched data
     first, last = _date_range(res["data"])
+
+    if start_date and start_date < first:
+        warnings.warn(
+            f"Requested start date ({start_date}) is before earliest available "
+            f"data ({first}), because data is only available for 180 days. "
+            "See https://pypistats.org/about#data",
+            stacklevel=3,
+        )
 
     if start_date or end_date:
         res["data"] = _filter(res["data"], start_date, end_date)
