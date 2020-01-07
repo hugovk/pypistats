@@ -300,4 +300,4 @@ chart.figure.show()
 chart.figure.savefig("python3.png")  # alternatively
 ```
 
-![python3.png](example/overall.png)
+![python3.png](example/python3.png)
