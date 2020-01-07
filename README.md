@@ -277,17 +277,21 @@ print(pandas_dataframe)
 For example, create charts with pandas:
 
 ```python
-import pypistats
-
 # Show overall downloads over time, excluding mirrors
+import pypistats
 data = pypistats.overall("pillow", total=True, format="pandas")
 data = data.groupby("category").get_group("without_mirrors").sort_values("date")
 
 chart = data.plot(x="date", y="downloads", figsize=(10, 2))
 chart.figure.show()
 chart.figure.savefig("overall.png")  # alternatively
+```
 
+![overall.png](example/overall.png)
+
+```python
 # Show Python 3 downloads over time
+import pypistats
 data = pypistats.python_major("pillow", total=True, format="pandas")
 data = data.groupby("category").get_group(3).sort_values("date")
 
@@ -295,3 +299,5 @@ chart = data.plot(x="date", y="downloads", figsize=(10, 2))
 chart.figure.show()
 chart.figure.savefig("python3.png")  # alternatively
 ```
+
+![python3.png](example/overall.png)
