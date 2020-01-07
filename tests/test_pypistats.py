@@ -137,8 +137,39 @@ class TestPypiStats(unittest.TestCase):
         with requests_mock.Mocker() as m:
             m.get(mocked_url, text=mocked_response)
             # Act / Assert
-            with self.assertWarns(UserWarning):
+            with self.assertWarnsRegex(
+                UserWarning,
+                r"Requested start date \(2000-01-01\) is before earliest available "
+                r"data \(2018-11-01\), because data is only available for 180 days. "
+                "See https://pypistats.org/about#data",
+            ):
                 pypistats.python_major(package, start_date=start_date)
+
+    def test_error_if_end_date_before_earliest_available(self):
+        # Arrange
+        end_date = "2000-01-01"
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/python_major"
+        mocked_response = """{
+            "data": [
+                {"category": "2", "date": "2018-11-01", "downloads": 2008344},
+                {"category": "3", "date": "2018-11-01", "downloads": 280299},
+                {"category": "null", "date": "2018-11-01", "downloads": 7122}
+            ],
+            "package": "pip",
+            "type": "python_major_downloads"
+        }"""
+
+        with requests_mock.Mocker() as m:
+            m.get(mocked_url, text=mocked_response)
+            # Act / Assert
+            with self.assertRaisesRegex(
+                ValueError,
+                r"Requested end date \(2000-01-01\) is before earliest available "
+                r"data \(2018-11-01\), because data is only available for 180 days. "
+                "See https://pypistats.org/about#data",
+            ):
+                pypistats.python_major(package, end_date=end_date)
 
     def test__paramify_none(self):
         # Arrange

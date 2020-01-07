@@ -129,6 +129,15 @@ def pypi_stats_api(
     # Actual first and last dates of the fetched data
     first, last = _date_range(res["data"])
 
+    # Validate end date
+    if end_date and end_date < first:
+        raise ValueError(
+            f"Requested end date ({end_date}) is before earliest available "
+            f"data ({first}), because data is only available for 180 days. "
+            "See https://pypistats.org/about#data"
+        )
+
+    # Validate start date
     if start_date and start_date < first:
         warnings.warn(
             f"Requested start date ({start_date}) is before earliest available "
