@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/asottile/pyupgrade
-    rev: v1.25.2
+    rev: v1.26.1
     hooks:
       - id: pyupgrade
         args: ["--py36-plus"]
@@ -31,7 +31,7 @@ repos:
       - id: isort
 
   - repo: https://github.com/pre-commit/pygrep-hooks
-    rev: v1.4.3
+    rev: v1.4.4
     hooks:
       - id: python-check-blanket-noqa
 
