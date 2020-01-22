@@ -7,13 +7,21 @@ import json
 import unittest
 from pathlib import Path
 
-import numpy
-import pandas
 import pypistats
 import requests_mock
 
 from .data.python_minor import DATA as PYTHON_MINOR_DATA
 from .data.tabulated_rst import DATA as EXPECTED_TABULATED_RST
+
+try:
+    import numpy
+except ImportError:
+    numpy = None
+try:
+    import pandas
+except ImportError:
+    pandas = None
+
 
 SAMPLE_DATA = [
     {"category": "2.6", "date": "2018-08-15", "downloads": 51},
@@ -774,6 +782,7 @@ Date range: 2018-11-01 - 2018-11-01
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
+    @unittest.skipIf(numpy is None, "NumPy is not installed")
     def test_format_numpy(self):
         # Arrange
         package = "pip"
@@ -790,6 +799,7 @@ Date range: 2018-11-01 - 2018-11-01
         self.assertIsInstance(output, numpy.ndarray)
         self.assertEqual(str(output), expected_output)
 
+    @unittest.skipIf(pandas is None, "pandas is not installed")
     def test_format_pandas(self):
         # Arrange
         package = "pip"
