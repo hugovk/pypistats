@@ -7,23 +7,23 @@ jobs:
   - template: .azure-pipelines/jobs/lint.yml
     parameters:
       name: Lint
-      vmImage: "Ubuntu-18.04"
+      vmImage: "ubuntu-latest"
       toxenv: lint
 
   - template: .azure-pipelines/jobs/test.yml
     parameters:
       name: Linux
-      vmImage: "Ubuntu-18.04"
+      vmImage: "ubuntu-latest"
 
   - template: .azure-pipelines/jobs/test.yml
     parameters:
       name: macOS
-      vmImage: "xcode9-macos10.13"
+      vmImage: "macOS-latest"
 
   - template: .azure-pipelines/jobs/test.yml
     parameters:
       name: Windows
-      vmImage: "vs2017-win2016"
+      vmImage: "windows-latest"
 
   - job: Publish
     dependsOn:
@@ -32,7 +32,7 @@ jobs:
       - macOS
       - Windows
     pool:
-      vmImage: "Ubuntu-16.04"
+      vmImage: "ubuntu-latest"
 
     steps:
       - task: UsePythonVersion@0
