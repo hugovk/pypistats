@@ -17,6 +17,7 @@ setup(
     long_description_content_type="text/markdown",
     author="hugovk",
     url="https://github.com/hugovk/pypistats",
+    project_urls={"Source": "https://github.com/hugovk/pypistats"},
     license="MIT",
     keywords=["PyPI", "downloads", "statistics", "stats", "BigQuery"],
     packages=find_packages(where="src"),
