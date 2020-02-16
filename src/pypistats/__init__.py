@@ -21,7 +21,7 @@ from pytablewriter import (
     RstSimpleTableWriter,
     String,
 )
-from pytablewriter.style import Align, Style
+from pytablewriter.style import Align, Style, ThousandSeparator
 from slugify import slugify
 
 __version__ = pkg_resources.get_distribution(__name__).version
@@ -346,7 +346,7 @@ def _tabulate(data, format="markdown"):
 
         for header in headers:
             align = None
-            thousand_separator = None
+            thousand_separator = ThousandSeparator.NONE
             type_hint = None
             if header == "percent":
                 align = Align.RIGHT
