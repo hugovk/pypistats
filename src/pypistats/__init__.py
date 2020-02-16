@@ -339,9 +339,9 @@ def _tabulate(data, format="markdown"):
     # Custom alignment and format
     if header_list[0] in ["last_day", "last_month", "last_week"]:
         # Special case for 'recent'
-        writer.style_list = len(header_list) * [Style(thousand_separator=",")]
+        writer.column_styles = len(header_list) * [Style(thousand_separator=",")]
     else:
-        style_list = []
+        column_styles = []
         type_hints = []
 
         for item in header_list:
@@ -355,10 +355,10 @@ def _tabulate(data, format="markdown"):
             elif item == "category":
                 type_hint = String
             style = Style(align=align, thousand_separator=thousand_separator)
-            style_list.append(style)
+            column_styles.append(style)
             type_hints.append(type_hint)
 
-        writer.style_list = style_list
+        writer.column_styles = column_styles
         writer.type_hints = type_hints
 
     if format == "numpy":
