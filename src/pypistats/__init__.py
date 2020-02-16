@@ -325,34 +325,34 @@ def _tabulate(data, format="markdown"):
         writer.margin = 1
 
     if isinstance(data, dict):
-        header_list = list(data.keys())
+        headers = list(data.keys())
         writer.value_matrix = [data]
     else:  # isinstance(data, list):
-        header_list = sorted(set().union(*(d.keys() for d in data)))
+        headers = sorted(set().union(*(d.keys() for d in data)))
         writer.value_matrix = data
 
     # Move downloads last
-    header_list.append("downloads")
-    header_list.remove("downloads")
-    writer.header_list = header_list
+    headers.append("downloads")
+    headers.remove("downloads")
+    writer.headers = headers
 
     # Custom alignment and format
-    if header_list[0] in ["last_day", "last_month", "last_week"]:
+    if headers[0] in ["last_day", "last_month", "last_week"]:
         # Special case for 'recent'
-        writer.column_styles = len(header_list) * [Style(thousand_separator=",")]
+        writer.column_styles = len(headers) * [Style(thousand_separator=",")]
     else:
         column_styles = []
         type_hints = []
 
-        for item in header_list:
+        for header in headers:
             align = None
             thousand_separator = None
             type_hint = None
-            if item == "percent":
+            if header == "percent":
                 align = Align.RIGHT
-            elif item == "downloads" and (format not in ["numpy", "pandas"]):
+            elif header == "downloads" and (format not in ["numpy", "pandas"]):
                 thousand_separator = ","
-            elif item == "category":
+            elif header == "category":
                 type_hint = String
             style = Style(align=align, thousand_separator=thousand_separator)
             column_styles.append(style)
