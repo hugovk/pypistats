@@ -4,7 +4,7 @@ on:
     branches:
       - master
     paths:
-      - .github/workflows/labels.yml
+      - .github/labels.yml
 jobs:
   build:
     runs-on: ubuntu-latest

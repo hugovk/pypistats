@@ -25,26 +25,27 @@
   description: "This will not be worked on"
 
 # Keep a Changelog labels
+# https://keepachangelog.com/en/1.0.0/
 - color: 0e8a16
-  name: Added
+  name: "changelog: Added"
   description: "Changelog: for new features"
 - color: af99e5
-  name: Changed
+  name: "changelog: Changed"
   description: "Changelog: for changes in existing functionality"
 - color: FFA500
-  name: Deprecated
+  name: "changelog: Deprecated"
   description: "Changelog: for soon-to-be removed features"
 - color: 00A800
-  name: Fixed
+  name: "changelog: Fixed"
   description: "Changelog: for any bug fixes"
 - color: ff0000
-  name: Removed
+  name: "changelog: Removed"
   description: "Changelog: for now removed features"
 - color: 045aa0
-  name: Security
+  name: "changelog: Security"
   description: "Changelog: in case of vulnerabilities"
 - color: fbca04
-  name: skip-changelog
+  name: "changelog: skip"
   description: "Exclude PR from release draft"
 
 # Other labels

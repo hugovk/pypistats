@@ -4,23 +4,23 @@ tag-template: "$NEXT_PATCH_VERSION"
 categories:
   - title: "Added"
     labels:
-      - "Added"
+      - "changelog: Added"
       - "enhancement"
   - title: "Changed"
-    label: "Changed"
+    label: "changelog: Changed"
   - title: "Deprecated"
-    label: "Deprecated"
+    label: "changelog: Deprecated"
   - title: "Removed"
-    label: "Removed"
+    label: "changelog: Removed"
   - title: "Fixed"
     labels:
-      - "Fixed"
+      - "changelog: Fixed"
       - "bug"
   - title: "Security"
-    label: "Security"
+    label: "changelog: Security"
 
 exclude-labels:
-  - "skip-changelog"
+  - "changelog: skip"
 
 template: |
   ## Changes
