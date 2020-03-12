@@ -7,7 +7,7 @@ import unittest
 from pathlib import Path
 
 import pypistats
-import requests_mock
+import respx
 from freezegun import freeze_time
 
 
@@ -86,6 +86,7 @@ class TestPypiStatsCache(unittest.TestCase):
         # Assert
         self.assertFalse(cache_file.exists())
 
+    @respx.mock
     def test_subcommand_with_cache(self):
         # Arrange
         package = "pip"
@@ -106,12 +107,11 @@ Date range: 2018-11-01 - 2018-11-01
 """
 
         # Act
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            # First time to save to cache
-            pypistats.overall(package)
-            # Second time to read from cache
-            output = pypistats.overall(package)
+        respx.get(mocked_url, content=mocked_response)
+        # First time to save to cache
+        pypistats.overall(package)
+        # Second time to read from cache
+        output = pypistats.overall(package)
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())

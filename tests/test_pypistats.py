@@ -8,7 +8,7 @@ import unittest
 from pathlib import Path
 
 import pypistats
-import requests_mock
+import respx
 
 from .data.python_minor import DATA as PYTHON_MINOR_DATA
 from .data.tabulated_rst import DATA as EXPECTED_TABULATED_RST
@@ -127,6 +127,7 @@ class TestPypiStats(unittest.TestCase):
             self.assertGreaterEqual(row["date"], start_date)
             self.assertLessEqual(row["date"], end_date)
 
+    @respx.mock
     def test_warn_if_start_date_before_earliest_available(self):
         # Arrange
         start_date = "2000-01-01"
@@ -142,17 +143,17 @@ class TestPypiStats(unittest.TestCase):
             "type": "python_major_downloads"
         }"""
 
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            # Act / Assert
-            with self.assertWarnsRegex(
-                UserWarning,
-                r"Requested start date \(2000-01-01\) is before earliest available "
-                r"data \(2018-11-01\), because data is only available for 180 days. "
-                "See https://pypistats.org/about#data",
-            ):
-                pypistats.python_major(package, start_date=start_date)
+        respx.get(mocked_url, content=mocked_response)
+        # Act / Assert
+        with self.assertWarnsRegex(
+            UserWarning,
+            r"Requested start date \(2000-01-01\) is before earliest available "
+            r"data \(2018-11-01\), because data is only available for 180 days. "
+            "See https://pypistats.org/about#data",
+        ):
+            pypistats.python_major(package, start_date=start_date)
 
+    @respx.mock
     def test_error_if_end_date_before_earliest_available(self):
         # Arrange
         end_date = "2000-01-01"
@@ -168,16 +169,15 @@ class TestPypiStats(unittest.TestCase):
             "type": "python_major_downloads"
         }"""
 
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            # Act / Assert
-            with self.assertRaisesRegex(
-                ValueError,
-                r"Requested end date \(2000-01-01\) is before earliest available "
-                r"data \(2018-11-01\), because data is only available for 180 days. "
-                "See https://pypistats.org/about#data",
-            ):
-                pypistats.python_major(package, end_date=end_date)
+        respx.get(mocked_url, content=mocked_response)
+        # Act / Assert
+        with self.assertRaisesRegex(
+            ValueError,
+            r"Requested end date \(2000-01-01\) is before earliest available "
+            r"data \(2018-11-01\), because data is only available for 180 days. "
+            "See https://pypistats.org/about#data",
+        ):
+            pypistats.python_major(package, end_date=end_date)
 
     def test__paramify_none(self):
         # Arrange
@@ -536,6 +536,7 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         self.assertEqual(output, SAMPLE_DATA_RECENT)
 
+    @respx.mock
     def test_valid_json(self):
         # Arrange
         package = "pip"
@@ -545,15 +546,15 @@ class TestPypiStats(unittest.TestCase):
         """
 
         # Act
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            output = pypistats.recent(package, period="day", format="json")
+        respx.get(mocked_url, content=mocked_response)
+        output = pypistats.recent(package, period="day", format="json")
 
         # Assert
         # Should not raise any errors eg. TypeError
         json.loads(output)
         self.assertEqual(json.loads(output), json.loads(mocked_response))
 
+    @respx.mock
     def test_recent_tabular(self):
         # Arrange
         package = "pip"
@@ -570,17 +571,17 @@ class TestPypiStats(unittest.TestCase):
 """
 
         # Act
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            output = pypistats.recent(package)
+        respx.get(mocked_url, content=mocked_response)
+        output = pypistats.recent(package)
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
+    @respx.mock
     def test_overall_tabular_start_date(self):
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/overall"
+        mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
 |    category     | downloads |
@@ -591,17 +592,17 @@ Date range: 2018-11-02 - 2018-11-02
 """
 
         # Act
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            output = pypistats.overall(package, mirrors=False, start_date="2018-11-02")
+        respx.get(mocked_url, content=mocked_response)
+        output = pypistats.overall(package, mirrors=False, start_date="2018-11-02")
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
+    @respx.mock
     def test_overall_tabular_end_date(self):
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/overall"
+        mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
 |    category     | downloads |
@@ -612,13 +613,13 @@ Date range: 2018-11-01 - 2018-11-01
 """
 
         # Act
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            output = pypistats.overall(package, mirrors=False, end_date="2018-11-01")
+        respx.get(mocked_url, content=mocked_response)
+        output = pypistats.overall(package, mirrors=False, end_date="2018-11-01")
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
+    @respx.mock
     def test_python_major_json(self):
         # Arrange
         package = "pip"
@@ -643,13 +644,13 @@ Date range: 2018-11-01 - 2018-11-01
         }"""
 
         # Act
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            output = pypistats.python_major(package, format="json")
+        respx.get(mocked_url, content=mocked_response)
+        output = pypistats.python_major(package, format="json")
 
         # Assert
         self.assertEqual(json.loads(output), json.loads(expected_output))
 
+    @respx.mock
     def test_python_minor_json(self):
         # Arrange
         package = "pip"
@@ -688,13 +689,13 @@ Date range: 2018-11-01 - 2018-11-01
         }"""
 
         # Act
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            output = pypistats.python_minor(package, format="json")
+        respx.get(mocked_url, content=mocked_response)
+        output = pypistats.python_minor(package, format="json")
 
         # Assert
         self.assertEqual(json.loads(output), json.loads(expected_output))
 
+    @respx.mock
     def test_system_tabular(self):
         # Arrange
         package = "pip"
@@ -722,13 +723,13 @@ Date range: 2018-11-01 - 2018-11-01
 """
 
         # Act
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            output = pypistats.system(package)
+        respx.get(mocked_url, content=mocked_response)
+        output = pypistats.system(package)
 
         # Assert
         self.assertEqual(output.strip(), expected_output.strip())
 
+    @respx.mock
     def test_python_minor_monthly(self):
         # Arrange
         package = "pip"
@@ -759,13 +760,13 @@ Date range: 2018-11-01 - 2018-11-01
         }"""
 
         # Act
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            output = pypistats.python_minor(package, total="monthly", format="json")
+        respx.get(mocked_url, content=mocked_response)
+        output = pypistats.python_minor(package, total="monthly", format="json")
 
         # Assert
         self.assertEqual(json.loads(output), json.loads(expected_output))
 
+    @respx.mock
     def test_versions_are_strings(self):
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA_VERSION_STRINGS)
@@ -783,6 +784,7 @@ Date range: 2018-11-01 - 2018-11-01
         self.assertEqual(output.strip(), expected_output.strip())
 
     @unittest.skipIf(numpy is None, "NumPy is not installed")
+    @respx.mock
     def test_format_numpy(self):
         # Arrange
         package = "pip"
@@ -791,15 +793,15 @@ Date range: 2018-11-01 - 2018-11-01
         expected_output = "[['without_mirrors' 4593356]]"
 
         # Act
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            output = pypistats.overall(package, format="numpy")
+        respx.get(mocked_url, content=mocked_response)
+        output = pypistats.overall(package, format="numpy")
 
         # Assert
         self.assertIsInstance(output, numpy.ndarray)
         self.assertEqual(str(output), expected_output)
 
     @unittest.skipIf(pandas is None, "pandas is not installed")
+    @respx.mock
     def test_format_pandas(self):
         # Arrange
         package = "pip"
@@ -811,9 +813,8 @@ Date range: 2018-11-01 - 2018-11-01
 """
 
         # Act
-        with requests_mock.Mocker() as m:
-            m.get(mocked_url, text=mocked_response)
-            output = pypistats.overall(package, format="pandas")
+        respx.get(mocked_url, content=mocked_response)
+        output = pypistats.overall(package, format="pandas")
 
         # Assert
         self.assertIsInstance(output, pandas.DataFrame)
