@@ -22,7 +22,7 @@ jobs:
             codecov-flag: GHA_Windows
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Ubuntu cache
         uses: actions/cache@v1
