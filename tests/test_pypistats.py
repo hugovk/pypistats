@@ -244,38 +244,23 @@ class TestPypiStats:
         # Assert
         assert output.strip() == expected_output.strip()
 
-    def test__tabulate_markdown(self):
+    @pytest.mark.parametrize(
+        "test_input, expected",
+        [
+            ("html", EXPECTED_TABULATED_HTML),
+            ("markdown", EXPECTED_TABULATED_MD),
+            ("rst", EXPECTED_TABULATED_RST),
+        ],
+    )
+    def test__tabulate(self, test_input, expected):
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)
-        expected_output = EXPECTED_TABULATED_MD
 
         # Act
-        output = pypistats._tabulate(data, format="markdown")
+        output = pypistats._tabulate(data, format=test_input)
 
         # Assert
-        assert output.strip() == expected_output.strip()
-
-    def test__tabulate_rst(self):
-        # Arrange
-        data = copy.deepcopy(SAMPLE_DATA)
-        expected_output = EXPECTED_TABULATED_RST
-
-        # Act
-        output = pypistats._tabulate(data, format="rst")
-
-        # Assert
-        assert output.strip() == expected_output.strip()
-
-    def test__tabulate_html(self):
-        # Arrange
-        data = copy.deepcopy(SAMPLE_DATA)
-        expected_output = EXPECTED_TABULATED_HTML
-
-        # Act
-        output = pypistats._tabulate(data, format="html")
-
-        # Assert
-        assert output.strip() == expected_output.strip()
+        assert output.strip() == expected.strip()
 
     def test__sort(self):
         # Arrange
