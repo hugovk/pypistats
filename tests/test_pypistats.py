@@ -13,6 +13,7 @@ from .data.expected_tabulated import (
     EXPECTED_TABULATED_HTML,
     EXPECTED_TABULATED_MD,
     EXPECTED_TABULATED_RST,
+    EXPECTED_TABULATED_TSV,
 )
 from .data.python_minor import DATA as PYTHON_MINOR_DATA
 
@@ -250,6 +251,7 @@ class TestPypiStats:
             ("html", EXPECTED_TABULATED_HTML),
             ("markdown", EXPECTED_TABULATED_MD),
             ("rst", EXPECTED_TABULATED_RST),
+            ("tsv", EXPECTED_TABULATED_TSV),
         ],
     )
     def test__tabulate(self, test_input, expected):

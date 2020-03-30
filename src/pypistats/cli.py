@@ -115,7 +115,7 @@ def _define_format(args) -> str:
     return args.format
 
 
-FORMATS = ("html", "json", "markdown", "rst")
+FORMATS = ("html", "json", "markdown", "rst", "tsv")
 
 arg_start_date = argument(
     "-sd",

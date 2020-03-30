@@ -20,6 +20,7 @@ from pytablewriter import (
     PandasDataFrameWriter,
     RstSimpleTableWriter,
     String,
+    TsvTableWriter,
 )
 from pytablewriter.style import Align, Style, ThousandSeparator
 from slugify import slugify
@@ -318,6 +319,7 @@ def _tabulate(data, format="markdown"):
         "numpy": NumpyTableWriter,
         "pandas": PandasDataFrameWriter,
         "rst": RstSimpleTableWriter,
+        "tsv": TsvTableWriter,
     }
 
     writer = format_writers[format]()
