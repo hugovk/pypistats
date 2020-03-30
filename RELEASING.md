@@ -7,21 +7,12 @@
       [![Build Status](https://travis-ci.org/hugovk/pypistats.svg?branch=master)](https://travis-ci.org/hugovk/pypistats)
       [![GitHub Actions status](https://github.com/hugovk/pypistats/workflows/Test/badge.svg)](https://github.com/hugovk/pypistats/actions)
 
-- [ ] Tag with the version number:
+- [ ] Edit release draft, adjust text if needed:
+      https://github.com/hugovk/pypistats/releases
 
-```bash
-git tag -a 0.1.0 -m "Release 0.1.0"
-```
+- [ ] Check next tag is correct, amend if needed
 
-- [ ] Push tag:
-
-```bash
-git push --tags
-```
-
-- [ ] Create new GitHub release: https://github.com/hugovk/pypistats/releases/new
-
-  - Tag: Pick existing tag "0.1.0"
+- [ ] Publish release
 
 - [ ] Check the tagged [Travis CI build](https://travis-ci.org/hugovk/pypistats) has
       deployed to [PyPI](https://pypi.org/project/pypistats/#history)

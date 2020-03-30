@@ -8,6 +8,7 @@
 [![GitHub Actions status](https://github.com/hugovk/pypistats/workflows/Test/badge.svg)](https://github.com/hugovk/pypistats/actions)
 [![codecov](https://codecov.io/gh/hugovk/pypistats/branch/master/graph/badge.svg)](https://codecov.io/gh/hugovk/pypistats)
 [![GitHub](https://img.shields.io/github/license/hugovk/pypistats.svg)](LICENSE.txt)
+[![DOI](https://zenodo.org/badge/149862343.svg)](https://zenodo.org/badge/latestdoi/149862343)
 [![Code style: Black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api) to get aggregate

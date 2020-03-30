@@ -20,6 +20,7 @@ from pytablewriter import (
     PandasDataFrameWriter,
     RstSimpleTableWriter,
     String,
+    TsvTableWriter,
 )
 from pytablewriter.style import Align, Style, ThousandSeparator
 from slugify import slugify
@@ -313,11 +314,12 @@ def _tabulate(data, format="markdown"):
     """Return data in specified format"""
 
     format_writers = {
-        "markdown": MarkdownTableWriter,
-        "rst": RstSimpleTableWriter,
         "html": HtmlTableWriter,
-        "pandas": PandasDataFrameWriter,
+        "markdown": MarkdownTableWriter,
         "numpy": NumpyTableWriter,
+        "pandas": PandasDataFrameWriter,
+        "rst": RstSimpleTableWriter,
+        "tsv": TsvTableWriter,
     }
 
     writer = format_writers[format]()

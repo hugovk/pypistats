@@ -1,17 +1,21 @@
-#!/usr/bin/env python3
 """
 Unit tests for pypistats
 """
 import copy
 import json
-import unittest
 from pathlib import Path
 
 import pypistats
+import pytest
 import respx
 
+from .data.expected_tabulated import (
+    EXPECTED_TABULATED_HTML,
+    EXPECTED_TABULATED_MD,
+    EXPECTED_TABULATED_RST,
+    EXPECTED_TABULATED_TSV,
+)
 from .data.python_minor import DATA as PYTHON_MINOR_DATA
-from .data.tabulated_rst import DATA as EXPECTED_TABULATED_RST
 
 try:
     import numpy
@@ -63,15 +67,15 @@ def stub__save_cache(*args):
     pass
 
 
-class TestPypiStats(unittest.TestCase):
-    def setUp(self):
+class TestPypiStats:
+    def setup_method(self):
         # Stub caching. Caches are tested in another class.
         self.original__cache_filename = pypistats._cache_filename
         self.original__save_cache = pypistats._save_cache
         pypistats._cache_filename = stub__cache_filename
         pypistats._save_cache = stub__save_cache
 
-    def tearDown(self):
+    def teardown_method(self):
         # Unstub caching
         pypistats._cache_filename = self.original__cache_filename
         pypistats._save_cache = self.original__save_cache
@@ -84,7 +88,7 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._filter(data)
 
         # Assert
-        self.assertEqual(data, output)
+        assert data == output
 
     def test__filter_start_date(self):
         # Arrange
@@ -95,9 +99,9 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._filter(data, start_date=start_date)
 
         # Assert
-        self.assertEqual(len(output), 20)
+        assert len(output) == 20
         for row in output:
-            self.assertGreaterEqual(row["date"], start_date)
+            assert row["date"] >= start_date
 
     def test__filter_end_date(self):
         # Arrange
@@ -108,9 +112,9 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._filter(data, end_date=end_date)
 
         # Assert
-        self.assertEqual(len(output), 62)
+        assert len(output) == 62
         for row in output:
-            self.assertLessEqual(row["date"], end_date)
+            assert row["date"] <= end_date
 
     def test__filter_start_and_end_date(self):
         # Arrange
@@ -122,10 +126,10 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._filter(data, start_date=start_date, end_date=end_date)
 
         # Assert
-        self.assertEqual(len(output), 112)
+        assert len(output) == 112
         for row in output:
-            self.assertGreaterEqual(row["date"], start_date)
-            self.assertLessEqual(row["date"], end_date)
+            assert row["date"] >= start_date
+            assert row["date"] <= end_date
 
     @respx.mock
     def test_warn_if_start_date_before_earliest_available(self):
@@ -145,9 +149,9 @@ class TestPypiStats(unittest.TestCase):
 
         respx.get(mocked_url, content=mocked_response)
         # Act / Assert
-        with self.assertWarnsRegex(
+        with pytest.warns(
             UserWarning,
-            r"Requested start date \(2000-01-01\) is before earliest available "
+            match=r"Requested start date \(2000-01-01\) is before earliest available "
             r"data \(2018-11-01\), because data is only available for 180 days. "
             "See https://pypistats.org/about#data",
         ):
@@ -171,9 +175,9 @@ class TestPypiStats(unittest.TestCase):
 
         respx.get(mocked_url, content=mocked_response)
         # Act / Assert
-        with self.assertRaisesRegex(
+        with pytest.raises(
             ValueError,
-            r"Requested end date \(2000-01-01\) is before earliest available "
+            match=r"Requested end date \(2000-01-01\) is before earliest available "
             r"data \(2018-11-01\), because data is only available for 180 days. "
             "See https://pypistats.org/about#data",
         ):
@@ -187,7 +191,7 @@ class TestPypiStats(unittest.TestCase):
         param = pypistats._paramify("period", period)
 
         # Assert
-        self.assertEqual(param, "")
+        assert param == ""
 
     def test__paramify_string(self):
         # Arrange
@@ -197,7 +201,7 @@ class TestPypiStats(unittest.TestCase):
         param = pypistats._paramify("period", period)
 
         # Assert
-        self.assertEqual(param, "&period=day")
+        assert param == "&period=day"
 
     def test__paramify_bool(self):
         # Arrange
@@ -207,7 +211,7 @@ class TestPypiStats(unittest.TestCase):
         param = pypistats._paramify("mirrors", mirrors)
 
         # Assert
-        self.assertEqual(param, "&mirrors=true")
+        assert param == "&mirrors=true"
 
     def test__paramify_int(self):
         # Arrange
@@ -217,7 +221,7 @@ class TestPypiStats(unittest.TestCase):
         param = pypistats._paramify("version", version)
 
         # Assert
-        self.assertEqual(param, "&version=3")
+        assert param == "&version=3"
 
     def test__paramify_float(self):
         # Arrange
@@ -227,139 +231,37 @@ class TestPypiStats(unittest.TestCase):
         param = pypistats._paramify("version", version)
 
         # Assert
-        self.assertEqual(param, "&version=3.7")
+        assert param == "&version=3.7"
 
     def test__tabulate_noarg(self):
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)
-        expected_output = """
-| category |    date    | downloads |
-|----------|------------|----------:|
-| 2.6      | 2018-08-15 |        51 |
-| 2.7      | 2018-08-15 |    63,749 |
-| 3.2      | 2018-08-15 |         2 |
-| 3.3      | 2018-08-15 |        40 |
-| 3.4      | 2018-08-15 |     6,095 |
-| 3.5      | 2018-08-15 |    20,358 |
-| 3.6      | 2018-08-15 |    35,274 |
-| 3.7      | 2018-08-15 |     6,595 |
-| 3.8      | 2018-08-15 |         3 |
-| null     | 2018-08-15 |     1,019 |
-"""
+        expected_output = EXPECTED_TABULATED_MD
 
         # Act
         output = pypistats._tabulate(data)
 
         # Assert
-        self.assertEqual(output.strip(), expected_output.strip())
+        assert output.strip() == expected_output.strip()
 
-    def test__tabulate_markdown(self):
+    @pytest.mark.parametrize(
+        "test_input, expected",
+        [
+            ("html", EXPECTED_TABULATED_HTML),
+            ("markdown", EXPECTED_TABULATED_MD),
+            ("rst", EXPECTED_TABULATED_RST),
+            ("tsv", EXPECTED_TABULATED_TSV),
+        ],
+    )
+    def test__tabulate(self, test_input, expected):
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)
-        expected_output = """
-| category |    date    | downloads |
-|----------|------------|----------:|
-| 2.6      | 2018-08-15 |        51 |
-| 2.7      | 2018-08-15 |    63,749 |
-| 3.2      | 2018-08-15 |         2 |
-| 3.3      | 2018-08-15 |        40 |
-| 3.4      | 2018-08-15 |     6,095 |
-| 3.5      | 2018-08-15 |    20,358 |
-| 3.6      | 2018-08-15 |    35,274 |
-| 3.7      | 2018-08-15 |     6,595 |
-| 3.8      | 2018-08-15 |         3 |
-| null     | 2018-08-15 |     1,019 |
-"""
 
         # Act
-        output = pypistats._tabulate(data, format="markdown")
+        output = pypistats._tabulate(data, format=test_input)
 
         # Assert
-        self.assertEqual(output.strip(), expected_output.strip())
-
-    def test__tabulate_rst(self):
-        # Arrange
-        data = copy.deepcopy(SAMPLE_DATA)
-        expected_output = EXPECTED_TABULATED_RST
-
-        # Act
-        output = pypistats._tabulate(data, format="rst")
-
-        # Assert
-        self.assertEqual(output.strip(), expected_output.strip())
-
-    def test__tabulate_html(self):
-        # Arrange
-        data = copy.deepcopy(SAMPLE_DATA)
-        expected_output = """
-<table>
-    <thead>
-        <tr>
-            <th>category</th>
-            <th>date</th>
-            <th>downloads</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td align="left">2.6</td>
-            <td align="left">2018-08-15</td>
-            <td align="right">51</td>
-        </tr>
-        <tr>
-            <td align="left">2.7</td>
-            <td align="left">2018-08-15</td>
-            <td align="right">63,749</td>
-        </tr>
-        <tr>
-            <td align="left">3.2</td>
-            <td align="left">2018-08-15</td>
-            <td align="right">2</td>
-        </tr>
-        <tr>
-            <td align="left">3.3</td>
-            <td align="left">2018-08-15</td>
-            <td align="right">40</td>
-        </tr>
-        <tr>
-            <td align="left">3.4</td>
-            <td align="left">2018-08-15</td>
-            <td align="right">6,095</td>
-        </tr>
-        <tr>
-            <td align="left">3.5</td>
-            <td align="left">2018-08-15</td>
-            <td align="right">20,358</td>
-        </tr>
-        <tr>
-            <td align="left">3.6</td>
-            <td align="left">2018-08-15</td>
-            <td align="right">35,274</td>
-        </tr>
-        <tr>
-            <td align="left">3.7</td>
-            <td align="left">2018-08-15</td>
-            <td align="right">6,595</td>
-        </tr>
-        <tr>
-            <td align="left">3.8</td>
-            <td align="left">2018-08-15</td>
-            <td align="right">3</td>
-        </tr>
-        <tr>
-            <td align="left">null</td>
-            <td align="left">2018-08-15</td>
-            <td align="right">1,019</td>
-        </tr>
-    </tbody>
-</table>
-        """
-
-        # Act
-        output = pypistats._tabulate(data, format="html")
-
-        # Assert
-        self.assertEqual(output.strip(), expected_output.strip())
+        assert output.strip() == expected.strip()
 
     def test__sort(self):
         # Arrange
@@ -381,7 +283,7 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._sort(data)
 
         # Assert
-        self.assertEqual(output, expected_output)
+        assert output == expected_output
 
     def test__sort_recent(self):
         # Arrange
@@ -391,7 +293,7 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._sort(data)
 
         # Assert
-        self.assertEqual(output, SAMPLE_DATA_RECENT)
+        assert output == SAMPLE_DATA_RECENT
 
     def test__monthly_total(self):
         # Arrange
@@ -401,15 +303,15 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._monthly_total(data)
 
         # Assert
-        self.assertEqual(len(output), 64)
+        assert len(output) == 64
 
-        self.assertEqual(output[0]["category"], "2.4")
-        self.assertEqual(output[0]["downloads"], 1)
-        self.assertEqual(output[0]["date"], "2018-04")
+        assert output[0]["category"] == "2.4"
+        assert output[0]["downloads"] == 1
+        assert output[0]["date"] == "2018-04"
 
-        self.assertEqual(output[10]["category"], "2.7")
-        self.assertEqual(output[10]["downloads"], 489_163)
-        self.assertEqual(output[10]["date"], "2018-05")
+        assert output[10]["category"] == "2.7"
+        assert output[10]["downloads"] == 489_163
+        assert output[10]["date"] == "2018-05"
 
     def test__total(self):
         # Arrange
@@ -419,9 +321,9 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._total(data)
 
         # Assert
-        self.assertEqual(len(output), 12)
-        self.assertEqual(output[0]["category"], "2.4")
-        self.assertEqual(output[0]["downloads"], 9)
+        assert len(output) == 12
+        assert output[0]["category"] == "2.4"
+        assert output[0]["downloads"] == 9
 
     def test__total_recent(self):
         # Arrange
@@ -431,7 +333,7 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._total(data)
 
         # Assert
-        self.assertEqual(output, SAMPLE_DATA_RECENT)
+        assert output == SAMPLE_DATA_RECENT
 
     def test__date_range(self):
         # Arrange
@@ -441,8 +343,8 @@ class TestPypiStats(unittest.TestCase):
         first, last = pypistats._date_range(data)
 
         # Assert
-        self.assertEqual(first, "2018-04-16")
-        self.assertEqual(last, "2018-09-23")
+        assert first == "2018-04-16"
+        assert last == "2018-09-23"
 
     def test__date_range_no_dates_in_data(self):
         # Arrange
@@ -459,8 +361,8 @@ class TestPypiStats(unittest.TestCase):
         first, last = pypistats._date_range(data)
 
         # Assert
-        self.assertIsNone(first)
-        self.assertIsNone(last)
+        assert first is None
+        assert last is None
 
     def test__grand_total(self):
         # Arrange
@@ -471,9 +373,9 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._grand_total(data)
 
         # Assert
-        self.assertEqual(len(output), original_len + 1)
-        self.assertEqual(output[-1]["category"], "Total")
-        self.assertEqual(output[-1]["downloads"], 9_355_317)
+        assert len(output) == original_len + 1
+        assert output[-1]["category"] == "Total"
+        assert output[-1]["downloads"] == 9_355_317
 
     def test__grand_total_one_row(self):
         # Arrange
@@ -483,7 +385,7 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._grand_total(data)
 
         # Assert
-        self.assertEqual(output, SAMPLE_DATA_ONE_ROW)
+        assert output == SAMPLE_DATA_ONE_ROW
 
     def test__grand_total_recent(self):
         # Arrange
@@ -493,7 +395,7 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._grand_total(data)
 
         # Assert
-        self.assertEqual(output, SAMPLE_DATA_RECENT)
+        assert output == SAMPLE_DATA_RECENT
 
     def test__percent(self):
         # Arrange
@@ -514,7 +416,7 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._percent(data)
 
         # Assert
-        self.assertEqual(output, expected_output)
+        assert output == expected_output
 
     def test__percent_one_row(self):
         # Arrange
@@ -524,7 +426,7 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._percent(data)
 
         # Assert
-        self.assertEqual(output, SAMPLE_DATA_ONE_ROW)
+        assert output == SAMPLE_DATA_ONE_ROW
 
     def test__percent_recent(self):
         # Arrange
@@ -534,7 +436,7 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats._percent(data)
 
         # Assert
-        self.assertEqual(output, SAMPLE_DATA_RECENT)
+        assert output == SAMPLE_DATA_RECENT
 
     @respx.mock
     def test_valid_json(self):
@@ -552,7 +454,7 @@ class TestPypiStats(unittest.TestCase):
         # Assert
         # Should not raise any errors eg. TypeError
         json.loads(output)
-        self.assertEqual(json.loads(output), json.loads(mocked_response))
+        assert json.loads(output) == json.loads(mocked_response)
 
     @respx.mock
     def test_recent_tabular(self):
@@ -575,7 +477,7 @@ class TestPypiStats(unittest.TestCase):
         output = pypistats.recent(package)
 
         # Assert
-        self.assertEqual(output.strip(), expected_output.strip())
+        assert output.strip() == expected_output.strip()
 
     @respx.mock
     def test_overall_tabular_start_date(self):
@@ -596,7 +498,7 @@ Date range: 2018-11-02 - 2018-11-02
         output = pypistats.overall(package, mirrors=False, start_date="2018-11-02")
 
         # Assert
-        self.assertEqual(output.strip(), expected_output.strip())
+        assert output.strip() == expected_output.strip()
 
     @respx.mock
     def test_overall_tabular_end_date(self):
@@ -617,7 +519,7 @@ Date range: 2018-11-01 - 2018-11-01
         output = pypistats.overall(package, mirrors=False, end_date="2018-11-01")
 
         # Assert
-        self.assertEqual(output.strip(), expected_output.strip())
+        assert output.strip() == expected_output.strip()
 
     @respx.mock
     def test_python_major_json(self):
@@ -648,7 +550,7 @@ Date range: 2018-11-01 - 2018-11-01
         output = pypistats.python_major(package, format="json")
 
         # Assert
-        self.assertEqual(json.loads(output), json.loads(expected_output))
+        assert json.loads(output) == json.loads(expected_output)
 
     @respx.mock
     def test_python_minor_json(self):
@@ -693,7 +595,7 @@ Date range: 2018-11-01 - 2018-11-01
         output = pypistats.python_minor(package, format="json")
 
         # Assert
-        self.assertEqual(json.loads(output), json.loads(expected_output))
+        assert json.loads(output) == json.loads(expected_output)
 
     @respx.mock
     def test_system_tabular(self):
@@ -727,7 +629,7 @@ Date range: 2018-11-01 - 2018-11-01
         output = pypistats.system(package)
 
         # Assert
-        self.assertEqual(output.strip(), expected_output.strip())
+        assert output.strip() == expected_output.strip()
 
     @respx.mock
     def test_python_minor_monthly(self):
@@ -764,7 +666,7 @@ Date range: 2018-11-01 - 2018-11-01
         output = pypistats.python_minor(package, total="monthly", format="json")
 
         # Assert
-        self.assertEqual(json.loads(output), json.loads(expected_output))
+        assert json.loads(output) == json.loads(expected_output)
 
     @respx.mock
     def test_versions_are_strings(self):
@@ -781,9 +683,9 @@ Date range: 2018-11-01 - 2018-11-01
         output = pypistats._tabulate(data, format="markdown")
 
         # Assert
-        self.assertEqual(output.strip(), expected_output.strip())
+        assert output.strip() == expected_output.strip()
 
-    @unittest.skipIf(numpy is None, "NumPy is not installed")
+    @pytest.mark.skipif(numpy is None, reason="NumPy is not installed")
     @respx.mock
     def test_format_numpy(self):
         # Arrange
@@ -797,10 +699,10 @@ Date range: 2018-11-01 - 2018-11-01
         output = pypistats.overall(package, format="numpy")
 
         # Assert
-        self.assertIsInstance(output, numpy.ndarray)
-        self.assertEqual(str(output), expected_output)
+        assert isinstance(output, numpy.ndarray)
+        assert str(output) == expected_output
 
-    @unittest.skipIf(pandas is None, "pandas is not installed")
+    @pytest.mark.skipif(pandas is None, reason="pandas is not installed")
     @respx.mock
     def test_format_pandas(self):
         # Arrange
@@ -817,5 +719,5 @@ Date range: 2018-11-01 - 2018-11-01
         output = pypistats.overall(package, format="pandas")
 
         # Assert
-        self.assertIsInstance(output, pandas.DataFrame)
-        self.assertEqual(str(output).strip(), expected_output.strip())
+        assert isinstance(output, pandas.DataFrame)
+        assert str(output).strip() == expected_output.strip()

@@ -10,9 +10,15 @@ jobs:
       matrix:
         python-version: [3.6, 3.7, 3.8]
         os: [ubuntu-18.04, ubuntu-16.04, macos-latest, windows-latest]
+        include:
+          # Include new variables for Codecov
+          - { codecov-flag: GHA_Ubuntu_18, os: ubuntu-18.04 }
+          - { codecov-flag: GHA_Ubuntu_16, os: ubuntu-16.04 }
+          - { codecov-flag: GHA_macOS, os: macos-latest }
+          - { codecov-flag: GHA_Windows, os: windows-latest }
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Ubuntu cache
         uses: actions/cache@v1
@@ -27,7 +33,7 @@ jobs:
 
       - name: macOS cache
         uses: actions/cache@v1
-        if: startsWith(matrix.os, 'macOS')
+        if: startsWith(matrix.os, 'macos')
         with:
           path: ~/Library/Caches/pip
           key:
@@ -62,9 +68,10 @@ jobs:
         run: |
           tox -e py
 
-      - name: Upload coverage to Codecov
+      - name: Upload coverage
+        if: success()
         run: |
-          python -m pip install --upgrade codecov
-          codecov --name "GH: ${{ matrix.os }} Python ${{ matrix.python-version }}"
+          curl --retry 8 -s https://codecov.io/bash -o codecov.sh
+          bash codecov.sh -F ${{ matrix.codecov-flag }}
         env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          CODECOV_NAME: ${{ matrix.os }} Python ${{ matrix.python-version }}
