@@ -43,7 +43,7 @@ repos:
       - id: check-yaml
 
   - repo: https://github.com/prettier/prettier
-    rev: 2.0.1
+    rev: 2.0.2
     hooks:
       - id: prettier
         args: [--prose-wrap=always, --print-width=88]
