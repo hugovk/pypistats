@@ -21,7 +21,7 @@ repos:
         additional_dependencies: [flake8-2020, flake8-implicit-str-concat]
 
   - repo: https://github.com/asottile/seed-isort-config
-    rev: v2.1.0
+    rev: v2.1.1
     hooks:
       - id: seed-isort-config
 
@@ -43,7 +43,7 @@ repos:
       - id: check-yaml
 
   - repo: https://github.com/prettier/prettier
-    rev: 2.0.2
+    rev: 2.0.4
     hooks:
       - id: prettier
         args: [--prose-wrap=always, --print-width=88]
