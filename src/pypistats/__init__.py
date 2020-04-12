@@ -347,7 +347,7 @@ def _tabulate(data, format="markdown"):
         type_hints = []
 
         for header in headers:
-            align = None
+            align = Align.AUTO
             thousand_separator = ThousandSeparator.NONE
             type_hint = None
             if header == "percent":
