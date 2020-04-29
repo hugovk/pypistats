@@ -36,10 +36,10 @@ jobs:
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
           key:
-            ${{ matrix.os }}-${{ matrix.python-version }}-${{ hashFiles('**/setup.py')
-            }}
+            ${{ matrix.os }}-${{ matrix.python-version }}-v2-${{
+            hashFiles('**/setup.py') }}
           restore-keys: |
-            ${{ matrix.os }}-${{ matrix.python-version }}-
+            ${{ matrix.os }}-${{ matrix.python-version }}-v2-
 
       - name: Install dependencies
         run: |
