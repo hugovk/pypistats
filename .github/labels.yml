@@ -49,6 +49,9 @@
   name: "changelog: skip"
 
 # Other labels
+- color: 2d18b2
+  description: "To automatically merge PRs that are ready"
+  name: automerge
 - color: fbca04
   description: "Unit tests, linting, CI, etc."
   name: testing
