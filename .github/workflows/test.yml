@@ -20,53 +20,43 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Ubuntu cache
-        uses: actions/cache@v1
-        if: startsWith(matrix.os, 'ubuntu')
-        with:
-          path: ~/.cache/pip
-          key:
-            ${{ matrix.os }}-${{ matrix.python-version }}-${{ hashFiles('**/setup.py')
-            }}
-          restore-keys: |
-            ${{ matrix.os }}-${{ matrix.python-version }}-
-
-      - name: macOS cache
-        uses: actions/cache@v1
-        if: startsWith(matrix.os, 'macos')
-        with:
-          path: ~/Library/Caches/pip
-          key:
-            ${{ matrix.os }}-${{ matrix.python-version }}-${{ hashFiles('**/setup.py')
-            }}
-          restore-keys: |
-            ${{ matrix.os }}-${{ matrix.python-version }}-
-
-      - name: Windows cache
-        uses: actions/cache@v1
-        if: startsWith(matrix.os, 'windows')
-        with:
-          path: ~\AppData\Local\pip\Cache
-          key:
-            ${{ matrix.os }}-${{ matrix.python-version }}-${{ hashFiles('**/setup.py')
-            }}
-          restore-keys: |
-            ${{ matrix.os }}-${{ matrix.python-version }}-
-
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v1
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          python -m pip install -U "pip>=20.1"
+          echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: pip cache
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key:
+            ${{ matrix.os }}-${{ matrix.python-version }}-v2-${{
+            hashFiles('**/setup.py') }}
+          restore-keys: |
+            ${{ matrix.os }}-${{ matrix.python-version }}-v2-
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          python -m pip install --upgrade wheel
           python -m pip install --upgrade tox
 
       - name: Tox tests
         shell: bash
         run: |
           tox -e py
+
+      - name: Tox tests (pins)
+        if: matrix.python-version == '3.8' && matrix.os == 'ubuntu-18.04'
+        shell: bash
+        run: |
+          tox -e pins
 
       - name: Upload coverage
         if: success()
