@@ -52,6 +52,12 @@ jobs:
         run: |
           tox -e py
 
+      - name: Tox tests (pins)
+        if: matrix.python-version == '3.8' && matrix.os == 'ubuntu-18.04'
+        shell: bash
+        run: |
+          tox -e pins
+
       - name: Upload coverage
         if: success()
         run: |
