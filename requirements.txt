@@ -1,11 +1,11 @@
 # Only for testing pinned versions on the CI
 appdirs==1.4.3
 freezegun==0.3.15
+httpx==0.12.1
 numpy==1.18.2
 pandas==1.0.0
 pytablewriter[html]==0.48
 pytest==5.4.1
 pytest-cov==2.8.1
 python-slugify==4.0.0
-requests==2.22.0
-requests_mock==1.8.0
+respx==0.10.1
