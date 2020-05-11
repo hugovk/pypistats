@@ -25,4 +25,3 @@ jobs:
         uses: "pascalgn/automerge-action@80acb0f883348dcfd0e526288f7d27a12b9333be"
         env:
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          MERGE_REMOVE_LABELS: "automerge"
