@@ -22,7 +22,7 @@ script:
 
 after_success:
   - |
-    pip install -U codecov && codecov
+    pip install -U codecov && codecov --flags TravisCI
 
 deploy:
   - provider: pypi
