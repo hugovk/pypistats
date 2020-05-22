@@ -5,7 +5,7 @@ numpy==1.18.4
 pandas==1.0.3
 pytablewriter[html]==0.54.0
 pytest==5.4.2
-pytest-cov==2.8.1
+pytest-cov==2.9.0
 python-slugify==4.0.0
 requests==2.23.0
 requests_mock==1.8.0
