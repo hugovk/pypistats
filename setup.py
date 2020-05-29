@@ -28,7 +28,7 @@ setup(
     setup_requires=["setuptools_scm"],
     install_requires=[
         "appdirs",
-        "httpx==0.12.*",
+        "httpx==0.13.*",
         "pytablewriter[html]>=0.48",
         "python-dateutil",
         "python-slugify",
@@ -36,7 +36,7 @@ setup(
     extras_require={
         "numpy": ["numpy"],
         "pandas": ["pandas"],
-        "tests": ["freezegun", "pytest", "pytest-cov", "respx"],
+        "tests": ["freezegun", "pytest", "pytest-cov", "respx>=0.11"],
     },
     python_requires=">=3.6",
     classifiers=[
