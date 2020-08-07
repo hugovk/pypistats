@@ -5,9 +5,10 @@ import copy
 import json
 from pathlib import Path
 
-import pypistats
 import pytest
 import requests_mock
+
+import pypistats
 
 from .data.expected_tabulated import (
     EXPECTED_TABULATED_HTML,
