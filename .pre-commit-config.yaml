@@ -20,13 +20,8 @@ repos:
       - id: flake8
         additional_dependencies: [flake8-2020, flake8-implicit-str-concat]
 
-  - repo: https://github.com/asottile/seed-isort-config
-    rev: v2.1.1
-    hooks:
-      - id: seed-isort-config
-
   - repo: https://github.com/timothycrosley/isort
-    rev: 4.3.21
+    rev: 5.3.2
     hooks:
       - id: isort
 
