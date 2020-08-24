@@ -6,6 +6,6 @@ numpy==1.19.1
 pandas==1.1.1
 pytablewriter[html]==0.54.0
 pytest==6.0.1
-pytest-cov==2.10.0
+pytest-cov==2.10.1
 python-slugify==4.0.1
 respx==0.12.1
