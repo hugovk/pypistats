@@ -28,7 +28,7 @@ setup(
     setup_requires=["setuptools_scm"],
     install_requires=[
         "appdirs",
-        "httpx>=0.13,<0.16",
+        "httpx>=0.13,<0.17",
         "pytablewriter[html]>=0.48",
         "python-dateutil",
         "python-slugify",
