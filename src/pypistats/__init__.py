@@ -168,8 +168,11 @@ def pypi_stats_api(
     if sort:
         data = _sort(data)
 
-    data = _percent(data)
-    data = _grand_total(data)
+    if res["type"] == "overall_downloads":
+        data = _fixCategories(data)
+    else:
+        data = _percent(data)
+        data = _grand_total(data)
 
     output = _tabulate(data, format)
 
@@ -177,6 +180,42 @@ def pypi_stats_api(
         return f"{output}\nDate range: {first} - {last}\n"
     else:
         return output
+
+
+def _fixCategories(data):
+    """Fix the categories so naming is correct and add correct total row"""
+
+    # Only for lists of dicts, not a single dict
+    if isinstance(data, dict):
+        return data
+
+    # No need when there's only one row
+    if len(data) == 1:
+        return data
+
+    dataDict = {}
+    for dataPiece in data:
+        dataDict[dataPiece["category"]] = dataPiece["downloads"]
+    
+    totalDownloads = dataDict["with_mirrors"]
+    endUsers = dataDict["without_mirrors"]
+    mirrorDownloads = totalDownloads - endUsers
+
+    data = [
+        {
+            "category": "End Users",
+            "downloads": endUsers
+        },
+        {
+            "category": "Mirrors",
+            "downloads": mirrorDownloads
+        }
+    ]
+
+    new_row = {"category": "Total", "downloads": totalDownloads}
+    data.append(new_row)
+
+    return data
 
 
 def _filter(data, start_date=None, end_date=None):
