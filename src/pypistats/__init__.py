@@ -169,7 +169,7 @@ def pypi_stats_api(
         data = _sort(data)
 
     if res["type"] == "overall_downloads":
-        data = _fixCategories(data)
+        data = _fix_categories(data)
     else:
         data = _percent(data)
         data = _grand_total(data)
@@ -182,7 +182,7 @@ def pypi_stats_api(
         return output
 
 
-def _fixCategories(data):
+def _fix_categories(data):
     """Fix the categories so naming is correct and add correct total row"""
 
     # Only for lists of dicts, not a single dict
@@ -196,20 +196,14 @@ def _fixCategories(data):
     dataDict = {}
     for dataPiece in data:
         dataDict[dataPiece["category"]] = dataPiece["downloads"]
-    
+
     totalDownloads = dataDict["with_mirrors"]
     endUsers = dataDict["without_mirrors"]
     mirrorDownloads = totalDownloads - endUsers
 
     data = [
-        {
-            "category": "End Users",
-            "downloads": endUsers
-        },
-        {
-            "category": "Mirrors",
-            "downloads": mirrorDownloads
-        }
+        {"category": "End Users", "downloads": endUsers},
+        {"category": "Mirrors", "downloads": mirrorDownloads},
     ]
 
     new_row = {"category": "Total", "downloads": totalDownloads}
