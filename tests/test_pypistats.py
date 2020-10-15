@@ -491,8 +491,8 @@ class TestPypiStats:
         expected_output = """
 |    category     | percent | downloads |
 |-----------------|--------:|----------:|
-| with_mirrors    |  50.19% | 1,487,218 |
-| without_mirrors |  49.81% | 1,475,979 |
+| with_mirrors    | 100.00% | 1,487,218 |
+| without_mirrors |  99.24% | 1,475,979 |
 | Total           |         | 1,487,218 |
 
 Date range: 2020-05-02 - 2020-05-02
@@ -514,8 +514,8 @@ Date range: 2020-05-02 - 2020-05-02
         expected_output = """
 |    category     | percent | downloads |
 |-----------------|--------:|----------:|
-| with_mirrors    |  50.20% | 2,100,139 |
-| without_mirrors |  49.80% | 2,083,472 |
+| with_mirrors    | 100.00% | 2,100,139 |
+| without_mirrors |  99.21% | 2,083,472 |
 | Total           |         | 2,100,139 |
 
 Date range: 2020-05-01 - 2020-05-01

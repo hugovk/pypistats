@@ -310,7 +310,14 @@ def _percent(data):
     if len(data) == 1:
         return data
 
-    grand_total = sum(row["downloads"] for row in data)
+    # For "overall", without_mirrors is a subset of with_mirrors.
+    # Only sum with_mirrors.
+    if data[0]["category"] in ["with_mirrors", "without_mirrors"]:
+        grand_total = sum(
+            row["downloads"] for row in data if row["category"] == "with_mirrors"
+        )
+    else:
+        grand_total = sum(row["downloads"] for row in data)
 
     for row in data:
         row["percent"] = "{:.2%}".format(row["downloads"] / grand_total)
