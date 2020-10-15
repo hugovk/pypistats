@@ -698,7 +698,11 @@ Date range: 2020-05-01 - 2020-05-01
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = SAMPLE_RESPONSE_OVERALL
-        expected_output = "[['without_mirrors' 4593356]]"
+        expected_output = """
+[['with_mirrors' '100.00%' 3587357]
+ ['without_mirrors' '99.22%' 3559451]
+ ['Total' None 3587357]]
+"""
 
         # Act
         with requests_mock.Mocker() as m:
@@ -707,7 +711,7 @@ Date range: 2020-05-01 - 2020-05-01
 
         # Assert
         assert isinstance(output, numpy.ndarray)
-        assert str(output) == expected_output
+        assert str(output).strip() == expected_output.strip()
 
     @pytest.mark.skipif(pandas is None, reason="pandas is not installed")
     def test_format_pandas(self):
@@ -716,8 +720,10 @@ Date range: 2020-05-01 - 2020-05-01
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
-          category  downloads
-0  without_mirrors    4593356
+          category  percent  downloads
+0     with_mirrors  100.00%    3587357
+1  without_mirrors   99.22%    3559451
+2            Total     None    3587357
 """
 
         # Act
