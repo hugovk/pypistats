@@ -273,6 +273,21 @@ def _date_range(data):
     return first, last
 
 
+def _grand_total_value(data):
+    """Return the grand total of the data"""
+
+    # For "overall", without_mirrors is a subset of with_mirrors.
+    # Only sum with_mirrors.
+    if data[0]["category"] in ["with_mirrors", "without_mirrors"]:
+        grand_total = sum(
+            row["downloads"] for row in data if row["category"] == "with_mirrors"
+        )
+    else:
+        grand_total = sum(row["downloads"] for row in data)
+
+    return grand_total
+
+
 def _grand_total(data):
     """Add a grand total row"""
 
@@ -284,14 +299,7 @@ def _grand_total(data):
     if len(data) == 1:
         return data
 
-    # For "overall", without_mirrors is a subset of with_mirrors.
-    # Only sum with_mirrors.
-    if data[0]["category"] in ["with_mirrors", "without_mirrors"]:
-        grand_total = sum(
-            row["downloads"] for row in data if row["category"] == "with_mirrors"
-        )
-    else:
-        grand_total = sum(row["downloads"] for row in data)
+    grand_total = _grand_total_value(data)
 
     new_row = {"category": "Total", "downloads": grand_total}
     data.append(new_row)
@@ -310,14 +318,7 @@ def _percent(data):
     if len(data) == 1:
         return data
 
-    # For "overall", without_mirrors is a subset of with_mirrors.
-    # Only sum with_mirrors.
-    if data[0]["category"] in ["with_mirrors", "without_mirrors"]:
-        grand_total = sum(
-            row["downloads"] for row in data if row["category"] == "with_mirrors"
-        )
-    else:
-        grand_total = sum(row["downloads"] for row in data)
+    grand_total = _grand_total_value(data)
 
     for row in data:
         row["percent"] = "{:.2%}".format(row["downloads"] / grand_total)
