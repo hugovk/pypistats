@@ -55,6 +55,12 @@
 - color: 0366d6
   description: "For dependencies and dependabot"
   name: dependencies
+- color: f4660e
+  description: ""
+  name: Hacktoberfest
+- color: f4660e
+  description: "To credit accepted Hacktoberfest PRs"
+  name: hacktoberfest-accepted
 - color: fbca04
   description: "Unit tests, linting, CI, etc."
   name: testing
