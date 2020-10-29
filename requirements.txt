@@ -1,7 +1,7 @@
 # Only for testing pinned versions on the CI
 appdirs==1.4.4
 freezegun==1.0.0
-numpy==1.19.2
+numpy==1.19.3
 pandas==1.1.3
 pytablewriter[html]==0.58.0
 pytest==6.1.1
