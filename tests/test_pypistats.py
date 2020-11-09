@@ -20,11 +20,11 @@ from .data.python_minor import DATA as PYTHON_MINOR_DATA
 
 try:
     import numpy
-except ImportError:
+except ImportError:  # pragma: no cover
     numpy = None
 try:
     import pandas
-except ImportError:
+except ImportError:  # pragma: no cover
     pandas = None
 
 
