@@ -7,5 +7,5 @@ pytablewriter[html]==0.58.0
 pytest==6.1.2
 pytest-cov==2.10.1
 python-slugify==4.0.1
-requests==2.24.0
+requests==2.25.0
 requests_mock==1.8.0
