@@ -103,7 +103,7 @@ Date range: 2018-11-01 - 2018-11-01
 """
 
         # Act
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         # First time to save to cache
         pypistats.overall(package)
         # Second time to read from cache

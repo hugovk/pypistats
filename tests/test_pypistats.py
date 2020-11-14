@@ -147,7 +147,7 @@ class TestPypiStats:
             "type": "python_major_downloads"
         }"""
 
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         # Act / Assert
         with pytest.warns(
             UserWarning,
@@ -173,7 +173,7 @@ class TestPypiStats:
             "type": "python_major_downloads"
         }"""
 
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         # Act / Assert
         with pytest.raises(
             ValueError,
@@ -448,7 +448,7 @@ class TestPypiStats:
         """
 
         # Act
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         output = pypistats.recent(package, period="day", format="json")
 
         # Assert
@@ -473,7 +473,7 @@ class TestPypiStats:
 """
 
         # Act
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         output = pypistats.recent(package)
 
         # Assert
@@ -494,7 +494,7 @@ Date range: 2018-11-02 - 2018-11-02
 """
 
         # Act
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         output = pypistats.overall(package, mirrors=False, start_date="2018-11-02")
 
         # Assert
@@ -515,7 +515,7 @@ Date range: 2018-11-01 - 2018-11-01
 """
 
         # Act
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         output = pypistats.overall(package, mirrors=False, end_date="2018-11-01")
 
         # Assert
@@ -546,7 +546,7 @@ Date range: 2018-11-01 - 2018-11-01
         }"""
 
         # Act
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         output = pypistats.python_major(package, format="json")
 
         # Assert
@@ -591,7 +591,7 @@ Date range: 2018-11-01 - 2018-11-01
         }"""
 
         # Act
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         output = pypistats.python_minor(package, format="json")
 
         # Assert
@@ -625,7 +625,7 @@ Date range: 2018-11-01 - 2018-11-01
 """
 
         # Act
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         output = pypistats.system(package)
 
         # Assert
@@ -662,7 +662,7 @@ Date range: 2018-11-01 - 2018-11-01
         }"""
 
         # Act
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         output = pypistats.python_minor(package, total="monthly", format="json")
 
         # Assert
@@ -695,7 +695,7 @@ Date range: 2018-11-01 - 2018-11-01
         expected_output = "[['without_mirrors' 4593356]]"
 
         # Act
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         output = pypistats.overall(package, format="numpy")
 
         # Assert
@@ -715,7 +715,7 @@ Date range: 2018-11-01 - 2018-11-01
 """
 
         # Act
-        respx.get(mocked_url, content=mocked_response)
+        respx.get(mocked_url).respond(content=mocked_response)
         output = pypistats.overall(package, format="pandas")
 
         # Assert
