@@ -4,7 +4,7 @@ freezegun==1.0.0
 numpy==1.19.4
 pandas==1.1.5
 pytablewriter[html]==0.58.0
-pytest==6.1.2
+pytest==6.2.0
 pytest-cov==2.10.1
 python-slugify==4.0.1
 requests==2.25.0
