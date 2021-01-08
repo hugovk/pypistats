@@ -5,9 +5,10 @@ import copy
 import json
 from pathlib import Path
 
-import pypistats
 import pytest
 import respx
+
+import pypistats
 
 from .data.expected_tabulated import (
     EXPECTED_TABULATED_HTML,
@@ -19,11 +20,11 @@ from .data.python_minor import DATA as PYTHON_MINOR_DATA
 
 try:
     import numpy
-except ImportError:
+except ImportError:  # pragma: no cover
     numpy = None
 try:
     import pandas
-except ImportError:
+except ImportError:  # pragma: no cover
     pandas = None
 
 
@@ -51,8 +52,10 @@ SAMPLE_DATA_VERSION_STRINGS = [
 ]
 SAMPLE_RESPONSE_OVERALL = """{
           "data": [
-            {"category": "without_mirrors", "date": "2018-11-01", "downloads": 2295765},
-            {"category": "without_mirrors", "date": "2018-11-02", "downloads": 2297591}
+            {"category": "with_mirrors", "date": "2020-05-01", "downloads": 2100139},
+            {"category": "with_mirrors", "date": "2020-05-02", "downloads": 1487218},
+            {"category": "without_mirrors", "date": "2020-05-01", "downloads": 2083472},
+            {"category": "without_mirrors", "date": "2020-05-02", "downloads": 1475979}
           ],
           "package": "pip",
           "type": "overall_downloads"
@@ -486,16 +489,18 @@ class TestPypiStats:
         mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
-|    category     | downloads |
-|-----------------|----------:|
-| without_mirrors | 2,297,591 |
+|    category     | percent | downloads |
+|-----------------|--------:|----------:|
+| with_mirrors    | 100.00% | 1,487,218 |
+| without_mirrors |  99.24% | 1,475,979 |
+| Total           |         | 1,487,218 |
 
-Date range: 2018-11-02 - 2018-11-02
+Date range: 2020-05-02 - 2020-05-02
 """
 
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
-        output = pypistats.overall(package, mirrors=False, start_date="2018-11-02")
+        output = pypistats.overall(package, mirrors=False, start_date="2020-05-02")
 
         # Assert
         assert output.strip() == expected_output.strip()
@@ -507,16 +512,18 @@ Date range: 2018-11-02 - 2018-11-02
         mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
-|    category     | downloads |
-|-----------------|----------:|
-| without_mirrors | 2,295,765 |
+|    category     | percent | downloads |
+|-----------------|--------:|----------:|
+| with_mirrors    | 100.00% | 2,100,139 |
+| without_mirrors |  99.21% | 2,083,472 |
+| Total           |         | 2,100,139 |
 
-Date range: 2018-11-01 - 2018-11-01
+Date range: 2020-05-01 - 2020-05-01
 """
 
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
-        output = pypistats.overall(package, mirrors=False, end_date="2018-11-01")
+        output = pypistats.overall(package, mirrors=False, end_date="2020-05-01")
 
         # Assert
         assert output.strip() == expected_output.strip()
@@ -692,7 +699,11 @@ Date range: 2018-11-01 - 2018-11-01
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = SAMPLE_RESPONSE_OVERALL
-        expected_output = "[['without_mirrors' 4593356]]"
+        expected_output = """
+[['with_mirrors' '100.00%' 3587357]
+ ['without_mirrors' '99.22%' 3559451]
+ ['Total' None 3587357]]
+"""
 
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
@@ -700,7 +711,7 @@ Date range: 2018-11-01 - 2018-11-01
 
         # Assert
         assert isinstance(output, numpy.ndarray)
-        assert str(output) == expected_output
+        assert str(output).strip() == expected_output.strip()
 
     @pytest.mark.skipif(pandas is None, reason="pandas is not installed")
     @respx.mock
@@ -710,8 +721,10 @@ Date range: 2018-11-01 - 2018-11-01
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
-          category  downloads
-0  without_mirrors    4593356
+          category  percent  downloads
+0     with_mirrors  100.00%    3587357
+1  without_mirrors   99.22%    3559451
+2            Total     None    3587357
 """
 
         # Act

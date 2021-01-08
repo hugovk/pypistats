@@ -4,9 +4,10 @@ Unit tests for pypistats cache
 import tempfile
 from pathlib import Path
 
-import pypistats
 import respx
 from freezegun import freeze_time
+
+import pypistats
 
 
 class TestPypiStatsCache:
