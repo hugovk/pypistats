@@ -26,8 +26,8 @@ jobs:
 
       - script: |
           python -m pip install --upgrade pip
-          python -m pip install --upgrade freezegun numpy pandas pytest pytest-azurepipelines pytest-cov respx
-          python -m pip install  -e .
+          python -m pip install  -e ".[numpy,pandas,tests]"
+          python -m pip install --upgrade pytest-azurepipelines
         displayName: "Install dependencies"
 
       - script: |
