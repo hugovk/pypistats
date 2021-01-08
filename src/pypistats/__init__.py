@@ -10,8 +10,8 @@ import sys
 import warnings
 from pathlib import Path
 
+import httpx
 import pkg_resources
-import requests
 from appdirs import user_cache_dir
 from pytablewriter import (
     HtmlTableWriter,
@@ -116,7 +116,7 @@ def pypi_stats_api(
 
     if res == {}:
         # No cache, or couldn't load cache
-        r = requests.get(url, headers={"User-Agent": USER_AGENT})
+        r = httpx.get(url, headers={"User-Agent": USER_AGENT})
 
         # Raise if we made a bad request
         # (4XX client error or 5XX server error response)
