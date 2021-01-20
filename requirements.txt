@@ -1,6 +1,6 @@
 # Only for testing pinned versions on the CI
 appdirs==1.4.4
-freezegun==1.0.0
+freezegun==1.1.0
 httpx==0.16.1
 numpy==1.19.5
 pandas==1.2.0
