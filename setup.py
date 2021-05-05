@@ -29,7 +29,7 @@ setup(
     install_requires=[
         "appdirs",
         "httpx>=0.13,<0.19",
-        "pytablewriter[html]>=0.48",
+        "pytablewriter[html]>=0.49",
         "python-dateutil",
         "python-slugify",
     ],
