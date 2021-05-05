@@ -471,7 +471,7 @@ class TestPypiStats:
         }"""
         expected_output = """
 | last_day  | last_month | last_week  |
-|----------:|-----------:|-----------:|
+| --------: | ---------: | ---------: |
 | 2,295,765 | 67,759,913 | 15,706,750 |
 """
 
@@ -490,7 +490,7 @@ class TestPypiStats:
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
 |    category     | percent | downloads |
-|-----------------|--------:|----------:|
+| --------------- | ------: | --------: |
 | with_mirrors    | 100.00% | 1,487,218 |
 | without_mirrors |  99.24% | 1,475,979 |
 | Total           |         | 1,487,218 |
@@ -513,7 +513,7 @@ Date range: 2020-05-02 - 2020-05-02
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
 |    category     | percent | downloads |
-|-----------------|--------:|----------:|
+| --------------- | ------: | --------: |
 | with_mirrors    | 100.00% | 2,100,139 |
 | without_mirrors |  99.21% | 2,083,472 |
 | Total           |         | 2,100,139 |
@@ -622,7 +622,7 @@ Date range: 2020-05-01 - 2020-05-01
         }"""
         expected_output = """
 | category | percent |  downloads  |
-|----------|--------:|------------:|
+| -------- | ------: | ----------: |
 | Linux    |  83.14% | 236,502,274 |
 | null     |  10.75% |  30,579,325 |
 | Darwin   |   3.77% |  10,734,594 |
@@ -681,7 +681,7 @@ Date range: 2020-05-01 - 2020-05-01
         data = copy.deepcopy(SAMPLE_DATA_VERSION_STRINGS)
         expected_output = """
 | category |    date    | downloads |
-|----------|------------|----------:|
+| -------- | ---------- | --------: |
 | 3.1      | 2018-08-15 |        10 |
 | 3.10     | 2018-08-15 |         1 |
 """

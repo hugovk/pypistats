@@ -45,8 +45,7 @@ Top-level help:
 
 ```console
 $ pypistats --help
-usage: pypistats [-h] [-V]
-                 {recent,overall,python_major,python_minor,system} ...
+usage: pypistats [-h] [-V] {recent,overall,python_major,python_minor,system} ...
 
 positional arguments:
   {recent,overall,python_major,python_minor,system}
@@ -60,9 +59,7 @@ Help for a subcommand:
 
 ```console
 $ pypistats recent --help
-usage: pypistats recent [-h] [-p {day,week,month}]
-                        [-f {json,markdown,rst,html}] [-j] [-v]
-                        package
+usage: pypistats recent [-h] [-p {day,week,month}] [-f {html,json,markdown,rst,tsv}] [-j] [-v] package
 
 Retrieve the aggregate download quantities for the last day/week/month
 
@@ -72,7 +69,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -p {day,week,month}, --period {day,week,month}
-  -f {json,markdown,rst,html}, --format {json,markdown,rst,html}
+  -f {html,json,markdown,rst,tsv}, --format {html,json,markdown,rst,tsv}
                         The format of output (default: markdown)
   -j, --json            Shortcut for "-f json" (default: False)
   -v, --verbose         Print debug messages to stderr (default: False)
@@ -82,19 +79,20 @@ Get recent downloads:
 
 ```console
 $ pypistats recent pillow
-| last_day | last_month | last_week |
-|---------:|-----------:|----------:|
-|  280,842 |  7,065,928 | 1,709,689 |
+| last_day  | last_month | last_week |
+| --------: | ---------: | --------: |
+| 1,083,451 | 30,750,398 | 7,088,038 |
 ```
 
 Help for another subcommand:
 
 ```console
 $ pypistats python_minor --help
-usage: pypistats python_minor [-h] [-V VERSION] [-f {json,markdown,rst,html}]
-                              [-j] [-sd yyyy-mm[-dd]|name]
-                              [-ed yyyy-mm[-dd]|name] [-m yyyy-mm|name] [-l]
-                              [-t] [-d] [--monthly] [-v]
+usage: pypistats python_minor [-h] [-V VERSION]
+                              [-f {html,json,markdown,rst,tsv}] [-j]
+                              [-sd yyyy-mm[-dd]|name] [-ed yyyy-mm[-dd]|name]
+                              [-m yyyy-mm|name] [-l] [-t] [-d] [--monthly]
+                              [-v]
                               package
 
 Retrieve the aggregate daily download time series by Python minor version
@@ -107,7 +105,7 @@ optional arguments:
   -h, --help            show this help message and exit
   -V VERSION, --version VERSION
                         eg. 2.7 or 3.6 (default: None)
-  -f {json,markdown,rst,html}, --format {json,markdown,rst,html}
+  -f {html,json,markdown,rst,tsv}, --format {html,json,markdown,rst,tsv}
                         The format of output (default: markdown)
   -j, --json            Shortcut for "-f json" (default: False)
   -sd yyyy-mm[-dd]|name, --start-date yyyy-mm[-dd]|name
@@ -128,42 +126,42 @@ Get version downloads:
 
 ```console
 $ pypistats python_minor pillow --last-month
-| category | percent | downloads |
-|----------|--------:|----------:|
-| 2.7      |  35.94% | 2,189,327 |
-| 3.6      |  31.83% | 1,938,870 |
-| 3.7      |  18.71% | 1,139,642 |
-| 3.5      |  11.29% |   687,782 |
-| 3.4      |   1.23% |    74,673 |
-| null     |   0.94% |    57,476 |
-| 3.8      |   0.04% |     2,147 |
-| 2.6      |   0.01% |       826 |
-| 3.3      |   0.00% |       212 |
-| 3.2      |   0.00% |        28 |
-| 2.4      |   0.00% |         6 |
-| 3.9      |   0.00% |         5 |
-| 2.8      |   0.00% |         1 |
-| Total    |         | 6,090,995 |
+| category | percent | downloads  |
+| -------- | ------: | ---------: |
+| 3.7      |  35.93% | 11,002,680 |
+| 3.6      |  33.00% | 10,107,822 |
+| 3.8      |  15.04% |  4,605,236 |
+| 3.9      |   5.03% |  1,540,571 |
+| 3.5      |   4.73% |  1,449,591 |
+| null     |   3.39% |  1,037,124 |
+| 2.7      |   2.84% |    870,677 |
+| 3.4      |   0.03% |     10,055 |
+| 3.10     |   0.01% |      2,863 |
+| 2.6      |   0.00% |         58 |
+| 3.3      |   0.00% |         44 |
+| 3.2      |   0.00% |         39 |
+| Total    |         | 30,626,760 |
+
+Date range: 2021-04-01 - 2021-04-30
 ```
 
 The table is Markdown, ready for pasting in GitHub issues and PRs:
 
-| category | percent | downloads |
-| -------- | ------: | --------: |
-| 2.7      |  35.94% | 2,189,327 |
-| 3.6      |  31.83% | 1,938,870 |
-| 3.7      |  18.71% | 1,139,642 |
-| 3.5      |  11.29% |   687,782 |
-| 3.4      |   1.23% |    74,673 |
-| null     |   0.94% |    57,476 |
-| 3.8      |   0.04% |     2,147 |
-| 2.6      |   0.01% |       826 |
-| 3.3      |   0.00% |       212 |
-| 3.2      |   0.00% |        28 |
-| 2.4      |   0.00% |         6 |
-| 3.9      |   0.00% |         5 |
-| 2.8      |   0.00% |         1 |
-| Total    |         | 6,090,995 |
+| category | percent |  downloads |
+| -------- | ------: | ---------: |
+| 3.7      |  35.93% | 11,002,680 |
+| 3.6      |  33.00% | 10,107,822 |
+| 3.8      |  15.04% |  4,605,236 |
+| 3.9      |   5.03% |  1,540,571 |
+| 3.5      |   4.73% |  1,449,591 |
+| null     |   3.39% |  1,037,124 |
+| 2.7      |   2.84% |    870,677 |
+| 3.4      |   0.03% |     10,055 |
+| 3.10     |   0.01% |      2,863 |
+| 2.6      |   0.00% |         58 |
+| 3.3      |   0.00% |         44 |
+| 3.2      |   0.00% |         39 |
+| Total    |         | 30,626,760 |
 
 These are equivalent (in May 2019):
 
