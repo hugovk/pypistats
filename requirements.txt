@@ -7,5 +7,5 @@ pandas==1.2.4
 pytablewriter[html]==0.59.0
 pytest==6.2.4
 pytest-cov==2.11.1
-python-slugify==5.0.0
+python-slugify==5.0.2
 respx==0.17.0
