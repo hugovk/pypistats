@@ -3,7 +3,7 @@ appdirs==1.4.4
 freezegun==1.1.0
 httpx==0.18.1
 numpy==1.20.3
-pandas==1.2.4
+pandas==1.2.5
 pytablewriter[html]==0.60.0
 pytest==6.2.4
 pytest-cov==2.12.0
