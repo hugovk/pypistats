@@ -1,10 +1,8 @@
 # Release Checklist
 
 - [ ] Get master to the appropriate code release state.
-      [Travis CI](https://travis-ci.org/hugovk/pypistats) and
       [GitHub Actions](https://github.com/hugovk/pypistats/actions) should be running
       cleanly for all merges to master.
-      [![Build Status](https://travis-ci.org/hugovk/pypistats.svg?branch=master)](https://travis-ci.org/hugovk/pypistats)
       [![GitHub Actions status](https://github.com/hugovk/pypistats/workflows/Test/badge.svg)](https://github.com/hugovk/pypistats/actions)
 
 - [ ] Edit release draft, adjust text if needed:
@@ -14,8 +12,9 @@
 
 - [ ] Publish release
 
-- [ ] Check the tagged [Travis CI build](https://travis-ci.org/hugovk/pypistats) has
-      deployed to [PyPI](https://pypi.org/project/pypistats/#history)
+- [ ] Check the tagged
+      [GitHub Actions build](https://github.com/hugovk/pypistats/actions/workflows/deploy.yml)
+      has deployed to [PyPI](https://pypi.org/project/pypistats/#history)
 
 - [ ] Check installation:
 

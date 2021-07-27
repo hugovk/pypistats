@@ -1,11 +1,11 @@
 # Only for testing pinned versions on the CI
 freezegun==1.1.0
-httpx==0.18.1
-numpy==1.20.3
-pandas==1.2.4
-platformdirs==2.0.0a3
-pytablewriter[html]==0.60.0
+httpx==0.18.2
+numpy==1.21.0
+pandas==1.2.5
+platformdirs==2.1.0
+pytablewriter[html]==0.61.0
 pytest==6.2.4
-pytest-cov==2.12.0
+pytest-cov==2.12.1
 python-slugify==5.0.2
 respx==0.17.0
