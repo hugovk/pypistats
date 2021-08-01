@@ -8,4 +8,4 @@ pytablewriter[html]==0.62.0
 pytest==6.2.4
 pytest-cov==2.12.1
 python-slugify==5.0.2
-respx==0.17.0
+respx==0.17.1
