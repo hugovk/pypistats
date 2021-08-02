@@ -50,4 +50,4 @@ repos:
         args: [--prose-wrap=always, --print-width=88]
 
 ci:
-  autoupdate_schedule: monthly
+  autoupdate_schedule: quarterly
