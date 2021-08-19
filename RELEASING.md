@@ -1,8 +1,8 @@
 # Release Checklist
 
-- [ ] Get master to the appropriate code release state.
+- [ ] Get `main` to the appropriate code release state.
       [GitHub Actions](https://github.com/hugovk/pypistats/actions) should be running
-      cleanly for all merges to master.
+      cleanly for all merges to `main`.
       [![GitHub Actions status](https://github.com/hugovk/pypistats/workflows/Test/badge.svg)](https://github.com/hugovk/pypistats/actions)
 
 - [ ] Edit release draft, adjust text if needed:
