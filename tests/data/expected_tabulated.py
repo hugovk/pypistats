@@ -79,7 +79,7 @@ EXPECTED_TABULATED_MD = """
 
 
 EXPECTED_TABULATED_RST = """
-.. table:: 
+.. table::
 
     ==========  ============  ===========
      category       date       downloads 
