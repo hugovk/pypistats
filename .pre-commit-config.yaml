@@ -39,10 +39,9 @@ repos:
       - id: requirements-txt-fixer
 
   - repo: https://github.com/asottile/setup-cfg-fmt
-    rev: v1.17.0
+    rev: v1.18.0
     hooks:
       - id: setup-cfg-fmt
-        args: ["--max-py-version", "3.10"]
 
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v2.4.1
