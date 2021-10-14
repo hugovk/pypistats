@@ -299,3 +299,10 @@ chart.figure.savefig("python3.png")  # alternatively
 ```
 
 ![python3.png](example/python3.png)
+
+## See also
+
+Related projects
+
+* https://github.com/ofek/pypinfo
+* https://github.com/scivision/pypistats-plots
