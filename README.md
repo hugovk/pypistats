@@ -304,5 +304,5 @@ chart.figure.savefig("python3.png")  # alternatively
 
 Related projects
 
-* https://github.com/ofek/pypinfo
-* https://github.com/scivision/pypistats-plots
+- https://github.com/ofek/pypinfo
+- https://github.com/scivision/pypistats-plots
