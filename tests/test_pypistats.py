@@ -186,55 +186,22 @@ class TestPypiStats:
         ):
             pypistats.python_major(package, end_date=end_date)
 
-    def test__paramify_none(self) -> None:
-        # Arrange
-        period = None
-
+    @pytest.mark.parametrize(
+        "test_name, test_value, expected",
+        [
+            ("period", None, ""),
+            ("period", "day", "&period=day"),
+            ("mirrors", True, "&mirrors=true"),
+            ("version", 3, "&version=3"),
+            ("version", 3.7, "&version=3.7"),
+        ],
+    )
+    def test__paramify(self, test_name, test_value, expected) -> None:
         # Act
-        param = pypistats._paramify("period", period)
+        param = pypistats._paramify(test_name, test_value)
 
         # Assert
-        assert param == ""
-
-    def test__paramify_string(self) -> None:
-        # Arrange
-        period = "day"
-
-        # Act
-        param = pypistats._paramify("period", period)
-
-        # Assert
-        assert param == "&period=day"
-
-    def test__paramify_bool(self) -> None:
-        # Arrange
-        mirrors = True
-
-        # Act
-        param = pypistats._paramify("mirrors", mirrors)
-
-        # Assert
-        assert param == "&mirrors=true"
-
-    def test__paramify_int(self) -> None:
-        # Arrange
-        version = 3
-
-        # Act
-        param = pypistats._paramify("version", version)
-
-        # Assert
-        assert param == "&version=3"
-
-    def test__paramify_float(self) -> None:
-        # Arrange
-        version = 3.7
-
-        # Act
-        param = pypistats._paramify("version", version)
-
-        # Assert
-        assert param == "&version=3.7"
+        assert param == expected
 
     def test__tabulate_noarg(self) -> None:
         # Arrange
