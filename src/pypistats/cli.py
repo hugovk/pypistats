@@ -2,6 +2,8 @@
 """
 CLI with subcommands for pypistats
 """
+from __future__ import annotations
+
 import argparse
 import datetime as dt
 
@@ -58,7 +60,7 @@ def subcommand(args=None, parent=subparsers):
     return decorator
 
 
-def _month_name_to_yyyy_mm(date_string, date_format):
+def _month_name_to_yyyy_mm(date_string: str, date_format: str) -> str:
     """Given a month name, return yyyy-dd for the most recent month in the past"""
     today = dt.date.today()
     new = dt.datetime.strptime(
@@ -73,7 +75,7 @@ def _month_name_to_yyyy_mm(date_string, date_format):
     return new.isoformat()[:7]
 
 
-def _valid_date(date_string, date_format):
+def _valid_date(date_string: str, date_format: str) -> str:
     try:
         dt.datetime.strptime(date_string, date_format)
         return date_string
@@ -82,11 +84,11 @@ def _valid_date(date_string, date_format):
         raise argparse.ArgumentTypeError(msg)
 
 
-def _valid_yyyy_mm_dd(date_string):
+def _valid_yyyy_mm_dd(date_string: str) -> str:
     return _valid_date(date_string, "%Y-%m-%d")
 
 
-def _valid_yyyy_mm(date_string):
+def _valid_yyyy_mm(date_string: str) -> str:
     try:
         # eg. jan, feb
         date_string = _month_name_to_yyyy_mm(date_string, "%b")
@@ -102,14 +104,14 @@ def _valid_yyyy_mm(date_string):
     return _valid_date(date_string, "%Y-%m")
 
 
-def _valid_yyyy_mm_optional_dd(date_string):
+def _valid_yyyy_mm_optional_dd(date_string: str) -> str:
     try:
         return _valid_yyyy_mm_dd(date_string)
     except argparse.ArgumentTypeError:
         return _valid_yyyy_mm(date_string)
 
 
-def _define_format(args) -> str:
+def _define_format(args: argparse.Namespace) -> str:
     if args.json:
         return "json"
 
@@ -182,7 +184,7 @@ common_arguments = [
         arg_verbose,
     ]
 )
-def recent(args):  # pragma: no cover
+def recent(args: argparse.Namespace) -> None:  # pragma: no cover
     print(
         pypistats.recent(
             args.package, period=args.period, format=args.format, verbose=args.verbose
@@ -197,7 +199,7 @@ def recent(args):  # pragma: no cover
         *common_arguments,
     ]
 )
-def overall(args):  # pragma: no cover
+def overall(args: argparse.Namespace) -> None:  # pragma: no cover
     if args.mirrors in ["with", "without"]:
         args.mirrors = args.mirrors == "with"
 
@@ -221,7 +223,7 @@ def overall(args):  # pragma: no cover
         *common_arguments,
     ]
 )
-def python_major(args):  # pragma: no cover
+def python_major(args: argparse.Namespace) -> None:  # pragma: no cover
     print(
         pypistats.python_major(
             args.package,
@@ -242,7 +244,7 @@ def python_major(args):  # pragma: no cover
         *common_arguments,
     ]
 )
-def python_minor(args):  # pragma: no cover
+def python_minor(args: argparse.Namespace) -> None:  # pragma: no cover
     print(
         pypistats.python_minor(
             args.package,
@@ -263,7 +265,7 @@ def python_minor(args):  # pragma: no cover
         *common_arguments,
     ]
 )
-def system(args):  # pragma: no cover
+def system(args: argparse.Namespace) -> None:  # pragma: no cover
     print(
         pypistats.system(
             args.package,
@@ -277,7 +279,7 @@ def system(args):  # pragma: no cover
     )
 
 
-def _month(yyyy_mm):
+def _month(yyyy_mm: str) -> tuple[str, str]:
     """Helper to return start_date and end_date of a month as yyyy-mm-dd"""
     year, month = map(int, yyyy_mm.split("-"))
     first = dt.date(year, month, 1)
@@ -285,21 +287,21 @@ def _month(yyyy_mm):
     return str(first), str(last)
 
 
-def _last_month():
+def _last_month() -> tuple[str, str]:
     """Helper to return start_date and end_date of the previous month as yyyy-mm-dd"""
     today = dt.date.today()
     d = today - relativedelta(months=1)
     return _month(d.isoformat()[:7])
 
 
-def _this_month():
+def _this_month() -> str:
     """Helper to return start_date of the current month as yyyy-mm-dd.
     No end_date needed."""
     today = dt.date.today()
     return _month(today.isoformat()[:7])[0]
 
 
-def main():
+def main() -> None:
     cli.add_argument(
         "-V", "--version", action="version", version=f"%(prog)s {pypistats.__version__}"
     )
