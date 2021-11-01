@@ -11,11 +11,17 @@ import warnings
 from pathlib import Path
 
 import httpx
-import pkg_resources
 from platformdirs import user_cache_dir
 from slugify import slugify
 
-__version__ = pkg_resources.get_distribution(__name__).version
+try:
+    # Python 3.8+
+    import importlib.metadata as importlib_metadata
+except ImportError:
+    # <Python 3.7 and lower
+    import importlib_metadata
+
+__version__ = importlib_metadata.version(__name__)
 
 BASE_URL = "https://pypistats.org/api/"
 CACHE_DIR = Path(user_cache_dir("pypistats"))
@@ -334,7 +340,7 @@ def _tabulate(data, format: str = "markdown"):
         return _pytablewriter(headers, data, format)
 
 
-def _prettytable(headers: list[str], data: list[dict]) -> str:
+def _prettytable(headers, data) -> str:
     from prettytable import MARKDOWN, PrettyTable
 
     x = PrettyTable()
