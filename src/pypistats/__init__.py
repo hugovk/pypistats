@@ -10,7 +10,6 @@ import sys
 import warnings
 from pathlib import Path
 
-import httpx
 from platformdirs import user_cache_dir
 from slugify import slugify
 
@@ -112,6 +111,8 @@ def pypi_stats_api(
 
     if res == {}:
         # No cache, or couldn't load cache
+        import httpx
+
         r = httpx.get(url, headers={"User-Agent": USER_AGENT})
 
         # Raise if we made a bad request
