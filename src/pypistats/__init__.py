@@ -13,16 +13,6 @@ from pathlib import Path
 import httpx
 import pkg_resources
 from platformdirs import user_cache_dir
-from pytablewriter import (
-    HtmlTableWriter,
-    MarkdownTableWriter,
-    NumpyTableWriter,
-    PandasDataFrameWriter,
-    RstSimpleTableWriter,
-    String,
-    TsvTableWriter,
-)
-from pytablewriter.style import Align, Style, ThousandSeparator
 from slugify import slugify
 
 __version__ = pkg_resources.get_distribution(__name__).version
@@ -326,12 +316,62 @@ def _percent(data):
     return data
 
 
-def _tabulate(data, format="markdown"):
+def _tabulate(data, format: str = "markdown"):
     """Return data in specified format"""
+
+    if isinstance(data, dict):
+        headers = list(data.keys())
+    else:  # isinstance(data, list):
+        headers = sorted(set().union(*(d.keys() for d in data)))
+
+    # Move downloads last
+    headers.append("downloads")
+    headers.remove("downloads")
+
+    if format == "markdown":
+        return _prettytable(headers, data)
+    else:
+        return _pytablewriter(headers, data, format)
+
+
+def _prettytable(headers: list[str], data: list[dict]) -> str:
+    from prettytable import MARKDOWN, PrettyTable
+
+    x = PrettyTable()
+    x.set_style(MARKDOWN)
+
+    if isinstance(data, dict):
+        data = [data]
+    for header in headers:
+        col_data = [row[header] if header in row else "" for row in data]
+        x.add_column(header, col_data)
+        x.align["last_day"] = "r"
+        x.align["last_month"] = "r"
+        x.align["last_week"] = "r"
+        x.align["category"] = "l"
+        x.align["percent"] = "r"
+        x.align["downloads"] = "r"
+        x.custom_format["last_day"] = lambda f, v: f"{v:,}"
+        x.custom_format["last_month"] = lambda f, v: f"{v:,}"
+        x.custom_format["last_week"] = lambda f, v: f"{v:,}"
+        x.custom_format["downloads"] = lambda f, v: f"{v:,}"
+
+    return x.get_string() + "\n"
+
+
+def _pytablewriter(headers, data, format: str):
+    from pytablewriter import (
+        HtmlTableWriter,
+        NumpyTableWriter,
+        PandasDataFrameWriter,
+        RstSimpleTableWriter,
+        String,
+        TsvTableWriter,
+    )
+    from pytablewriter.style import Align, Style, ThousandSeparator
 
     format_writers = {
         "html": HtmlTableWriter,
-        "markdown": MarkdownTableWriter,
         "numpy": NumpyTableWriter,
         "pandas": PandasDataFrameWriter,
         "rst": RstSimpleTableWriter,
@@ -343,15 +383,10 @@ def _tabulate(data, format="markdown"):
         writer.margin = 1
 
     if isinstance(data, dict):
-        headers = list(data.keys())
         writer.value_matrix = [data]
     else:  # isinstance(data, list):
-        headers = sorted(set().union(*(d.keys() for d in data)))
         writer.value_matrix = data
 
-    # Move downloads last
-    headers.append("downloads")
-    headers.remove("downloads")
     writer.headers = headers
 
     # Custom alignment and format

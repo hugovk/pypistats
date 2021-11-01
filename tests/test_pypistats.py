@@ -250,10 +250,10 @@ class TestPypiStats:
     @pytest.mark.parametrize(
         "test_input, expected",
         [
-            ("html", EXPECTED_TABULATED_HTML),
-            ("markdown", EXPECTED_TABULATED_MD),
-            ("rst", EXPECTED_TABULATED_RST),
-            ("tsv", EXPECTED_TABULATED_TSV),
+            pytest.param("html", EXPECTED_TABULATED_HTML, id="html"),
+            pytest.param("markdown", EXPECTED_TABULATED_MD, id="markdown"),
+            pytest.param("rst", EXPECTED_TABULATED_RST, id="rst"),
+            pytest.param("tsv", EXPECTED_TABULATED_TSV, id="tsv"),
         ],
     )
     def test__tabulate(self, test_input, expected):
@@ -460,7 +460,29 @@ class TestPypiStats:
         assert json.loads(output) == json.loads(mocked_response)
 
     @respx.mock
-    def test_recent_tabular(self):
+    @pytest.mark.parametrize(
+        "test_format, expected_output",
+        [
+            pytest.param(
+                "markdown",
+                """
+|  last_day | last_month |  last_week |
+|----------:|-----------:|-----------:|
+| 2,295,765 | 67,759,913 | 15,706,750 |
+""",
+                id="markdown",
+            ),
+            pytest.param(
+                "tsv",
+                """
+"last_day"\t"last_month"\t"last_week"
+2,295,765\t67,759,913\t15,706,750
+""",
+                id="tsv",
+            ),
+        ],
+    )
+    def test_recent_tabular(self, test_format, expected_output):
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/recent"
@@ -469,15 +491,10 @@ class TestPypiStats:
                 {"last_day": 2295765, "last_month": 67759913, "last_week": 15706750},
             "package": "pip", "type": "recent_downloads"
         }"""
-        expected_output = """
-| last_day  | last_month | last_week  |
-| --------: | ---------: | ---------: |
-| 2,295,765 | 67,759,913 | 15,706,750 |
-"""
 
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
-        output = pypistats.recent(package)
+        output = pypistats.recent(package, format=test_format)
 
         # Assert
         assert output.strip() == expected_output.strip()
@@ -489,8 +506,8 @@ class TestPypiStats:
         mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
-|    category     | percent | downloads |
-| --------------- | ------: | --------: |
+| category        | percent | downloads |
+|:----------------|--------:|----------:|
 | with_mirrors    | 100.00% | 1,487,218 |
 | without_mirrors |  99.24% | 1,475,979 |
 | Total           |         | 1,487,218 |
@@ -512,8 +529,8 @@ Date range: 2020-05-02 - 2020-05-02
         mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
-|    category     | percent | downloads |
-| --------------- | ------: | --------: |
+| category        | percent | downloads |
+|:----------------|--------:|----------:|
 | with_mirrors    | 100.00% | 2,100,139 |
 | without_mirrors |  99.21% | 2,083,472 |
 | Total           |         | 2,100,139 |
@@ -621,8 +638,8 @@ Date range: 2020-05-01 - 2020-05-01
             "type": "system_downloads"
         }"""
         expected_output = """
-| category | percent |  downloads  |
-| -------- | ------: | ----------: |
+| category | percent |   downloads |
+|:---------|--------:|------------:|
 | Linux    |  83.14% | 236,502,274 |
 | null     |  10.75% |  30,579,325 |
 | Darwin   |   3.77% |  10,734,594 |
@@ -681,7 +698,7 @@ Date range: 2020-05-01 - 2020-05-01
         data = copy.deepcopy(SAMPLE_DATA_VERSION_STRINGS)
         expected_output = """
 | category |    date    | downloads |
-| -------- | ---------- | --------: |
+|:---------|:----------:|----------:|
 | 3.1      | 2018-08-15 |        10 |
 | 3.10     | 2018-08-15 |         1 |
 """
