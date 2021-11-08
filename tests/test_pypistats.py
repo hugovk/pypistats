@@ -3,7 +3,9 @@ Unit tests for pypistats
 """
 import copy
 import json
+import os
 from pathlib import Path
+from unittest import mock
 
 import pytest
 import respx
@@ -202,6 +204,41 @@ class TestPypiStats:
 
         # Assert
         assert param == expected
+
+    @mock.patch.dict(os.environ, {"NO_COLOR": "TRUE"})
+    def test__can_do_colour_no_color(self) -> None:
+        # Act / Assert
+        assert pypistats._can_do_colour() is False
+
+    @mock.patch.dict(os.environ, {"FORCE_COLOR": "TRUE"})
+    def test__can_do_colour_force_colour(self) -> None:
+        # Act / Assert
+        assert pypistats._can_do_colour() is True
+
+    def test__colourify(self) -> None:
+        # Arrange
+        data = [
+            {"category": "2.7", "downloads": 1},
+            {"category": "3.5", "downloads": 10},
+            {"category": "3.10", "downloads": 89},
+        ]
+        expected_output = [
+            # red
+            {"category": "2.7", "downloads": 1, "percent": "\x1b[31m1.00%\x1b[0m"},
+            # yellow
+            {"category": "3.5", "downloads": 10, "percent": "\x1b[33m10.00%\x1b[0m"},
+            # green
+            {"category": "3.10", "downloads": 89, "percent": "\x1b[32m89.00%\x1b[0m"},
+            {"category": "Total", "downloads": 100},
+        ]
+        data = pypistats._percent(data)
+        data = pypistats._grand_total(data)
+
+        # Act
+        output = pypistats._colourify(data)
+
+        # Assert
+        assert output == expected_output
 
     def test__tabulate_noarg(self) -> None:
         # Arrange

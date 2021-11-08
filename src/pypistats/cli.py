@@ -156,6 +156,13 @@ arg_monthly = argument("--monthly", action="store_true", help="Show monthly down
 arg_format = argument(
     "-f", "--format", default="markdown", choices=FORMATS, help="The format of output"
 )
+arg_color = argument(
+    "-c",
+    "--color",
+    default="auto",
+    choices=("yes", "no", "auto"),
+    help="Color terminal output",
+)
 arg_verbose = argument(
     "-v", "--verbose", action="store_true", help="Print debug messages to stderr"
 )
@@ -171,6 +178,7 @@ common_arguments = [
     arg_this_month,
     arg_daily,
     arg_monthly,
+    arg_color,
     arg_verbose,
 ]
 
@@ -211,6 +219,7 @@ def overall(args: argparse.Namespace) -> None:  # pragma: no cover
             end_date=args.end_date,
             format=args.format,
             total="daily" if args.daily else ("monthly" if args.monthly else "all"),
+            color="no",  # Coloured percentages not really helpful here
             verbose=args.verbose,
         )
     )
@@ -232,6 +241,7 @@ def python_major(args: argparse.Namespace) -> None:  # pragma: no cover
             end_date=args.end_date,
             format=args.format,
             total="daily" if args.daily else ("monthly" if args.monthly else "all"),
+            color=args.color,
             verbose=args.verbose,
         )
     )
@@ -253,6 +263,7 @@ def python_minor(args: argparse.Namespace) -> None:  # pragma: no cover
             end_date=args.end_date,
             format=args.format,
             total="daily" if args.daily else ("monthly" if args.monthly else "all"),
+            color=args.color,
             verbose=args.verbose,
         )
     )
@@ -274,6 +285,7 @@ def system(args: argparse.Namespace) -> None:  # pragma: no cover
             end_date=args.end_date,
             format=args.format,
             total="daily" if args.daily else ("monthly" if args.monthly else "all"),
+            color=args.color,
             verbose=args.verbose,
         )
     )
