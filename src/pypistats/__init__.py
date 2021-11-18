@@ -3,6 +3,8 @@
 Python interface to PyPI Stats API
 https://pypistats.org/api
 """
+from __future__ import annotations
+
 import atexit
 import datetime as dt
 import json
@@ -27,18 +29,18 @@ CACHE_DIR = Path(user_cache_dir("pypistats"))
 USER_AGENT = f"pypistats/{__version__}"
 
 
-def _print_verbose(verbose, *args, **kwargs):
+def _print_verbose(verbose: bool, *args, **kwargs) -> None:
     """Print if verbose"""
     if verbose:
         _print_stderr(*args, **kwargs)
 
 
-def _print_stderr(*args, **kwargs):
+def _print_stderr(*args, **kwargs) -> None:
     """Print to stderr"""
     print(*args, file=sys.stderr, **kwargs)
 
 
-def _cache_filename(url):
+def _cache_filename(url: str) -> Path:
     """yyyy-mm-dd-url-slug.json"""
     today = dt.datetime.utcnow().strftime("%Y-%m-%d")
     slug = slugify(url)
@@ -47,7 +49,7 @@ def _cache_filename(url):
     return filename
 
 
-def _load_cache(cache_file):
+def _load_cache(cache_file: Path) -> dict:
     if not cache_file.exists():
         return {}
 
@@ -60,7 +62,7 @@ def _load_cache(cache_file):
     return data
 
 
-def _save_cache(cache_file, data):
+def _save_cache(cache_file: Path, data) -> None:
     try:
         if not CACHE_DIR.exists():
             CACHE_DIR.mkdir(parents=True)
@@ -72,7 +74,7 @@ def _save_cache(cache_file, data):
         pass
 
 
-def _clear_cache():
+def _clear_cache() -> None:
     """Delete old cache files, run as last task"""
     cache_files = CACHE_DIR.glob("**/*.json")
     this_month = dt.datetime.utcnow().strftime("%Y-%m")
@@ -85,14 +87,14 @@ atexit.register(_clear_cache)
 
 
 def pypi_stats_api(
-    endpoint,
-    params=None,
-    format="markdown",
-    start_date=None,
-    end_date=None,
-    sort=True,
-    total="all",
-    verbose=False,
+    endpoint: str,
+    params: str | None = None,
+    format: str = "markdown",
+    start_date: str | None = None,
+    end_date: str | None = None,
+    sort: bool = True,
+    total: str = "all",
+    verbose: bool = False,
 ):
     """Call the API and return JSON"""
     if params:
@@ -195,7 +197,7 @@ def _filter(data, start_date=None, end_date=None):
     return data
 
 
-def _sort(data):
+def _sort(data: dict | list) -> dict | list:
     """Sort by downloads"""
 
     # Only for lists of dicts, not a single dict
@@ -206,7 +208,7 @@ def _sort(data):
     return data
 
 
-def _monthly_total(data):
+def _monthly_total(data: list) -> list:
     """Sum all downloads per category, by month"""
 
     totalled = {}
@@ -231,7 +233,7 @@ def _monthly_total(data):
     return data
 
 
-def _total(data):
+def _total(data: dict | list) -> dict | list:
     """Sum all downloads per category, regardless of date"""
 
     # Only for lists of dicts, not a single dict
@@ -252,7 +254,7 @@ def _total(data):
     return data
 
 
-def _date_range(data):
+def _date_range(data: dict | list) -> tuple[str | None, str | None]:
     """Return the first and last dates in data"""
     try:
         first = data[0]["date"]
@@ -270,7 +272,7 @@ def _date_range(data):
     return first, last
 
 
-def _grand_total_value(data):
+def _grand_total_value(data: list) -> int:
     """Return the grand total of the data"""
 
     # For "overall", without_mirrors is a subset of with_mirrors.
@@ -285,7 +287,7 @@ def _grand_total_value(data):
     return grand_total
 
 
-def _grand_total(data):
+def _grand_total(data: dict | list) -> dict | list:
     """Add a grand total row"""
 
     # Only for lists of dicts, not a single dict
@@ -304,7 +306,7 @@ def _grand_total(data):
     return data
 
 
-def _percent(data):
+def _percent(data: dict | list) -> dict | list:
     """Add a percent column"""
 
     # Only for lists of dicts, not a single dict
@@ -323,7 +325,7 @@ def _percent(data):
     return data
 
 
-def _tabulate(data, format: str = "markdown"):
+def _tabulate(data: dict | list, format: str = "markdown"):
     """Return data in specified format"""
 
     if isinstance(data, dict):
@@ -428,7 +430,7 @@ def _pytablewriter(headers, data, format: str):
     return writer.dumps()
 
 
-def _paramify(param_name, param_value):
+def _paramify(param_name: str, param_value: float | str | None) -> str:
     """If param_value, return &param_name=param_value"""
     if isinstance(param_value, bool):
         param_value = str(param_value).lower()
@@ -439,14 +441,14 @@ def _paramify(param_name, param_value):
     return ""
 
 
-def recent(package, period=None, **kwargs):
+def recent(package: str, period: str | None = None, **kwargs: str):
     """Retrieve the aggregate download quantities for the last day/week/month"""
     endpoint = f"packages/{package}/recent"
     params = _paramify("period", period)
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def overall(package, mirrors=None, **kwargs):
+def overall(package: str, mirrors: bool | str | None = None, **kwargs: str):
     """Retrieve the aggregate daily download time series with or without mirror
     downloads"""
     endpoint = f"packages/{package}/overall"
@@ -454,7 +456,7 @@ def overall(package, mirrors=None, **kwargs):
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def python_major(package, version=None, **kwargs):
+def python_major(package: str, version: str | None = None, **kwargs: str):
     """Retrieve the aggregate daily download time series by Python major version
     number"""
     endpoint = f"packages/{package}/python_major"
@@ -462,7 +464,7 @@ def python_major(package, version=None, **kwargs):
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def python_minor(package, version=None, **kwargs):
+def python_minor(package: str, version: str | None = None, **kwargs) -> str:
     """Retrieve the aggregate daily download time series by Python minor version
     number"""
     endpoint = f"packages/{package}/python_minor"
@@ -470,7 +472,7 @@ def python_minor(package, version=None, **kwargs):
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def system(package, os=None, **kwargs):
+def system(package: str, os: str | None = None, **kwargs):
     """Retrieve the aggregate daily download time series by operating system"""
     endpoint = f"packages/{package}/system"
     params = _paramify("os", os)

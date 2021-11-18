@@ -62,28 +62,28 @@ SAMPLE_RESPONSE_OVERALL = """{
         }"""
 
 
-def stub__cache_filename(*args):
+def stub__cache_filename(*args) -> Path:
     return Path("/this/does/not/exist")
 
 
-def stub__save_cache(*args):
+def stub__save_cache(*args) -> None:
     pass
 
 
 class TestPypiStats:
-    def setup_method(self):
+    def setup_method(self) -> None:
         # Stub caching. Caches are tested in another class.
         self.original__cache_filename = pypistats._cache_filename
         self.original__save_cache = pypistats._save_cache
         pypistats._cache_filename = stub__cache_filename
         pypistats._save_cache = stub__save_cache
 
-    def teardown_method(self):
+    def teardown_method(self) -> None:
         # Unstub caching
         pypistats._cache_filename = self.original__cache_filename
         pypistats._save_cache = self.original__save_cache
 
-    def test__filter_no_filters_no_change(self):
+    def test__filter_no_filters_no_change(self) -> None:
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
 
@@ -93,7 +93,7 @@ class TestPypiStats:
         # Assert
         assert data == output
 
-    def test__filter_start_date(self):
+    def test__filter_start_date(self) -> None:
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
         start_date = "2018-09-22"
@@ -106,7 +106,7 @@ class TestPypiStats:
         for row in output:
             assert row["date"] >= start_date
 
-    def test__filter_end_date(self):
+    def test__filter_end_date(self) -> None:
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
         end_date = "2018-04-22"
@@ -119,7 +119,7 @@ class TestPypiStats:
         for row in output:
             assert row["date"] <= end_date
 
-    def test__filter_start_and_end_date(self):
+    def test__filter_start_and_end_date(self) -> None:
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
         start_date = "2018-09-01"
@@ -135,7 +135,7 @@ class TestPypiStats:
             assert row["date"] <= end_date
 
     @respx.mock
-    def test_warn_if_start_date_before_earliest_available(self):
+    def test_warn_if_start_date_before_earliest_available(self) -> None:
         # Arrange
         start_date = "2000-01-01"
         package = "pip"
@@ -161,7 +161,7 @@ class TestPypiStats:
             pypistats.python_major(package, start_date=start_date)
 
     @respx.mock
-    def test_error_if_end_date_before_earliest_available(self):
+    def test_error_if_end_date_before_earliest_available(self) -> None:
         # Arrange
         end_date = "2000-01-01"
         package = "pip"
@@ -186,57 +186,24 @@ class TestPypiStats:
         ):
             pypistats.python_major(package, end_date=end_date)
 
-    def test__paramify_none(self):
-        # Arrange
-        period = None
-
+    @pytest.mark.parametrize(
+        "test_name, test_value, expected",
+        [
+            ("period", None, ""),
+            ("period", "day", "&period=day"),
+            ("mirrors", True, "&mirrors=true"),
+            ("version", 3, "&version=3"),
+            ("version", 3.7, "&version=3.7"),
+        ],
+    )
+    def test__paramify(self, test_name, test_value, expected) -> None:
         # Act
-        param = pypistats._paramify("period", period)
+        param = pypistats._paramify(test_name, test_value)
 
         # Assert
-        assert param == ""
+        assert param == expected
 
-    def test__paramify_string(self):
-        # Arrange
-        period = "day"
-
-        # Act
-        param = pypistats._paramify("period", period)
-
-        # Assert
-        assert param == "&period=day"
-
-    def test__paramify_bool(self):
-        # Arrange
-        mirrors = True
-
-        # Act
-        param = pypistats._paramify("mirrors", mirrors)
-
-        # Assert
-        assert param == "&mirrors=true"
-
-    def test__paramify_int(self):
-        # Arrange
-        version = 3
-
-        # Act
-        param = pypistats._paramify("version", version)
-
-        # Assert
-        assert param == "&version=3"
-
-    def test__paramify_float(self):
-        # Arrange
-        version = 3.7
-
-        # Act
-        param = pypistats._paramify("version", version)
-
-        # Assert
-        assert param == "&version=3.7"
-
-    def test__tabulate_noarg(self):
+    def test__tabulate_noarg(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)
         expected_output = EXPECTED_TABULATED_MD
@@ -256,7 +223,7 @@ class TestPypiStats:
             pytest.param("tsv", EXPECTED_TABULATED_TSV, id="tsv"),
         ],
     )
-    def test__tabulate(self, test_input, expected):
+    def test__tabulate(self, test_input: str, expected: str) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)
 
@@ -266,7 +233,7 @@ class TestPypiStats:
         # Assert
         assert output.strip() == expected.strip()
 
-    def test__sort(self):
+    def test__sort(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)
         expected_output = [
@@ -288,7 +255,7 @@ class TestPypiStats:
         # Assert
         assert output == expected_output
 
-    def test__sort_recent(self):
+    def test__sort_recent(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA_RECENT)
 
@@ -298,7 +265,7 @@ class TestPypiStats:
         # Assert
         assert output == SAMPLE_DATA_RECENT
 
-    def test__monthly_total(self):
+    def test__monthly_total(self) -> None:
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
 
@@ -316,7 +283,7 @@ class TestPypiStats:
         assert output[10]["downloads"] == 489_163
         assert output[10]["date"] == "2018-05"
 
-    def test__total(self):
+    def test__total(self) -> None:
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
 
@@ -328,7 +295,7 @@ class TestPypiStats:
         assert output[0]["category"] == "2.4"
         assert output[0]["downloads"] == 9
 
-    def test__total_recent(self):
+    def test__total_recent(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA_RECENT)
 
@@ -338,7 +305,7 @@ class TestPypiStats:
         # Assert
         assert output == SAMPLE_DATA_RECENT
 
-    def test__date_range(self):
+    def test__date_range(self) -> None:
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
 
@@ -349,7 +316,7 @@ class TestPypiStats:
         assert first == "2018-04-16"
         assert last == "2018-09-23"
 
-    def test__date_range_no_dates_in_data(self):
+    def test__date_range_no_dates_in_data(self) -> None:
         # Arrange
         # recent
         data = [
@@ -367,7 +334,7 @@ class TestPypiStats:
         assert first is None
         assert last is None
 
-    def test__grand_total(self):
+    def test__grand_total(self) -> None:
         # Arrange
         data = copy.deepcopy(PYTHON_MINOR_DATA)
         original_len = len(data)
@@ -380,7 +347,7 @@ class TestPypiStats:
         assert output[-1]["category"] == "Total"
         assert output[-1]["downloads"] == 9_355_317
 
-    def test__grand_total_one_row(self):
+    def test__grand_total_one_row(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA_ONE_ROW)
 
@@ -390,7 +357,7 @@ class TestPypiStats:
         # Assert
         assert output == SAMPLE_DATA_ONE_ROW
 
-    def test__grand_total_recent(self):
+    def test__grand_total_recent(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA_RECENT)
 
@@ -400,7 +367,7 @@ class TestPypiStats:
         # Assert
         assert output == SAMPLE_DATA_RECENT
 
-    def test__percent(self):
+    def test__percent(self) -> None:
         # Arrange
         data = [
             {"category": "2.7", "downloads": 63749},
@@ -421,7 +388,7 @@ class TestPypiStats:
         # Assert
         assert output == expected_output
 
-    def test__percent_one_row(self):
+    def test__percent_one_row(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA_ONE_ROW)
 
@@ -431,7 +398,7 @@ class TestPypiStats:
         # Assert
         assert output == SAMPLE_DATA_ONE_ROW
 
-    def test__percent_recent(self):
+    def test__percent_recent(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA_RECENT)
 
@@ -442,7 +409,7 @@ class TestPypiStats:
         assert output == SAMPLE_DATA_RECENT
 
     @respx.mock
-    def test_valid_json(self):
+    def test_valid_json(self) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/recent?&period=day"
@@ -482,7 +449,7 @@ class TestPypiStats:
             ),
         ],
     )
-    def test_recent_tabular(self, test_format, expected_output):
+    def test_recent_tabular(self, test_format, expected_output) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/recent"
@@ -500,7 +467,7 @@ class TestPypiStats:
         assert output.strip() == expected_output.strip()
 
     @respx.mock
-    def test_overall_tabular_start_date(self):
+    def test_overall_tabular_start_date(self) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
@@ -523,7 +490,7 @@ Date range: 2020-05-02 - 2020-05-02
         assert output.strip() == expected_output.strip()
 
     @respx.mock
-    def test_overall_tabular_end_date(self):
+    def test_overall_tabular_end_date(self) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
@@ -546,7 +513,7 @@ Date range: 2020-05-01 - 2020-05-01
         assert output.strip() == expected_output.strip()
 
     @respx.mock
-    def test_python_major_json(self):
+    def test_python_major_json(self) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/python_major"
@@ -577,7 +544,7 @@ Date range: 2020-05-01 - 2020-05-01
         assert json.loads(output) == json.loads(expected_output)
 
     @respx.mock
-    def test_python_minor_json(self):
+    def test_python_minor_json(self) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/python_minor"
@@ -622,7 +589,7 @@ Date range: 2020-05-01 - 2020-05-01
         assert json.loads(output) == json.loads(expected_output)
 
     @respx.mock
-    def test_system_tabular(self):
+    def test_system_tabular(self) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/system"
@@ -656,7 +623,7 @@ Date range: 2020-05-01 - 2020-05-01
         assert output.strip() == expected_output.strip()
 
     @respx.mock
-    def test_python_minor_monthly(self):
+    def test_python_minor_monthly(self) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/python_minor"
@@ -693,7 +660,7 @@ Date range: 2020-05-01 - 2020-05-01
         assert json.loads(output) == json.loads(expected_output)
 
     @respx.mock
-    def test_versions_are_strings(self):
+    def test_versions_are_strings(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA_VERSION_STRINGS)
         expected_output = """
@@ -711,7 +678,7 @@ Date range: 2020-05-01 - 2020-05-01
 
     @pytest.mark.skipif(numpy is None, reason="NumPy is not installed")
     @respx.mock
-    def test_format_numpy(self):
+    def test_format_numpy(self) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
@@ -732,7 +699,7 @@ Date range: 2020-05-01 - 2020-05-01
 
     @pytest.mark.skipif(pandas is None, reason="pandas is not installed")
     @respx.mock
-    def test_format_pandas(self):
+    def test_format_pandas(self) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"

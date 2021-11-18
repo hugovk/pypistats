@@ -2,7 +2,7 @@ import pypistats
 
 
 # pytest's capsys cannot be used in a unittest class
-def test__print_verbose_print(capsys):
+def test__print_verbose_print(capsys) -> None:
     # Arrange
     verbose = True
 

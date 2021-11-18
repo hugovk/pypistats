@@ -10,7 +10,7 @@
 [![DOI](https://zenodo.org/badge/149862343.svg)](https://zenodo.org/badge/latestdoi/149862343)
 [![Code style: Black](https://img.shields.io/badge/code%20style-Black-000000.svg)](https://github.com/psf/black)
 
-Python 3.6+ interface to [PyPI Stats API](https://pypistats.org/api) to get aggregate
+Python interface to [PyPI Stats API](https://pypistats.org/api) to get aggregate
 download statistics on Python packages on the Python Package Index without having to
 execute queries directly against Google BigQuery.
 

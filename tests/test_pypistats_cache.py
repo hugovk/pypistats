@@ -11,18 +11,18 @@ import pypistats
 
 
 class TestPypiStatsCache:
-    def setup_method(self):
+    def setup_method(self) -> None:
         # Choose a new cache dir that doesn't exist
         self.original_cache_dir = pypistats.CACHE_DIR
         self.temp_dir = tempfile.TemporaryDirectory()
         pypistats.CACHE_DIR = Path(self.temp_dir.name) / "pypistats"
 
-    def teardown_method(self):
+    def teardown_method(self) -> None:
         # Reset original
         pypistats.CACHE_DIR = self.original_cache_dir
 
     @freeze_time("2018-12-26")
-    def test__cache_filename(self):
+    def test__cache_filename(self) -> None:
         # Arrange
         url = "https://pypistats.org/api/packages/pip/recent"
 
@@ -34,7 +34,7 @@ class TestPypiStatsCache:
             "2018-12-26-https-pypistats-org-api-packages-pip-recent.json"
         )
 
-    def test__load_cache_not_exist(self):
+    def test__load_cache_not_exist(self) -> None:
         # Arrange
         filename = Path("file-does-not-exist")
 
@@ -44,7 +44,7 @@ class TestPypiStatsCache:
         # Assert
         assert data == {}
 
-    def test__load_cache_bad_data(self):
+    def test__load_cache_bad_data(self) -> None:
         # Arrange
         with tempfile.NamedTemporaryFile(delete=False) as f:
             f.write(b"Invalid JSON!")
@@ -55,7 +55,7 @@ class TestPypiStatsCache:
         # Assert
         assert data == {}
 
-    def test_cache_round_trip(self):
+    def test_cache_round_trip(self) -> None:
         # Arrange
         filename = pypistats.CACHE_DIR / "test_cache_round_trip.json"
         data = "test data"
@@ -70,7 +70,7 @@ class TestPypiStatsCache:
         # Assert
         assert new_data == data
 
-    def test__clear_cache(self):
+    def test__clear_cache(self) -> None:
         # Arrange
         # Create old cache file
         cache_file = pypistats.CACHE_DIR / "2018-11-26-old-cache-file.json"
@@ -84,7 +84,7 @@ class TestPypiStatsCache:
         assert not cache_file.exists()
 
     @respx.mock
-    def test_subcommand_with_cache(self):
+    def test_subcommand_with_cache(self) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
