@@ -8,12 +8,14 @@ from __future__ import annotations
 import atexit
 import datetime as dt
 import json
+import os
 import sys
 import warnings
 from pathlib import Path
 
 from platformdirs import user_cache_dir
 from slugify import slugify
+from termcolor import colored
 
 try:
     # Python 3.8+
@@ -94,6 +96,7 @@ def pypi_stats_api(
     end_date: str | None = None,
     sort: bool = True,
     total: str = "all",
+    color: str = "yes",
     verbose: bool = False,
 ):
     """Call the API and return JSON"""
@@ -169,6 +172,9 @@ def pypi_stats_api(
 
     data = _percent(data)
     data = _grand_total(data)
+
+    if color != "no" and format in ("markdown", "rst", "tsv") and _can_do_colour():
+        data = _colourify(data)
 
     output = _tabulate(data, format)
 
@@ -322,6 +328,40 @@ def _percent(data: dict | list) -> dict | list:
     for row in data:
         row["percent"] = "{:.2%}".format(row["downloads"] / grand_total)
 
+    return data
+
+
+def _can_do_colour() -> bool:
+    """Check https://no-color.org env vars and for dumb terminal"""
+    if "NO_COLOR" in os.environ:
+        return False
+    if "FORCE_COLOR" in os.environ:
+        return True
+    return (
+        hasattr(sys.stdout, "isatty")
+        and sys.stdout.isatty()
+        and os.environ.get("TERM") != "dumb"
+    )
+
+
+def _colourify(data) -> list:
+    """Add colour to percentages:
+    red: 0% - 5%
+    yellow: 6% - 15%
+    green: 15% - 100%
+    """
+
+    for row in data:
+        if "percent" not in row:
+            continue
+        percent = float(row["percent"].rstrip("%"))
+        if percent <= 5:
+            colour = "red"
+        elif percent <= 15:
+            colour = "yellow"
+        else:
+            colour = "green"
+        row["percent"] = colored(row["percent"], colour)
     return data
 
 

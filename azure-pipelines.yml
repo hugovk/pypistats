@@ -41,4 +41,8 @@ jobs:
           architecture: "x64"
 
       - script: python setup.py sdist
-        displayName: "Build sdist"
+      - script: |
+          python -m pip install --upgrade pip
+          python -m pip install -U build twine wheel
+          python -m build
+        displayName: "Build sdist and wheel"
