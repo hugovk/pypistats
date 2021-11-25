@@ -23,7 +23,7 @@ key and get free quota.)
 ### From PyPI
 
 ```bash
-pip install --upgrade pypistats
+python3 -m pip install --upgrade pypistats
 ```
 
 ### From source
@@ -31,7 +31,7 @@ pip install --upgrade pypistats
 ```bash
 git clone https://github.com/hugovk/pypistats
 cd pypistats
-pip install .
+python3 -m pip install .
 ```
 
 ## Example command-line use
