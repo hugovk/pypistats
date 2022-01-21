@@ -64,10 +64,7 @@ options:
 
 Help for a subcommand:
 
-<!-- [[[cog
-from scripts.run_command import run
-run("pypistats recent --help")
-]]] -->
+<!-- [[[cog run("pypistats recent --help") ]]] -->
 
 ```console
 $ pypistats recent --help
@@ -93,10 +90,7 @@ options:
 
 Get recent downloads:
 
-<!-- [[[cog
-from scripts.run_command import run
-run("pypistats recent pillow")
-]]] -->
+<!-- [[[cog run("pypistats recent pillow") ]]] -->
 
 ```console
 $ pypistats recent pillow
@@ -109,10 +103,7 @@ $ pypistats recent pillow
 
 Help for another subcommand:
 
-<!-- [[[cog
-from scripts.run_command import run
-run("pypistats python_minor --help")
-]]] -->
+<!-- [[[cog run("pypistats python_minor --help") ]]] -->
 
 ```console
 $ pypistats python_minor --help
@@ -156,10 +147,7 @@ options:
 
 Get version downloads:
 
-<!-- [[[cog
-from scripts.run_command import run
-run("pypistats python_minor pillow --last-month")
-]]] -->
+<!-- [[[cog run("pypistats python_minor pillow --last-month") ]]] -->
 
 ```console
 $ pypistats python_minor pillow --last-month
@@ -186,10 +174,7 @@ Date range: 2021-10-01 - 2021-10-31
 
 The table is Markdown, ready for pasting in GitHub issues and PRs:
 
-<!-- [[[cog
-from scripts.run_command import run
-run("pypistats python_minor pillow --last-month", with_console=False)
-]]] -->
+<!-- [[[cog run("pypistats python_minor pillow --last-month", with_console=False) ]]] -->
 
 | category | percent |  downloads |
 | :------- | ------: | ---------: |
