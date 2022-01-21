@@ -64,10 +64,7 @@ options:
 
 Help for a subcommand:
 
-<!-- [[[cog
-from scripts.run_command import run
-run("pypistats recent --help")
-]]] -->
+<!-- [[[cog run("pypistats recent --help") ]]] -->
 
 ```console
 $ pypistats recent --help
@@ -93,26 +90,20 @@ options:
 
 Get recent downloads:
 
-<!-- [[[cog
-from scripts.run_command import run
-run("pypistats recent pillow")
-]]] -->
+<!-- [[[cog run("pypistats recent pillow") ]]] -->
 
 ```console
 $ pypistats recent pillow
-| last_day | last_month | last_week |
-|---------:|-----------:|----------:|
-|  788,486 | 34,452,893 | 8,204,391 |
+|  last_day | last_month | last_week |
+|----------:|-----------:|----------:|
+| 1,311,102 | 30,846,063 | 7,783,107 |
 ```
 
 <!-- [[[end]]] -->
 
 Help for another subcommand:
 
-<!-- [[[cog
-from scripts.run_command import run
-run("pypistats python_minor --help")
-]]] -->
+<!-- [[[cog run("pypistats python_minor --help") ]]] -->
 
 ```console
 $ pypistats python_minor --help
@@ -156,58 +147,54 @@ options:
 
 Get version downloads:
 
-<!-- [[[cog
-from scripts.run_command import run
-run("pypistats python_minor pillow --last-month")
-]]] -->
+<!-- [[[cog run("pypistats python_minor pillow --last-month") ]]] -->
 
 ```console
 $ pypistats python_minor pillow --last-month
 | category | percent |  downloads |
 |:---------|--------:|-----------:|
-| 3.7      |  33.33% | 11,948,221 |
-| 3.8      |  20.54% |  7,361,763 |
-| 3.6      |  17.60% |  6,307,352 |
-| null     |  12.54% |  4,496,338 |
-| 3.9      |  10.24% |  3,671,213 |
-| 3.5      |   2.71% |    971,117 |
-| 2.7      |   2.13% |    764,048 |
-| 3.10     |   0.89% |    319,636 |
-| 3.4      |   0.01% |      5,141 |
-| 3.11     |   0.00% |        585 |
-| 3.3      |   0.00% |        150 |
-| 3.2      |   0.00% |         13 |
-| Total    |         | 35,845,577 |
+| 3.7      |  35.51% | 11,619,678 |
+| 3.8      |  22.03% |  7,207,712 |
+| 3.6      |  16.30% |  5,332,566 |
+| 3.9      |  11.60% |  3,794,862 |
+| null     |   5.57% |  1,822,007 |
+| 3.5      |   5.43% |  1,776,077 |
+| 2.7      |   1.96% |    641,598 |
+| 3.10     |   1.59% |    520,363 |
+| 3.4      |   0.01% |      4,171 |
+| 3.11     |   0.00% |        976 |
+| 3.3      |   0.00% |         54 |
+| 3.2      |   0.00% |          5 |
+| 2.6      |   0.00% |          2 |
+| Total    |         | 32,720,071 |
 
-Date range: 2021-10-01 - 2021-10-31
+Date range: 2021-12-01 - 2021-12-31
 ```
 
 <!-- [[[end]]] -->
 
 The table is Markdown, ready for pasting in GitHub issues and PRs:
 
-<!-- [[[cog
-from scripts.run_command import run
-run("pypistats python_minor pillow --last-month", with_console=False)
-]]] -->
+<!-- [[[cog run("pypistats python_minor pillow --last-month", with_console=False) ]]] -->
 
 | category | percent |  downloads |
 | :------- | ------: | ---------: |
-| 3.7      |  33.33% | 11,948,221 |
-| 3.8      |  20.54% |  7,361,763 |
-| 3.6      |  17.60% |  6,307,352 |
-| null     |  12.54% |  4,496,338 |
-| 3.9      |  10.24% |  3,671,213 |
-| 3.5      |   2.71% |    971,117 |
-| 2.7      |   2.13% |    764,048 |
-| 3.10     |   0.89% |    319,636 |
-| 3.4      |   0.01% |      5,141 |
-| 3.11     |   0.00% |        585 |
-| 3.3      |   0.00% |        150 |
-| 3.2      |   0.00% |         13 |
-| Total    |         | 35,845,577 |
+| 3.7      |  35.51% | 11,619,678 |
+| 3.8      |  22.03% |  7,207,712 |
+| 3.6      |  16.30% |  5,332,566 |
+| 3.9      |  11.60% |  3,794,862 |
+| null     |   5.57% |  1,822,007 |
+| 3.5      |   5.43% |  1,776,077 |
+| 2.7      |   1.96% |    641,598 |
+| 3.10     |   1.59% |    520,363 |
+| 3.4      |   0.01% |      4,171 |
+| 3.11     |   0.00% |        976 |
+| 3.3      |   0.00% |         54 |
+| 3.2      |   0.00% |          5 |
+| 2.6      |   0.00% |          2 |
+| Total    |         | 32,720,071 |
 
-Date range: 2021-10-01 - 2021-10-31
+Date range: 2021-12-01 - 2021-12-31
 
 <!-- [[[end]]] -->
 
