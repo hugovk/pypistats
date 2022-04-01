@@ -4,7 +4,7 @@ httpx==0.22.0
 numpy==1.22.2
 pandas==1.4.1
 platformdirs==2.5.1
-pytablewriter[html]==0.64.1
+pytablewriter[html]==0.64.2
 pytest==7.0.1
 pytest-cov==3.0.0
 python-slugify==6.1.1
