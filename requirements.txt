@@ -3,7 +3,7 @@ freezegun==1.2.1
 httpx==0.22.0
 numpy==1.22.3
 pandas==1.4.2
-platformdirs==2.5.1
+platformdirs==2.5.2
 pytablewriter[html]==0.64.2
 pytest==7.1.1
 pytest-cov==3.0.0
