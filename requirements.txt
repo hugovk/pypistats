@@ -1,6 +1,6 @@
 # Only for testing pinned versions on the CI
 freezegun==1.2.1
-httpx==0.22.0
+httpx==0.23.0
 numpy==1.22.3
 pandas==1.4.2
 platformdirs==2.5.2
