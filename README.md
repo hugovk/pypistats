@@ -69,7 +69,8 @@ Help for a subcommand:
 ```console
 $ pypistats recent --help
 usage: pypistats recent [-h] [-p {day,week,month}]
-                        [-f {html,json,markdown,rst,tsv}] [-j] [-v]
+                        [-f {border,html,json,md,markdown,rich,rst,tsv}] [-j]
+                        [-v]
                         package
 
 Retrieve the aggregate download quantities for the last day/week/month
@@ -80,8 +81,8 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -p {day,week,month}, --period {day,week,month}
-  -f {html,json,markdown,rst,tsv}, --format {html,json,markdown,rst,tsv}
-                        The format of output (default: markdown)
+  -f {border,html,json,md,markdown,rich,rst,tsv}, --format {border,html,json,md,markdown,rich,rst,tsv}
+                        The format of output (default: border)
   -j, --json            Shortcut for "-f json" (default: False)
   -v, --verbose         Print debug messages to stderr (default: False)
 ```
@@ -94,9 +95,11 @@ Get recent downloads:
 
 ```console
 $ pypistats recent pillow
-|  last_day | last_month | last_week |
-|----------:|-----------:|----------:|
-| 1,311,102 | 30,846,063 | 7,783,107 |
+┌───────────┬────────────┬────────────┐
+│  last_day │ last_month │  last_week │
+├───────────┼────────────┼────────────┤
+│ 1,706,880 │ 45,503,494 │ 10,409,358 │
+└───────────┴────────────┴────────────┘
 ```
 
 <!-- [[[end]]] -->
@@ -108,10 +111,10 @@ Help for another subcommand:
 ```console
 $ pypistats python_minor --help
 usage: pypistats python_minor [-h] [-V VERSION]
-                              [-f {html,json,markdown,rst,tsv}] [-j]
-                              [-sd yyyy-mm[-dd]|name] [-ed yyyy-mm[-dd]|name]
-                              [-m yyyy-mm|name] [-l] [-t] [-d] [--monthly]
-                              [-c {yes,no,auto}] [-v]
+                              [-f {border,html,json,md,markdown,rich,rst,tsv}]
+                              [-j] [-sd yyyy-mm[-dd]|name]
+                              [-ed yyyy-mm[-dd]|name] [-m yyyy-mm|name] [-l]
+                              [-t] [-d] [--monthly] [-c {yes,no,auto}] [-v]
                               package
 
 Retrieve the aggregate daily download time series by Python minor version
@@ -124,8 +127,8 @@ options:
   -h, --help            show this help message and exit
   -V VERSION, --version VERSION
                         eg. 2.7 or 3.6 (default: None)
-  -f {html,json,markdown,rst,tsv}, --format {html,json,markdown,rst,tsv}
-                        The format of output (default: markdown)
+  -f {border,html,json,md,markdown,rich,rst,tsv}, --format {border,html,json,md,markdown,rich,rst,tsv}
+                        The format of output (default: border)
   -j, --json            Shortcut for "-f json" (default: False)
   -sd yyyy-mm[-dd]|name, --start-date yyyy-mm[-dd]|name
                         Start date (default: None)
@@ -151,50 +154,52 @@ Get version downloads:
 
 ```console
 $ pypistats python_minor pillow --last-month
-| category | percent |  downloads |
-|:---------|--------:|-----------:|
-| 3.7      |  35.51% | 11,619,678 |
-| 3.8      |  22.03% |  7,207,712 |
-| 3.6      |  16.30% |  5,332,566 |
-| 3.9      |  11.60% |  3,794,862 |
-| null     |   5.57% |  1,822,007 |
-| 3.5      |   5.43% |  1,776,077 |
-| 2.7      |   1.96% |    641,598 |
-| 3.10     |   1.59% |    520,363 |
-| 3.4      |   0.01% |      4,171 |
-| 3.11     |   0.00% |        976 |
-| 3.3      |   0.00% |         54 |
-| 3.2      |   0.00% |          5 |
-| 2.6      |   0.00% |          2 |
-| Total    |         | 32,720,071 |
+┌──────────┬─────────┬────────────┐
+│ category │ percent │  downloads │
+├──────────┼─────────┼────────────┤
+│ 3.7      │  28.97% │ 13,683,717 │
+│ 3.8      │  24.85% │ 11,738,755 │
+│ 3.9      │  16.22% │  7,658,826 │
+│ 3.6      │  14.08% │  6,649,941 │
+│ null     │   8.93% │  4,216,479 │
+│ 3.10     │   4.78% │  2,258,742 │
+│ 2.7      │   1.09% │    515,126 │
+│ 3.5      │   1.07% │    503,174 │
+│ 3.4      │   0.01% │      4,315 │
+│ 3.11     │   0.01% │      3,477 │
+│ 3.3      │   0.00% │         97 │
+│ 3.12     │   0.00% │         17 │
+│ 3.2      │   0.00% │          3 │
+│ Total    │         │ 47,232,669 │
+└──────────┴─────────┴────────────┘
 
-Date range: 2021-12-01 - 2021-12-31
+Date range: 2022-06-01 - 2022-06-30
 ```
 
 <!-- [[[end]]] -->
 
-The table is Markdown, ready for pasting in GitHub issues and PRs:
+You can format in Markdown, ready for pasting in GitHub issues and PRs:
 
-<!-- [[[cog run("pypistats python_minor pillow --last-month", with_console=False) ]]] -->
+<!-- [[[cog run("pypistats python_minor pillow --last-month --format md", with_console=False) ]]] -->
 
 | category | percent |  downloads |
 | :------- | ------: | ---------: |
-| 3.7      |  35.51% | 11,619,678 |
-| 3.8      |  22.03% |  7,207,712 |
-| 3.6      |  16.30% |  5,332,566 |
-| 3.9      |  11.60% |  3,794,862 |
-| null     |   5.57% |  1,822,007 |
-| 3.5      |   5.43% |  1,776,077 |
-| 2.7      |   1.96% |    641,598 |
-| 3.10     |   1.59% |    520,363 |
-| 3.4      |   0.01% |      4,171 |
-| 3.11     |   0.00% |        976 |
-| 3.3      |   0.00% |         54 |
-| 3.2      |   0.00% |          5 |
-| 2.6      |   0.00% |          2 |
-| Total    |         | 32,720,071 |
+| 3.7      |  28.97% | 13,683,717 |
+| 3.8      |  24.85% | 11,738,755 |
+| 3.9      |  16.22% |  7,658,826 |
+| 3.6      |  14.08% |  6,649,941 |
+| null     |   8.93% |  4,216,479 |
+| 3.10     |   4.78% |  2,258,742 |
+| 2.7      |   1.09% |    515,126 |
+| 3.5      |   1.07% |    503,174 |
+| 3.4      |   0.01% |      4,315 |
+| 3.11     |   0.01% |      3,477 |
+| 3.3      |   0.00% |         97 |
+| 3.12     |   0.00% |         17 |
+| 3.2      |   0.00% |          3 |
+| Total    |         | 47,232,669 |
 
-Date range: 2021-12-01 - 2021-12-31
+Date range: 2022-06-01 - 2022-06-30
 
 <!-- [[[end]]] -->
 

@@ -13,6 +13,7 @@ import respx
 import pypistats
 
 from .data.expected_tabulated import (
+    EXPECTED_TABULATED_BORDER,
     EXPECTED_TABULATED_HTML,
     EXPECTED_TABULATED_MD,
     EXPECTED_TABULATED_RST,
@@ -255,6 +256,7 @@ class TestPypiStats:
         "test_input, expected",
         [
             pytest.param("html", EXPECTED_TABULATED_HTML, id="html"),
+            pytest.param("border", EXPECTED_TABULATED_BORDER, id="border"),
             pytest.param("markdown", EXPECTED_TABULATED_MD, id="markdown"),
             pytest.param("rst", EXPECTED_TABULATED_RST, id="rst"),
             pytest.param("tsv", EXPECTED_TABULATED_TSV, id="tsv"),
@@ -521,7 +523,9 @@ Date range: 2020-05-02 - 2020-05-02
 
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
-        output = pypistats.overall(package, mirrors=False, start_date="2020-05-02")
+        output = pypistats.overall(
+            package, mirrors=False, start_date="2020-05-02", format="md"
+        )
 
         # Assert
         assert output.strip() == expected_output.strip()
@@ -544,7 +548,9 @@ Date range: 2020-05-01 - 2020-05-01
 
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
-        output = pypistats.overall(package, mirrors=False, end_date="2020-05-01")
+        output = pypistats.overall(
+            package, mirrors=False, end_date="2020-05-01", format="md"
+        )
 
         # Assert
         assert output.strip() == expected_output.strip()
@@ -654,7 +660,7 @@ Date range: 2020-05-01 - 2020-05-01
 
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
-        output = pypistats.system(package)
+        output = pypistats.system(package, format="md")
 
         # Assert
         assert output.strip() == expected_output.strip()

@@ -108,7 +108,7 @@ Date range: 2018-11-01 - 2018-11-01
         # First time to save to cache
         pypistats.overall(package)
         # Second time to read from cache
-        output = pypistats.overall(package)
+        output = pypistats.overall(package, format="md")
 
         # Assert
         assert output.strip() == expected_output.strip()
