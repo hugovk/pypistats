@@ -5,6 +5,71 @@ requires = [
   "setuptools_scm[toml]>=6.2",
 ]
 
+[project]
+name = "pypistats"
+description = "Python interface to PyPI Stats API https://pypistats.org/api"
+readme = "README.md"
+keywords = [
+  "BigQuery",
+  "downloads",
+  "PyPI",
+  "statistics",
+  "stats",
+]
+license = {text = "MIT"}
+authors = [{name = "Hugo van Kemenade"}]
+requires-python = ">=3.7"
+dependencies = [
+  "httpx>=0.19",
+  'importlib-metadata; python_version < "3.8"',
+  "platformdirs",
+  "prettytable>=2.4",
+  "pytablewriter[html]>=0.63",
+  "python-dateutil",
+  "python-slugify",
+  "termcolor",
+]
+dynamic = [
+  "version",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: Implementation :: CPython",
+]
+[project.optional-dependencies]
+numpy = [
+  "numpy",
+]
+pandas = [
+  "pandas",
+]
+tests = [
+  "freezegun",
+  "pytest",
+  "pytest-cov",
+  "respx>=0.11",
+]
+
+[project.urls]
+Changelog = "https://github.com/hugovk/pypistats/releases"
+Homepage = "https://github.com/hugovk/pypistats"
+Source = "https://github.com/hugovk/pypistats"
+
+[project.scripts]
+pypistats = "pypistats.cli:main"
+
+
 [tool.black]
 target_version = ["py37"]
 
@@ -13,6 +78,16 @@ profile = "black"
 
 [tool.pytest.ini_options]
 addopts = "--color=yes"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+zip-safe = true
+license-files = ["LICENSE.txt"]
+include-package-data = false
+
+[tool.setuptools.packages.find]
+where = ["src"]
+namespaces = false
 
 [tool.setuptools_scm]
 local_scheme = "no-local-version"
