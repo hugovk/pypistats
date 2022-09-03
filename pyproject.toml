@@ -1,9 +1,15 @@
 [build-system]
 build-backend = "setuptools.build_meta"
 requires = [
-  "setuptools>=45",
+  "setuptools>=61.2",
   "setuptools_scm[toml]>=6.2",
 ]
 
 [tool.black]
 target_version = ["py37"]
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = "--color=yes"
