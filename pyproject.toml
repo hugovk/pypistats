@@ -13,3 +13,6 @@ profile = "black"
 
 [tool.pytest.ini_options]
 addopts = "--color=yes"
+
+[tool.setuptools_scm]
+local_scheme = "no-local-version"
