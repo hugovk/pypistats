@@ -19,5 +19,5 @@
 - [ ] Check installation:
 
 ```bash
-pip3 uninstall -y pypistats && pip3 install -U pypistats
+pip3 uninstall -y pypistats && pip3 install -U pypistats && pypistats --version
 ```
