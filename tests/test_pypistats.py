@@ -215,7 +215,7 @@ class TestPypiStats:
         # Act / Assert
         assert pypistats._can_do_colour() is True
 
-    def test__colourify(self) -> None:
+    def test__colourify(self, monkeypatch) -> None:
         # Arrange
         data = [
             {"category": "2.7", "downloads": 1},
@@ -233,6 +233,7 @@ class TestPypiStats:
         ]
         data = pypistats._percent(data)
         data = pypistats._grand_total(data)
+        monkeypatch.setenv("FORCE_COLOR", "1")
 
         # Act
         output = pypistats._colourify(data)
