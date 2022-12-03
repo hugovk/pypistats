@@ -90,7 +90,7 @@ atexit.register(_clear_cache)
 def pypi_stats_api(
     endpoint: str,
     params: str | None = None,
-    format: str = "border",
+    format: str = "pretty",
     start_date: str | None = None,
     end_date: str | None = None,
     sort: bool = True,
@@ -176,7 +176,7 @@ def pypi_stats_api(
 
     if (
         color != "no"
-        and format in ("border", "markdown", "rst", "tsv")
+        and format in ("markdown", "pretty", "rst", "tsv")
         and _can_do_colour()
     ):
         data = _colourify(data)
@@ -370,7 +370,7 @@ def _colourify(data) -> list:
     return data
 
 
-def _tabulate(data: dict | list, format: str = "markdown"):
+def _tabulate(data: dict | list, format_: str = "markdown"):
     """Return data in specified format"""
 
     if isinstance(data, dict):
@@ -382,17 +382,17 @@ def _tabulate(data: dict | list, format: str = "markdown"):
     headers.append("downloads")
     headers.remove("downloads")
 
-    if format in ("border", "markdown"):
-        return _prettytable(headers, data, format)
+    if format_ in ("markdown", "pretty"):
+        return _prettytable(headers, data, format_)
     else:
-        return _pytablewriter(headers, data, format)
+        return _pytablewriter(headers, data, format_)
 
 
-def _prettytable(headers: list[str], data: dict | list, format: str) -> str:
+def _prettytable(headers: list[str], data: dict | list, format_: str) -> str:
     from prettytable import MARKDOWN, SINGLE_BORDER, PrettyTable
 
     x = PrettyTable()
-    if format == "markdown":
+    if format_ == "markdown":
         x.set_style(MARKDOWN)
     else:
         x.set_style(SINGLE_BORDER)
@@ -416,7 +416,7 @@ def _prettytable(headers: list[str], data: dict | list, format: str) -> str:
     return x.get_string() + "\n"
 
 
-def _pytablewriter(headers, data, format: str):
+def _pytablewriter(headers, data, format_: str):
     from pytablewriter import (
         HtmlTableWriter,
         NumpyTableWriter,
@@ -435,8 +435,8 @@ def _pytablewriter(headers, data, format: str):
         "tsv": TsvTableWriter,
     }
 
-    writer = format_writers[format]()
-    if format != "html":
+    writer = format_writers[format_]()
+    if format_ != "html":
         writer.margin = 1
 
     if isinstance(data, dict):
@@ -460,7 +460,7 @@ def _pytablewriter(headers, data, format: str):
             type_hint = None
             if header == "percent":
                 align = Align.RIGHT
-            elif header == "downloads" and (format not in ["numpy", "pandas"]):
+            elif header == "downloads" and (format_ not in ["numpy", "pandas"]):
                 thousand_separator = ","
             elif header == "category":
                 type_hint = String
@@ -471,9 +471,9 @@ def _pytablewriter(headers, data, format: str):
         writer.column_styles = column_styles
         writer.type_hints = type_hints
 
-    if format == "numpy":
+    if format_ == "numpy":
         return writer.tabledata.as_dataframe().values
-    elif format == "pandas":
+    elif format_ == "pandas":
         return writer.tabledata.as_dataframe()
     return writer.dumps()
 
