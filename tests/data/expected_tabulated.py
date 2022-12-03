@@ -62,7 +62,7 @@ EXPECTED_TABULATED_HTML = """
 </table>
         """
 
-EXPECTED_TABULATED_BORDER = """
+EXPECTED_TABULATED_PRETTY = """
 ┌──────────┬────────────┬───────────┐
 │ category │    date    │ downloads │
 ├──────────┼────────────┼───────────┤

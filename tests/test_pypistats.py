@@ -13,9 +13,9 @@ import respx
 import pypistats
 
 from .data.expected_tabulated import (
-    EXPECTED_TABULATED_BORDER,
     EXPECTED_TABULATED_HTML,
     EXPECTED_TABULATED_MD,
+    EXPECTED_TABULATED_PRETTY,
     EXPECTED_TABULATED_RST,
     EXPECTED_TABULATED_TSV,
 )
@@ -257,8 +257,8 @@ class TestPypiStats:
         "test_input, expected",
         [
             pytest.param("html", EXPECTED_TABULATED_HTML, id="html"),
-            pytest.param("border", EXPECTED_TABULATED_BORDER, id="border"),
             pytest.param("markdown", EXPECTED_TABULATED_MD, id="markdown"),
+            pytest.param("pretty", EXPECTED_TABULATED_PRETTY, id="pretty"),
             pytest.param("rst", EXPECTED_TABULATED_RST, id="rst"),
             pytest.param("tsv", EXPECTED_TABULATED_TSV, id="tsv"),
         ],
@@ -268,7 +268,7 @@ class TestPypiStats:
         data = copy.deepcopy(SAMPLE_DATA)
 
         # Act
-        output = pypistats._tabulate(data, format=test_input)
+        output = pypistats._tabulate(data, format_=test_input)
 
         # Assert
         assert output.strip() == expected.strip()
@@ -715,7 +715,7 @@ Date range: 2020-05-01 - 2020-05-01
 """
 
         # Act
-        output = pypistats._tabulate(data, format="markdown")
+        output = pypistats._tabulate(data, format_="markdown")
 
         # Assert
         assert output.strip() == expected_output.strip()

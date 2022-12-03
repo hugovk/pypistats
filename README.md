@@ -69,7 +69,7 @@ Help for a subcommand:
 ```console
 $ pypistats recent --help
 usage: pypistats recent [-h] [-p {day,week,month}]
-                        [-f {border,html,json,md,markdown,rich,rst,tsv}] [-j]
+                        [-f {html,json,pretty,md,markdown,rich,rst,tsv}] [-j]
                         [-v]
                         package
 
@@ -81,8 +81,8 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -p {day,week,month}, --period {day,week,month}
-  -f {border,html,json,md,markdown,rich,rst,tsv}, --format {border,html,json,md,markdown,rich,rst,tsv}
-                        The format of output (default: border)
+  -f {html,json,pretty,md,markdown,rich,rst,tsv}, --format {html,json,pretty,md,markdown,rich,rst,tsv}
+                        The format of output (default: pretty)
   -j, --json            Shortcut for "-f json" (default: False)
   -v, --verbose         Print debug messages to stderr (default: False)
 ```
@@ -98,7 +98,7 @@ $ pypistats recent pillow
 ┌───────────┬────────────┬────────────┐
 │  last_day │ last_month │  last_week │
 ├───────────┼────────────┼────────────┤
-│ 1,706,880 │ 45,503,494 │ 10,409,358 │
+│ 1,740,674 │ 50,722,906 │ 11,471,253 │
 └───────────┴────────────┴────────────┘
 ```
 
@@ -111,7 +111,7 @@ Help for another subcommand:
 ```console
 $ pypistats python_minor --help
 usage: pypistats python_minor [-h] [-V VERSION]
-                              [-f {border,html,json,md,markdown,rich,rst,tsv}]
+                              [-f {html,json,pretty,md,markdown,rich,rst,tsv}]
                               [-j] [-sd yyyy-mm[-dd]|name]
                               [-ed yyyy-mm[-dd]|name] [-m yyyy-mm|name] [-l]
                               [-t] [-d] [--monthly] [-c {yes,no,auto}] [-v]
@@ -127,8 +127,8 @@ options:
   -h, --help            show this help message and exit
   -V VERSION, --version VERSION
                         eg. 2.7 or 3.6 (default: None)
-  -f {border,html,json,md,markdown,rich,rst,tsv}, --format {border,html,json,md,markdown,rich,rst,tsv}
-                        The format of output (default: border)
+  -f {html,json,pretty,md,markdown,rich,rst,tsv}, --format {html,json,pretty,md,markdown,rich,rst,tsv}
+                        The format of output (default: pretty)
   -j, --json            Shortcut for "-f json" (default: False)
   -sd yyyy-mm[-dd]|name, --start-date yyyy-mm[-dd]|name
                         Start date (default: None)
@@ -157,23 +157,24 @@ $ pypistats python_minor pillow --last-month
 ┌──────────┬─────────┬────────────┐
 │ category │ percent │  downloads │
 ├──────────┼─────────┼────────────┤
-│ 3.7      │  28.97% │ 13,683,717 │
-│ 3.8      │  24.85% │ 11,738,755 │
-│ 3.9      │  16.22% │  7,658,826 │
-│ 3.6      │  14.08% │  6,649,941 │
-│ null     │   8.93% │  4,216,479 │
-│ 3.10     │   4.78% │  2,258,742 │
-│ 2.7      │   1.09% │    515,126 │
-│ 3.5      │   1.07% │    503,174 │
-│ 3.4      │   0.01% │      4,315 │
-│ 3.11     │   0.01% │      3,477 │
-│ 3.3      │   0.00% │         97 │
-│ 3.12     │   0.00% │         17 │
-│ 3.2      │   0.00% │          3 │
-│ Total    │         │ 47,232,669 │
+│ 3.7      │  36.58% │ 18,620,128 │
+│ 3.8      │  22.17% │ 11,285,248 │
+│ 3.9      │  13.83% │  7,041,419 │
+│ 3.6      │  10.72% │  5,454,315 │
+│ null     │   7.39% │  3,761,767 │
+│ 3.10     │   6.41% │  3,263,885 │
+│ 3.11     │   1.16% │    589,792 │
+│ 2.7      │   0.89% │    451,041 │
+│ 3.5      │   0.83% │    422,741 │
+│ 3.12     │   0.01% │      3,089 │
+│ 3.4      │   0.00% │      2,483 │
+│ 3.3      │   0.00% │        251 │
+│ 3.2      │   0.00% │         95 │
+│ 2.6      │   0.00% │          1 │
+│ Total    │         │ 50,896,255 │
 └──────────┴─────────┴────────────┘
 
-Date range: 2022-06-01 - 2022-06-30
+Date range: 2022-11-01 - 2022-11-30
 ```
 
 <!-- [[[end]]] -->
@@ -184,22 +185,23 @@ You can format in Markdown, ready for pasting in GitHub issues and PRs:
 
 | category | percent |  downloads |
 | :------- | ------: | ---------: |
-| 3.7      |  28.97% | 13,683,717 |
-| 3.8      |  24.85% | 11,738,755 |
-| 3.9      |  16.22% |  7,658,826 |
-| 3.6      |  14.08% |  6,649,941 |
-| null     |   8.93% |  4,216,479 |
-| 3.10     |   4.78% |  2,258,742 |
-| 2.7      |   1.09% |    515,126 |
-| 3.5      |   1.07% |    503,174 |
-| 3.4      |   0.01% |      4,315 |
-| 3.11     |   0.01% |      3,477 |
-| 3.3      |   0.00% |         97 |
-| 3.12     |   0.00% |         17 |
-| 3.2      |   0.00% |          3 |
-| Total    |         | 47,232,669 |
+| 3.7      |  36.58% | 18,620,128 |
+| 3.8      |  22.17% | 11,285,248 |
+| 3.9      |  13.83% |  7,041,419 |
+| 3.6      |  10.72% |  5,454,315 |
+| null     |   7.39% |  3,761,767 |
+| 3.10     |   6.41% |  3,263,885 |
+| 3.11     |   1.16% |    589,792 |
+| 2.7      |   0.89% |    451,041 |
+| 3.5      |   0.83% |    422,741 |
+| 3.12     |   0.01% |      3,089 |
+| 3.4      |   0.00% |      2,483 |
+| 3.3      |   0.00% |        251 |
+| 3.2      |   0.00% |         95 |
+| 2.6      |   0.00% |          1 |
+| Total    |         | 50,896,255 |
 
-Date range: 2022-06-01 - 2022-06-30
+Date range: 2022-11-01 - 2022-11-30
 
 <!-- [[[end]]] -->
 
