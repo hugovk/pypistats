@@ -118,7 +118,7 @@ def _define_format(args: argparse.Namespace) -> str:
     return args.format
 
 
-FORMATS = ("html", "json", "markdown", "rst", "tsv")
+FORMATS = ("border", "html", "json", "md", "markdown", "rich", "rst", "tsv")
 
 arg_start_date = argument(
     "-sd",
@@ -154,7 +154,7 @@ arg_json = argument("-j", "--json", action="store_true", help='Shortcut for "-f 
 arg_daily = argument("-d", "--daily", action="store_true", help="Show daily downloads")
 arg_monthly = argument("--monthly", action="store_true", help="Show monthly downloads")
 arg_format = argument(
-    "-f", "--format", default="markdown", choices=FORMATS, help="The format of output"
+    "-f", "--format", default="border", choices=FORMATS, help="The format of output"
 )
 arg_color = argument(
     "-c",

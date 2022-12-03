@@ -90,7 +90,7 @@ atexit.register(_clear_cache)
 def pypi_stats_api(
     endpoint: str,
     params: str | None = None,
-    format: str = "markdown",
+    format: str = "border",
     start_date: str | None = None,
     end_date: str | None = None,
     sort: bool = True,
@@ -99,6 +99,8 @@ def pypi_stats_api(
     verbose: bool = False,
 ):
     """Call the API and return JSON"""
+    if format == "md":
+        format = "markdown"
     if params:
         params = "?" + params
     else:
@@ -172,7 +174,11 @@ def pypi_stats_api(
     data = _percent(data)
     data = _grand_total(data)
 
-    if color != "no" and format in ("markdown", "rst", "tsv") and _can_do_colour():
+    if (
+        color != "no"
+        and format in ("border", "markdown", "rst", "tsv")
+        and _can_do_colour()
+    ):
         data = _colourify(data)
 
     output = _tabulate(data, format)
@@ -376,17 +382,20 @@ def _tabulate(data: dict | list, format: str = "markdown"):
     headers.append("downloads")
     headers.remove("downloads")
 
-    if format == "markdown":
-        return _prettytable(headers, data)
+    if format in ("border", "markdown"):
+        return _prettytable(headers, data, format)
     else:
         return _pytablewriter(headers, data, format)
 
 
-def _prettytable(headers, data) -> str:
-    from prettytable import MARKDOWN, PrettyTable
+def _prettytable(headers: list[str], data: dict | list, format: str) -> str:
+    from prettytable import MARKDOWN, SINGLE_BORDER, PrettyTable
 
     x = PrettyTable()
-    x.set_style(MARKDOWN)
+    if format == "markdown":
+        x.set_style(MARKDOWN)
+    else:
+        x.set_style(SINGLE_BORDER)
 
     if isinstance(data, dict):
         data = [data]
