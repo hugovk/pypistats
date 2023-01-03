@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         Python37:
-          python.version: "3.7"
+          python.version: "3.11"
 
     steps:
       - task: UsePythonVersion@0.206.0
