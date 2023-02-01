@@ -7,5 +7,5 @@ platformdirs==2.6.2
 pytablewriter[html]==0.64.2
 pytest==7.2.0
 pytest-cov==4.0.0
-python-slugify==7.0.0
+python-slugify==8.0.0
 respx==0.20.1
