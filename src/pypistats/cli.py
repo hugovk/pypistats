@@ -321,7 +321,6 @@ def main() -> None:
     if args.subcommand is None:
         cli.print_help()
     else:
-
         # Convert yyyy-mm to yyyy-mm-dd
         if hasattr(args, "start_date") and args.start_date:
             try:

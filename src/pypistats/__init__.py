@@ -7,7 +7,6 @@ from __future__ import annotations
 import atexit
 import datetime as dt
 import json
-import os
 import sys
 import warnings
 from pathlib import Path
@@ -20,7 +19,7 @@ try:
     # Python 3.8+
     import importlib.metadata as importlib_metadata
 except ImportError:
-    # Python 3.7 and lower
+    # Python 3.7
     import importlib_metadata
 
 __version__ = importlib_metadata.version(__name__)
@@ -174,14 +173,10 @@ def pypi_stats_api(
     data = _percent(data)
     data = _grand_total(data)
 
-    if (
-        color != "no"
-        and format in ("markdown", "pretty", "rst", "tsv")
-        and _can_do_colour()
-    ):
+    if color != "no" and format in ("markdown", "pretty", "rst", "tsv"):
         data = _colourify(data)
 
-    output = _tabulate(data, format)
+    output = _tabulate(data, format, color)
 
     if first and format not in ["numpy", "pandas"]:
         return f"{output}\nDate range: {first} - {last}\n"
@@ -336,19 +331,6 @@ def _percent(data: dict | list) -> dict | list:
     return data
 
 
-def _can_do_colour() -> bool:
-    """Check https://no-color.org env vars and for dumb terminal"""
-    if "NO_COLOR" in os.environ:
-        return False
-    if "FORCE_COLOR" in os.environ:
-        return True
-    return (
-        hasattr(sys.stdout, "isatty")
-        and sys.stdout.isatty()
-        and os.environ.get("TERM") != "dumb"
-    )
-
-
 def _colourify(data) -> list:
     """Add colour to percentages:
     red: 0% - 5%
@@ -370,7 +352,7 @@ def _colourify(data) -> list:
     return data
 
 
-def _tabulate(data: dict | list, format_: str = "markdown"):
+def _tabulate(data: dict | list, format_: str = "markdown", color: str = "yes") -> str:
     """Return data in specified format"""
 
     if isinstance(data, dict):
@@ -383,25 +365,27 @@ def _tabulate(data: dict | list, format_: str = "markdown"):
     headers.remove("downloads")
 
     if format_ in ("markdown", "pretty"):
-        return _prettytable(headers, data, format_)
+        return _prettytable(headers, data, format_, color)
     else:
         return _pytablewriter(headers, data, format_)
 
 
-def _prettytable(headers: list[str], data: dict | list, format_: str) -> str:
+def _prettytable(
+    headers: list[str], data: dict | list, format_: str, color: str = "yes"
+) -> str:
     from prettytable import MARKDOWN, SINGLE_BORDER, PrettyTable
 
     x = PrettyTable()
-    if format_ == "markdown":
-        x.set_style(MARKDOWN)
-    else:
-        x.set_style(SINGLE_BORDER)
+    x.set_style(MARKDOWN if format_ == "markdown" else SINGLE_BORDER)
 
     if isinstance(data, dict):
         data = [data]
     for header in headers:
         col_data = [row[header] if header in row else "" for row in data]
-        x.add_column(header, col_data)
+        if color != "no" and format_ == "pretty":
+            x.add_column(colored(header, attrs=["bold"]), col_data)
+        else:
+            x.add_column(header, col_data)
         x.align["last_day"] = "r"
         x.align["last_month"] = "r"
         x.align["last_week"] = "r"

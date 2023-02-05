@@ -3,9 +3,7 @@ Unit tests for pypistats
 """
 import copy
 import json
-import os
 from pathlib import Path
-from unittest import mock
 
 import pytest
 import respx
@@ -205,16 +203,6 @@ class TestPypiStats:
 
         # Assert
         assert param == expected
-
-    @mock.patch.dict(os.environ, {"NO_COLOR": "TRUE"})
-    def test__can_do_colour_no_color(self) -> None:
-        # Act / Assert
-        assert pypistats._can_do_colour() is False
-
-    @mock.patch.dict(os.environ, {"FORCE_COLOR": "TRUE"})
-    def test__can_do_colour_force_colour(self) -> None:
-        # Act / Assert
-        assert pypistats._can_do_colour() is True
 
     def test__colourify(self, monkeypatch) -> None:
         # Arrange

@@ -4,8 +4,10 @@ httpx==0.23.3
 numpy==1.24.1
 pandas==1.5.3
 platformdirs==2.6.2
+prettytable==3.6.0
 pytablewriter[html]==0.64.2
 pytest==7.2.1
 pytest-cov==4.0.0
 python-slugify==8.0.0
 respx==0.20.1
+termcolor==2.2.0
