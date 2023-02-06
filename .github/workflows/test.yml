@@ -36,7 +36,6 @@ jobs:
 
       - name: Tox tests (pins)
         if: matrix.python-version == '3.11' && matrix.os == 'ubuntu-latest'
-        shell: bash
         run: |
           tox -e pins
 
