@@ -9,7 +9,6 @@ repos:
     rev: 23.1.0
     hooks:
       - id: black
-        args: [--target-version=py37]
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.12.0
@@ -26,6 +25,7 @@ repos:
     rev: v1.10.0
     hooks:
       - id: python-check-blanket-noqa
+      - id: python-no-log-warn
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
