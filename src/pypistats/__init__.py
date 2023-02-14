@@ -380,22 +380,27 @@ def _prettytable(
 
     if isinstance(data, dict):
         data = [data]
+
+    # Apply bold to header?
+    def h(header: str) -> str:
+        if color != "no" and format_ == "pretty":
+            return colored(header, attrs=["bold"])
+        return header
+
     for header in headers:
         col_data = [row[header] if header in row else "" for row in data]
-        if color != "no" and format_ == "pretty":
-            x.add_column(colored(header, attrs=["bold"]), col_data)
-        else:
-            x.add_column(header, col_data)
-        x.align["last_day"] = "r"
-        x.align["last_month"] = "r"
-        x.align["last_week"] = "r"
-        x.align["category"] = "l"
-        x.align["percent"] = "r"
-        x.align["downloads"] = "r"
-        x.custom_format["last_day"] = lambda f, v: f"{v:,}"
-        x.custom_format["last_month"] = lambda f, v: f"{v:,}"
-        x.custom_format["last_week"] = lambda f, v: f"{v:,}"
-        x.custom_format["downloads"] = lambda f, v: f"{v:,}"
+        x.add_column(h(header), col_data)
+
+    x.align[h("last_day")] = "r"
+    x.align[h("last_month")] = "r"
+    x.align[h("last_week")] = "r"
+    x.align[h("category")] = "l"
+    x.align[h("percent")] = "r"
+    x.align[h("downloads")] = "r"
+    x.custom_format[h("last_day")] = lambda f, v: f"{v:,}"
+    x.custom_format[h("last_month")] = lambda f, v: f"{v:,}"
+    x.custom_format[h("last_week")] = lambda f, v: f"{v:,}"
+    x.custom_format[h("downloads")] = lambda f, v: f"{v:,}"
 
     return x.get_string() + "\n"
 
