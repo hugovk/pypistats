@@ -62,15 +62,12 @@ tests = [
   "pytest-cov",
   "respx>=0.11",
 ]
-
 [project.urls]
 Changelog = "https://github.com/hugovk/pypistats/releases"
 Homepage = "https://github.com/hugovk/pypistats"
 Source = "https://github.com/hugovk/pypistats"
-
 [project.scripts]
 pypistats = "pypistats.cli:main"
-
 
 [tool.hatch]
 version.source = "vcs"
