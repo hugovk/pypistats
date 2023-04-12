@@ -40,9 +40,3 @@ jobs:
           pypistats --help
           pypistats recent --help
         displayName: "Test runs"
-
-      - script: |
-          python -m pip install --upgrade codecov
-          codecov --name "Azure: ${{ parameters.name }} Python $(python.version)" --build $(Build.BuildNumber) --token $(CODECOV_TOKEN)
-        condition: succeeded()
-        displayName: "Upload to Codecov"
