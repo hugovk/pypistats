@@ -42,7 +42,7 @@ def _print_stderr(*args, **kwargs) -> None:
 
 def _cache_filename(url: str) -> Path:
     """yyyy-mm-dd-url-slug.json"""
-    today = dt.datetime.utcnow().strftime("%Y-%m-%d")
+    today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
     slug = slugify(url)
     filename = CACHE_DIR / f"{today}-{slug}.json"
 
@@ -77,7 +77,7 @@ def _save_cache(cache_file: Path, data) -> None:
 def _clear_cache() -> None:
     """Delete old cache files, run as last task"""
     cache_files = CACHE_DIR.glob("**/*.json")
-    this_month = dt.datetime.utcnow().strftime("%Y-%m")
+    this_month = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m")
     for cache_file in cache_files:
         if not cache_file.name.startswith(this_month):
             cache_file.unlink()
