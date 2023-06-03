@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        Python37:
+        Python311:
           python.version: "3.11"
 
     steps:
