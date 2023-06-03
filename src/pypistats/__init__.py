@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import atexit
 import datetime as dt
+import importlib.metadata
 import json
 import sys
 import warnings
@@ -15,14 +16,7 @@ from platformdirs import user_cache_dir
 from slugify import slugify
 from termcolor import colored
 
-try:
-    # Python 3.8+
-    import importlib.metadata as importlib_metadata
-except ImportError:
-    # Python 3.7
-    import importlib_metadata
-
-__version__ = importlib_metadata.version(__name__)
+__version__ = importlib.metadata.version(__name__)
 
 BASE_URL = "https://pypistats.org/api/"
 CACHE_DIR = Path(user_cache_dir("pypistats"))
