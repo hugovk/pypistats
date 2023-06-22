@@ -19,16 +19,6 @@ from .data.expected_tabulated import (
 )
 from .data.python_minor import DATA as PYTHON_MINOR_DATA
 
-try:
-    import numpy
-except ImportError:  # pragma: no cover
-    numpy = None
-try:
-    import pandas
-except ImportError:  # pragma: no cover
-    pandas = None
-
-
 SAMPLE_DATA = [
     {"category": "2.6", "date": "2018-08-15", "downloads": 51},
     {"category": "2.7", "date": "2018-08-15", "downloads": 63749},
@@ -708,10 +698,10 @@ Date range: 2020-05-01 - 2020-05-01
         # Assert
         assert output.strip() == expected_output.strip()
 
-    @pytest.mark.skipif(numpy is None, reason="NumPy is not installed")
     @respx.mock
     def test_format_numpy(self) -> None:
         # Arrange
+        numpy = pytest.importorskip("numpy", reason="NumPy is not installed")
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = SAMPLE_RESPONSE_OVERALL
@@ -729,10 +719,10 @@ Date range: 2020-05-01 - 2020-05-01
         assert isinstance(output, numpy.ndarray)
         assert str(output).strip() == expected_output.strip()
 
-    @pytest.mark.skipif(pandas is None, reason="pandas is not installed")
     @respx.mock
     def test_format_pandas(self) -> None:
         # Arrange
+        pandas = pytest.importorskip("pandas", reason="pandas is not installed")
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = SAMPLE_RESPONSE_OVERALL
