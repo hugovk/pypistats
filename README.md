@@ -69,7 +69,7 @@ Help for a subcommand:
 ```console
 $ pypistats recent --help
 usage: pypistats recent [-h] [-p {day,week,month}]
-                        [-f {html,json,pretty,md,markdown,rich,rst,tsv}] [-j]
+                        [-f {html,json,pretty,md,markdown,rst,tsv}] [-j]
                         [-v]
                         package
 
@@ -81,7 +81,7 @@ positional arguments:
 options:
   -h, --help            show this help message and exit
   -p {day,week,month}, --period {day,week,month}
-  -f {html,json,pretty,md,markdown,rich,rst,tsv}, --format {html,json,pretty,md,markdown,rich,rst,tsv}
+  -f {html,json,pretty,md,markdown,rst,tsv}, --format {html,json,pretty,md,markdown,rst,tsv}
                         The format of output (default: pretty)
   -j, --json            Shortcut for "-f json" (default: False)
   -v, --verbose         Print debug messages to stderr (default: False)
@@ -111,7 +111,7 @@ Help for another subcommand:
 ```console
 $ pypistats python_minor --help
 usage: pypistats python_minor [-h] [-V VERSION]
-                              [-f {html,json,pretty,md,markdown,rich,rst,tsv}]
+                              [-f {html,json,pretty,md,markdown,rst,tsv}]
                               [-j] [-sd yyyy-mm[-dd]|name]
                               [-ed yyyy-mm[-dd]|name] [-m yyyy-mm|name] [-l]
                               [-t] [-d] [--monthly] [-c {yes,no,auto}] [-v]
@@ -127,7 +127,7 @@ options:
   -h, --help            show this help message and exit
   -V VERSION, --version VERSION
                         eg. 2.7 or 3.6 (default: None)
-  -f {html,json,pretty,md,markdown,rich,rst,tsv}, --format {html,json,pretty,md,markdown,rich,rst,tsv}
+  -f {html,json,pretty,md,markdown,rst,tsv}, --format {html,json,pretty,md,markdown,rst,tsv}
                         The format of output (default: pretty)
   -j, --json            Shortcut for "-f json" (default: False)
   -sd yyyy-mm[-dd]|name, --start-date yyyy-mm[-dd]|name
