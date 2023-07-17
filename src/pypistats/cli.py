@@ -118,7 +118,7 @@ def _define_format(args: argparse.Namespace) -> str:
     return args.format
 
 
-FORMATS = ("html", "json", "pretty", "md", "markdown", "rich", "rst", "tsv")
+FORMATS = ("html", "json", "pretty", "md", "markdown", "rst", "tsv")
 
 arg_start_date = argument(
     "-sd",
