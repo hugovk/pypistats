@@ -6,6 +6,8 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import re
+from typing import Any
 
 from dateutil.relativedelta import relativedelta
 
@@ -118,6 +120,25 @@ def _define_format(args: argparse.Namespace) -> str:
     return args.format
 
 
+def _python_major_version(value: Any) -> int | None:
+    pattern = r"^\d+$"  # x format
+    if not re.match(pattern, value):
+        msg = "Invalid major version format. Expected a positive integer value"
+        raise argparse.ArgumentTypeError(msg)
+    return value
+
+
+def _python_minor_version(value: Any) -> int | None:
+    pattern = r"^\d+\.\d+$"  # x.x format
+    if not re.match(pattern, value):
+        msg = (
+            "Invalid minor version format."
+            "Expected a positive float value in x.x pattern"
+        )
+        raise argparse.ArgumentTypeError(msg)
+    return value
+
+
 FORMATS = ("html", "json", "pretty", "md", "markdown", "rst", "tsv")
 
 arg_start_date = argument(
@@ -228,7 +249,7 @@ def overall(args: argparse.Namespace) -> None:  # pragma: no cover
 @subcommand(
     [
         argument("package"),
-        argument("-V", "--version", help="eg. 2 or 3"),
+        argument("-V", "--version", help="eg. 2 or 3", type=_python_major_version),
         *common_arguments,
     ]
 )
@@ -250,7 +271,7 @@ def python_major(args: argparse.Namespace) -> None:  # pragma: no cover
 @subcommand(
     [
         argument("package"),
-        argument("-V", "--version", help="eg. 2.7 or 3.6"),
+        argument("-V", "--version", help="eg. 2.7 or 3.6", type=_python_minor_version),
         *common_arguments,
     ]
 )

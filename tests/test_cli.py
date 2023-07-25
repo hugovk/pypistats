@@ -172,3 +172,29 @@ def test__define_format_format_flag(test_input: str) -> None:
 
     # Assert
     assert test_input == _format
+
+
+@pytest.mark.parametrize("test_input", ["2", "3", "4"])
+def test__python_major_version_valid(test_input: str) -> None:
+    # Act / Assert
+    assert cli._python_major_version(test_input) == test_input
+
+
+@pytest.mark.parametrize("test_input", ["2.7", "3.9", "3.11", "-5", "pillow"])
+def test__python_major_version_invalid(test_input) -> None:
+    # Act / Assert
+    with pytest.raises(argparse.ArgumentTypeError):
+        cli._python_major_version(test_input)
+
+
+@pytest.mark.parametrize("test_input", ["2.7", "3.9", "3.11"])
+def test__python_minor_version_valid(test_input: str) -> None:
+    # Act / Assert
+    assert cli._python_minor_version(test_input) == test_input
+
+
+@pytest.mark.parametrize("test_input", ["2", "3", "4", "-5", "pillow"])
+def test__python_minor_version_invalid(test_input: str) -> None:
+    # Act / Assert
+    with pytest.raises(argparse.ArgumentTypeError):
+        cli._python_minor_version(test_input)
