@@ -2,7 +2,7 @@
 freezegun==1.2.2
 httpx==0.24.1
 numpy==1.25.2
-pandas==2.0.3
+pandas==2.1.0
 platformdirs==3.10.0
 prettytable==3.8.0
 pytablewriter[html]==1.0.0
