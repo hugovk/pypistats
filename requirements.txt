@@ -1,8 +1,8 @@
 # Only for testing pinned versions on the CI
 freezegun==1.2.2
-httpx==0.25.0
-numpy==1.26.1
-pandas==2.1.2
+httpx==0.25.2
+numpy==1.26.2
+pandas==2.1.3
 platformdirs==4.0.0
 prettytable==3.9.0
 pytablewriter[html]==1.2.0
