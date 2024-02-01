@@ -241,9 +241,10 @@ class TestPypiStats:
             pytest.param("tsv", EXPECTED_TABULATED_TSV, id="tsv"),
         ],
     )
-    def test__tabulate(self, test_input: str, expected: str) -> None:
+    def test__tabulate(self, test_input: str, expected: str, monkeypatch) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)
+        monkeypatch.setenv("NO_COLOR", "1")
 
         # Act
         output = pypistats._tabulate(data, format_=test_input)
@@ -485,7 +486,7 @@ class TestPypiStats:
         assert output.strip() == expected_output.strip()
 
     @respx.mock
-    def test_overall_tabular_start_date(self) -> None:
+    def test_overall_tabular_start_date(self, monkeypatch) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
@@ -499,6 +500,7 @@ class TestPypiStats:
 
 Date range: 2020-05-02 - 2020-05-02
 """
+        monkeypatch.setenv("NO_COLOR", "1")
 
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
@@ -510,7 +512,7 @@ Date range: 2020-05-02 - 2020-05-02
         assert output.strip() == expected_output.strip()
 
     @respx.mock
-    def test_overall_tabular_end_date(self) -> None:
+    def test_overall_tabular_end_date(self, monkeypatch) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
@@ -524,6 +526,7 @@ Date range: 2020-05-02 - 2020-05-02
 
 Date range: 2020-05-01 - 2020-05-01
 """
+        monkeypatch.setenv("NO_COLOR", "1")
 
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
@@ -611,7 +614,7 @@ Date range: 2020-05-01 - 2020-05-01
         assert json.loads(output) == json.loads(expected_output)
 
     @respx.mock
-    def test_system_tabular(self) -> None:
+    def test_system_tabular(self, monkeypatch) -> None:
         # Arrange
         package = "pip"
         mocked_url = "https://pypistats.org/api/packages/pip/system"
@@ -636,6 +639,7 @@ Date range: 2020-05-01 - 2020-05-01
 | other    |   0.04% |     111,243 |
 | Total    |         | 284,455,414 |
 """
+        monkeypatch.setenv("NO_COLOR", "1")
 
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
