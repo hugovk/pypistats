@@ -100,7 +100,7 @@ class TestPypiStatsCache:
         }"""
         expected_output = """
 | category        | downloads |
-|:----------------|----------:|
+| :---------------|---------: |
 | without_mirrors | 2,295,765 |
 
 Date range: 2018-11-01 - 2018-11-01
