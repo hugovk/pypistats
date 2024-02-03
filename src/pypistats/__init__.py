@@ -213,7 +213,7 @@ def _sort(data: dict | list) -> dict | list:
 def _monthly_total(data: list) -> list:
     """Sum all downloads per category, by month"""
 
-    totalled = {}
+    totalled: dict = {}
     for row in data:
         category = row["category"]
         downloads = row["downloads"]
@@ -242,7 +242,7 @@ def _total(data: dict | list) -> dict | list:
     if isinstance(data, dict):
         return data
 
-    totalled = {}
+    totalled: dict = {}
     for row in data:
         try:
             totalled[row["category"]] += row["downloads"]
@@ -446,7 +446,7 @@ def _pytablewriter(headers, data, format_: str):
             if header == "percent":
                 align = Align.RIGHT
             elif header == "downloads" and (format_ not in ["numpy", "pandas"]):
-                thousand_separator = ","
+                thousand_separator = ThousandSeparator.COMMA
             elif header == "category":
                 type_hint = String
             style = Style(align=align, thousand_separator=thousand_separator)

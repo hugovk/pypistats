@@ -144,8 +144,9 @@ def test__valid_yyyy_mm_optional_dd_invalid(test_input: str) -> None:
         cli._valid_yyyy_mm_optional_dd(test_input)
 
 
-class __Args:
-    def __init__(self) -> None:
+class __Args(argparse.Namespace):
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
         self.json = False  # type: bool
         self.format = "markdown"  # type: str
 
