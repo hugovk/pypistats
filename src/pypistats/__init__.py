@@ -2,6 +2,7 @@
 Python interface to PyPI Stats API
 https://pypistats.org/api
 """
+
 from __future__ import annotations
 
 import atexit

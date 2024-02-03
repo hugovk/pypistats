@@ -1,6 +1,9 @@
 """
 Unit tests for cli
 """
+
+from __future__ import annotations
+
 import argparse
 
 import pytest

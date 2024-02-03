@@ -2,6 +2,8 @@
 """
 Example use of pypistats
 """
+from __future__ import annotations
+
 import argparse
 from pprint import pprint  # noqa: F401
 

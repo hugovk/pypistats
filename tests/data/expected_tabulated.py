@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 EXPECTED_TABULATED_HTML = """
 <table>
     <thead>
@@ -126,4 +128,4 @@ EXPECTED_TABULATED_TSV = """
 "3.7"\t"2018-08-15"\t6,595
 "3.8"\t"2018-08-15"\t3
 "null"\t"2018-08-15"\t1,019
-"""  # noqa: W291
+"""
