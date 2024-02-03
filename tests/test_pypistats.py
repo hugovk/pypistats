@@ -69,8 +69,8 @@ class TestPypiStats:
         # Stub caching. Caches are tested in another class.
         self.original__cache_filename = pypistats._cache_filename
         self.original__save_cache = pypistats._save_cache
-        pypistats._cache_filename = stub__cache_filename
-        pypistats._save_cache = stub__save_cache
+        pypistats._cache_filename = stub__cache_filename  # type: ignore[assignment]
+        pypistats._save_cache = stub__save_cache  # type: ignore[assignment]
 
     def teardown_method(self) -> None:
         # Unstub caching
@@ -213,12 +213,12 @@ class TestPypiStats:
             {"category": "3.10", "downloads": 89, "percent": "\x1b[32m89.00%\x1b[0m"},
             {"category": "Total", "downloads": 100},
         ]
-        data = pypistats._percent(data)
-        data = pypistats._grand_total(data)
+        percent_data = pypistats._percent(data)
+        total_data = pypistats._grand_total(percent_data)
         monkeypatch.setenv("FORCE_COLOR", "1")
 
         # Act
-        output = pypistats._colourify(data)
+        output = pypistats._colourify(total_data)
 
         # Assert
         assert output == expected_output
