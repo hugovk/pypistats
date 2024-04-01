@@ -6,8 +6,8 @@ pandas==2.2.1
 platformdirs==4.2.0
 prettytable==3.10.0
 pytablewriter[html]==1.2.0
-pytest==8.0.2
+pytest==8.1.1
 pytest-cov==4.1.0
 python-slugify==8.0.4
-respx==0.20.2
+respx==0.21.1
 termcolor==2.4.0
