@@ -1,0 +1,10 @@
+freezegun
+mypy==1.17.1
+platformdirs
+prettytable
+pytablewriter
+pytest
+respx
+termcolor
+types-python-dateutil
+types-python-slugify
