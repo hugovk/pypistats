@@ -751,6 +751,6 @@ Date range: 2020-05-01 - 2020-05-01
     def test__package_not_exist(self) -> None:
         package = "a" * 100
         result = pypistats.python_major(package)
-        
+
         # Assert
         assert result == f"The package '{package}' does not exist"
