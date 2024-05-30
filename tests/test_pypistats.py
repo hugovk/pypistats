@@ -747,3 +747,12 @@ Date range: 2020-05-01 - 2020-05-01
         # Assert
         assert isinstance(output, pandas.DataFrame)
         assert str(output).strip() == expected_output.strip()
+
+    def test__package_not_exist(self) -> None:
+        package = "a" * 100
+        endpoint = f"packages/{package}/recent"
+        params = pypistats._paramify("period", None)
+        result = pypistats.pypi_stats_api(endpoint, params)
+        
+        # Assert
+        assert result is f"The package '{package}' does not exist"
