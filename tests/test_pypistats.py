@@ -750,9 +750,7 @@ Date range: 2020-05-01 - 2020-05-01
 
     def test__package_not_exist(self) -> None:
         package = "a" * 100
-        endpoint = f"packages/{package}/recent"
-        params = pypistats._paramify("period", None)
-        result = pypistats.pypi_stats_api(endpoint, params)
-
+        result = pypistats.python_major(package)
+        
         # Assert
-        assert result is f"The package '{package}' does not exist"
+        assert result == f"The package '{package}' does not exist"
