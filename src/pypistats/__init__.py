@@ -261,7 +261,7 @@ def _date_range(data: dict | list) -> tuple[str | None, str | None]:
     try:
         first = data[0]["date"]
         last = data[0]["date"]
-    except KeyError:
+    except (KeyError, IndexError):
         # /recent has no dates
         return None, None
     for row in data:
