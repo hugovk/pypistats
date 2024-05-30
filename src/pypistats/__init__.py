@@ -123,11 +123,10 @@ def pypi_stats_api(
         res = r.json()
 
         _save_cache(cache_file, res)
-    
+
     if not res.get("data", []):
         return f"The package '{res.get('package', '')}' does not exist"
-        
-    
+
     # Actual first and last dates of the fetched data
     first, last = _date_range(res["data"])
 

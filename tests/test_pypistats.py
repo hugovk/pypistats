@@ -753,6 +753,6 @@ Date range: 2020-05-01 - 2020-05-01
         endpoint = f"packages/{package}/recent"
         params = pypistats._paramify("period", None)
         result = pypistats.pypi_stats_api(endpoint, params)
-        
+
         # Assert
         assert result is f"The package '{package}' does not exist"
