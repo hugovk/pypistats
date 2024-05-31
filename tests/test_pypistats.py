@@ -758,7 +758,7 @@ Date range: 2020-05-01 - 2020-05-01
             "type":"python_major_downloads"
         }}"""
         mocked_url = f"https://pypistats.org/api/packages/{package}/python_major"
-        expected_output = f"The package '{package}' does not exist"
+        expected_output = f"No data for https://pypi.org/project/{package}/"
 
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
