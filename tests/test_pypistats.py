@@ -763,6 +763,6 @@ Date range: 2020-05-01 - 2020-05-01
         # Act
         respx.get(mocked_url).respond(content=mocked_response)
         output = pypistats.python_major(package)
-        
+
         # Assert
-        assert output == expected_output 
+        assert output == expected_output
