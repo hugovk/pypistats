@@ -748,9 +748,21 @@ Date range: 2020-05-01 - 2020-05-01
         assert isinstance(output, pandas.DataFrame)
         assert str(output).strip() == expected_output.strip()
 
-    def test__package_not_exist(self) -> None:
+    @respx.mock
+    def test_package_not_exist(self) -> None:
+        # Arrange
         package = "a" * 100
-        result = pypistats.python_major(package)
+        mocked_response = f"""{{
+            "data":[],
+            "package":"{package}",
+            "type":"python_major_downloads"
+        }}"""
+        mocked_url = f"https://pypistats.org/api/packages/{package}/python_major"
+        expected_output = f"The package '{package}' does not exist"
 
+        # Act
+        respx.get(mocked_url).respond(content=mocked_response)
+        output = pypistats.python_major(package)
+        
         # Assert
-        assert result == f"The package '{package}' does not exist"
+        assert output == expected_output 
