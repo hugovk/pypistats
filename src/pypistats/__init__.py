@@ -126,7 +126,7 @@ def pypi_stats_api(
 
     if not res.get("data", []):
         return f"No data found for https://pypi.org/project/{res.get('package', '')}/"
-    
+
     # Actual first and last dates of the fetched data
     first, last = _date_range(res["data"])
 
