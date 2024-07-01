@@ -109,3 +109,7 @@ filterwarnings = [
   "ignore:sys.monitoring isn't available, using default core:coverage.exceptions.CoverageWarning",
 ]
 testpaths = ["tests"]
+
+
+[tool.pyproject-fmt]
+max_supported_python = "3.13"
