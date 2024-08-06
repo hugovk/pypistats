@@ -14,6 +14,9 @@ on:
 permissions:
   contents: read
 
+env:
+  FORCE_COLOR: 1
+
 jobs:
   # Always build & lint package.
   build-package:

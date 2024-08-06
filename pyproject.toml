@@ -69,6 +69,9 @@ scripts.pypistats = "pypistats.cli:main"
 [tool.hatch]
 version.source = "vcs"
 
+[tool.hatch.build.hooks.vcs]
+version-file = "src/pypistats/_version.py"
+
 [tool.hatch.version.raw-options]
 local_scheme = "no-local-version"
 
@@ -81,19 +84,26 @@ lint.select = [
   "EM",     # flake8-errmsg
   "F",      # pyflakes errors
   "I",      # isort
+  "ICN",    # flake8-import-conventions
   "ISC",    # flake8-implicit-str-concat
   "LOG",    # flake8-logging
   "PGH",    # pygrep-hooks
+  "PYI",    # flake8-pyi
+  "RUF022", # unsorted-dunder-all
   "RUF100", # unused noqa (yesqa)
   "UP",     # pyupgrade
   "W",      # pycodestyle warnings
   "YTT",    # flake8-2020
 ]
-lint.extend-ignore = [
+lint.ignore = [
   "E203", # Whitespace before ':'
   "E221", # Multiple spaces before operator
   "E226", # Missing whitespace around arithmetic operator
   "E241", # Multiple spaces after ','
+]
+lint.flake8-import-conventions.aliases.datetime = "dt"
+lint.flake8-import-conventions.banned-from = [
+  "datetime",
 ]
 lint.isort.known-first-party = [
   "pypistats",
