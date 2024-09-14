@@ -112,4 +112,4 @@ venv.bak/
 dmypy.json
 
 # hatch-vcs
-src/pypistats/_version.py
+src/*/_version.py
