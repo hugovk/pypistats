@@ -10,8 +10,8 @@ jobs:
 
     strategy:
       matrix:
-        Python312:
-          python.version: "3.12"
+        Python313:
+          python.version: "3.13"
 
     steps:
       - task: UsePythonVersion@0.206.0
