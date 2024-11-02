@@ -373,10 +373,12 @@ def _tabulate(data: dict | list, format_: str = "markdown", color: str = "yes") 
 def _prettytable(
     headers: list[str], data: dict | list, format_: str, color: str = "yes"
 ) -> str:
-    from prettytable import MARKDOWN, SINGLE_BORDER, PrettyTable
+    from prettytable import PrettyTable, TableStyle
 
     x = PrettyTable()
-    x.set_style(MARKDOWN if format_ == "markdown" else SINGLE_BORDER)
+    x.set_style(
+        TableStyle.MARKDOWN if format_ == "markdown" else TableStyle.SINGLE_BORDER
+    )
 
     if isinstance(data, dict):
         data = [data]

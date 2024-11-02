@@ -38,7 +38,7 @@ dynamic = [ "version" ]
 dependencies = [
   "httpx>=0.19",
   "platformdirs",
-  "prettytable>=2.4",
+  "prettytable>=3.12",
   "pytablewriter[html]>=0.63",
   "python-dateutil",
   "python-slugify",
