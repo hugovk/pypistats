@@ -1,7 +1,8 @@
 # Only for testing pinned versions on the CI
 freezegun==1.5.1
-httpx==0.28.1
-numpy==2.1.3
+httpx==0.27.2  # Temporarily pin HTTPX pending RESPX compatibility
+numpy==2.1.3; python_version >= "3.10"
+numpy; python_version <= "3.9"
 pandas==2.2.3
 platformdirs==4.3.6
 prettytable==3.12.0

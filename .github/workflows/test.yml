@@ -33,12 +33,14 @@ jobs:
           python -m pip install -U pip
           python -m pip install -U tox
 
-      - name: Tox tests
-        run: |
-          tox -e py
+      # Temporarily pin HTTPX pending RESPX compatibility
+      # - name: Tox tests
+      #  run: |
+      #    tox -e py
 
       - name: Tox tests (pins)
-        if: matrix.python-version == '3.11' && matrix.os == 'ubuntu-latest'
+        # Temporarily pin HTTPX pending RESPX compatibility
+        # if: matrix.python-version == '3.11' && matrix.os == 'ubuntu-latest'
         run: |
           tox -e pins
 
