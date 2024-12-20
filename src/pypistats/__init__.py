@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import atexit
 import datetime as dt
-import importlib.metadata
 import json
 import sys
 import warnings
@@ -18,7 +17,9 @@ from platformdirs import user_cache_dir
 from slugify import slugify
 from termcolor import colored
 
-__version__ = importlib.metadata.version(__name__)
+from . import _version
+
+__version__ = _version.__version__
 
 BASE_URL = "https://pypistats.org/api/"
 CACHE_DIR = Path(user_cache_dir("pypistats"))
@@ -124,6 +125,9 @@ def pypi_stats_api(
         res = r.json()
 
         _save_cache(cache_file, res)
+
+    if not res.get("data", []):
+        return f"No data found for https://pypi.org/project/{res.get('package', '')}/"
 
     # Actual first and last dates of the fetched data
     first, last = _date_range(res["data"])
@@ -370,10 +374,12 @@ def _tabulate(data: dict | list, format_: str = "markdown", color: str = "yes") 
 def _prettytable(
     headers: list[str], data: dict | list, format_: str, color: str = "yes"
 ) -> str:
-    from prettytable import MARKDOWN, SINGLE_BORDER, PrettyTable
+    from prettytable import PrettyTable, TableStyle
 
     x = PrettyTable()
-    x.set_style(MARKDOWN if format_ == "markdown" else SINGLE_BORDER)
+    x.set_style(
+        TableStyle.MARKDOWN if format_ == "markdown" else TableStyle.SINGLE_BORDER
+    )
 
     if isinstance(data, dict):
         data = [data]

@@ -16,9 +16,9 @@ keywords = [
   "statistics",
   "stats",
 ]
-license = {text = "MIT"}
-authors = [{name = "Hugo van Kemenade"}]
-requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [ { name = "Hugo van Kemenade" } ]
+requires-python = ">=3.9"
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
@@ -26,49 +26,47 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dynamic = [
-  "version",
-]
+dynamic = [ "version" ]
 dependencies = [
   "httpx>=0.19",
   "platformdirs",
-  "prettytable>=2.4",
+  "prettytable>=3.12",
   "pytablewriter[html]>=0.63",
   "python-dateutil",
   "python-slugify",
   "termcolor>=2.1",
 ]
-[project.optional-dependencies]
-numpy = [
+optional-dependencies.numpy = [
   "numpy",
 ]
-pandas = [
+optional-dependencies.pandas = [
   "pandas",
 ]
-tests = [
+optional-dependencies.tests = [
   "freezegun",
   "pytest",
   "pytest-cov",
   "respx>=0.11",
 ]
-[project.urls]
-Changelog = "https://github.com/hugovk/pypistats/releases"
-Homepage = "https://github.com/hugovk/pypistats"
-Source = "https://github.com/hugovk/pypistats"
-[project.scripts]
-pypistats = "pypistats.cli:main"
+urls.Changelog = "https://github.com/hugovk/pypistats/releases"
+urls.Homepage = "https://github.com/hugovk/pypistats"
+urls.Source = "https://github.com/hugovk/pypistats"
+scripts.pypistats = "pypistats.cli:main"
 
 [tool.hatch]
 version.source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/pypistats/_version.py"
 
 [tool.hatch.version.raw-options]
 local_scheme = "no-local-version"
@@ -76,31 +74,36 @@ local_scheme = "no-local-version"
 [tool.ruff]
 fix = true
 
-[tool.ruff.lint]
-select = [
-  "C4", # flake8-comprehensions
-  "E", # pycodestyle errors
-  "EM", # flake8-errmsg
-  "F", # pyflakes errors
-  "I", # isort
-  "ISC", # flake8-implicit-str-concat
-  "LOG", # flake8-logging
-  "PGH", # pygrep-hooks
+lint.select = [
+  "C4",     # flake8-comprehensions
+  "E",      # pycodestyle errors
+  "EM",     # flake8-errmsg
+  "F",      # pyflakes errors
+  "I",      # isort
+  "ICN",    # flake8-import-conventions
+  "ISC",    # flake8-implicit-str-concat
+  "LOG",    # flake8-logging
+  "PGH",    # pygrep-hooks
+  "PYI",    # flake8-pyi
+  "RUF022", # unsorted-dunder-all
   "RUF100", # unused noqa (yesqa)
-  "UP", # pyupgrade
-  "W", # pycodestyle warnings
-  "YTT", # flake8-2020
+  "UP",     # pyupgrade
+  "W",      # pycodestyle warnings
+  "YTT",    # flake8-2020
 ]
-extend-ignore = [
+lint.ignore = [
   "E203", # Whitespace before ':'
   "E221", # Multiple spaces before operator
   "E226", # Missing whitespace around arithmetic operator
   "E241", # Multiple spaces after ','
 ]
+lint.flake8-import-conventions.aliases.datetime = "dt"
+lint.flake8-import-conventions.banned-from = [ "datetime" ]
+lint.isort.known-first-party = [ "pypistats" ]
+lint.isort.required-imports = [ "from __future__ import annotations" ]
 
-[tool.ruff.lint.isort]
-known-first-party = ["pypistats"]
-required-imports = ["from __future__ import annotations"]
+[tool.pyproject-fmt]
+max_supported_python = "3.14"
 
 [tool.pytest.ini_options]
 addopts = "--color=yes"
@@ -108,4 +111,4 @@ filterwarnings = [
   # Python <= 3.11
   "ignore:sys.monitoring isn't available, using default core:coverage.exceptions.CoverageWarning",
 ]
-testpaths = ["tests"]
+testpaths = [ "tests" ]

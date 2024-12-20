@@ -2,9 +2,6 @@ name: Test
 
 on: [push, pull_request, workflow_dispatch]
 
-permissions:
-  contents: read
-
 env:
   FORCE_COLOR: 1
   PIP_DISABLE_PIP_VERSION_CHECK: 1
@@ -15,11 +12,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["pypy3.10", "3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["pypy3.10", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]
         os: [windows-latest, macos-latest, ubuntu-latest]
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
@@ -43,10 +42,10 @@ jobs:
           tox -e pins
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v3.1.5
+        uses: codecov/codecov-action@v5.1.2
         with:
           flags: ${{ matrix.os }}
-          name: "${{ matrix.os }} Python ${{ matrix.python-version }}"
+          name: ${{ matrix.os }} Python ${{ matrix.python-version }}
 
   success:
     needs: test
