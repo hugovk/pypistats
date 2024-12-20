@@ -11,6 +11,7 @@ import json
 import sys
 import warnings
 from pathlib import Path
+from typing import Any
 
 from platformdirs import user_cache_dir
 from slugify import slugify
@@ -25,13 +26,13 @@ CACHE_DIR = Path(user_cache_dir("pypistats"))
 USER_AGENT = f"pypistats/{__version__}"
 
 
-def _print_verbose(verbose: bool, *args, **kwargs) -> None:
+def _print_verbose(verbose: bool, *args, **kwargs: Any) -> None:
     """Print if verbose"""
     if verbose:
         _print_stderr(*args, **kwargs)
 
 
-def _print_stderr(*args, **kwargs) -> None:
+def _print_stderr(*args, **kwargs: Any) -> None:
     """Print to stderr"""
     print(*args, file=sys.stderr, **kwargs)
 
@@ -480,14 +481,14 @@ def _paramify(param_name: str, param_value: float | str | None) -> str:
     return ""
 
 
-def recent(package: str, period: str | None = None, **kwargs: str):
+def recent(package: str, period: str | None = None, **kwargs: Any):
     """Retrieve the aggregate download quantities for the last day/week/month"""
     endpoint = f"packages/{package}/recent"
     params = _paramify("period", period)
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def overall(package: str, mirrors: bool | str | None = None, **kwargs: str):
+def overall(package: str, mirrors: bool | str | None = None, **kwargs: Any):
     """Retrieve the aggregate daily download time series with or without mirror
     downloads"""
     endpoint = f"packages/{package}/overall"
@@ -495,7 +496,7 @@ def overall(package: str, mirrors: bool | str | None = None, **kwargs: str):
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def python_major(package: str, version: str | None = None, **kwargs: str):
+def python_major(package: str, version: str | None = None, **kwargs: Any):
     """Retrieve the aggregate daily download time series by Python major version
     number"""
     endpoint = f"packages/{package}/python_major"
@@ -503,7 +504,7 @@ def python_major(package: str, version: str | None = None, **kwargs: str):
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def python_minor(package: str, version: str | None = None, **kwargs) -> str:
+def python_minor(package: str, version: str | None = None, **kwargs: Any) -> str:
     """Retrieve the aggregate daily download time series by Python minor version
     number"""
     endpoint = f"packages/{package}/python_minor"
@@ -511,7 +512,7 @@ def python_minor(package: str, version: str | None = None, **kwargs) -> str:
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def system(package: str, os: str | None = None, **kwargs):
+def system(package: str, os: str | None = None, **kwargs: Any):
     """Retrieve the aggregate daily download time series by operating system"""
     endpoint = f"packages/{package}/system"
     params = _paramify("os", os)
