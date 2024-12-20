@@ -30,7 +30,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install  -e ".[numpy,pandas,tests]"
           python -m pip install --upgrade pytest-azurepipelines
-          python -m pip install "httpx==0.27.2"
         displayName: "Install dependencies"
 
       - script: |
