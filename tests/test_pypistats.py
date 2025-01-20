@@ -749,6 +749,25 @@ Date range: 2020-05-01 - 2020-05-01
         assert str(output).strip() == expected_output.strip()
 
     @respx.mock
+    def test_format_none(self) -> None:
+        # Arrange
+        package = "pip"
+        mocked_url = "https://pypistats.org/api/packages/pip/overall"
+        mocked_response = SAMPLE_RESPONSE_OVERALL
+        expected_output = {
+            "category": "with_mirrors",
+            "downloads": 3587357,
+            "percent": "100.00%",
+        }
+
+        # Act
+        respx.get(mocked_url).respond(content=mocked_response)
+        output = pypistats.overall(package, format=None)
+
+        # Assert
+        assert output[0] == expected_output
+
+    @respx.mock
     def test_package_not_exist(self) -> None:
         # Arrange
         package = "a" * 100
