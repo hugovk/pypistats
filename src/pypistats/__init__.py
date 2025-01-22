@@ -85,7 +85,7 @@ atexit.register(_clear_cache)
 def pypi_stats_api(
     endpoint: str,
     params: str | None = None,
-    format: str = "pretty",
+    format: str | None = "pretty",
     start_date: str | None = None,
     end_date: str | None = None,
     sort: bool = True,
@@ -172,6 +172,9 @@ def pypi_stats_api(
 
     data = _percent(data)
     data = _grand_total(data)
+
+    if format is None:
+        return data
 
     if color != "no" and format in ("markdown", "pretty", "rst", "tsv"):
         data = _colourify(data)
