@@ -40,7 +40,7 @@ jobs:
           uvx --with tox-uv tox -e pins
 
       - name: Upload coverage
-        uses: codecov/codecov-action@v5.1.2
+        uses: codecov/codecov-action@v5
         with:
           flags: ${{ matrix.os }}
           name: ${{ matrix.os }} Python ${{ matrix.python-version }}
