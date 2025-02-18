@@ -484,7 +484,8 @@ def _paramify(param_name: str, param_value: float | str | None) -> str:
 
 
 def recent(package: str, period: str | None = None, **kwargs: str):
-    """Retrieve the aggregate download quantities for the last day/week/month"""
+    """Retrieve the aggregate download quantities for the last 1/7/30 days, 
+    only includes without mirror downloads."""
     endpoint = f"packages/{package}/recent"
     params = _paramify("period", period)
     return pypi_stats_api(endpoint, params, **kwargs)
