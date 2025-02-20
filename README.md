@@ -5,7 +5,7 @@
 [![PyPI downloads](https://img.shields.io/pypi/dm/pypistats.svg)](https://pypistats.org/packages/pypistats)
 [![Azure Pipelines status](https://dev.azure.com/hugovk/hugovk/_apis/build/status/hugovk.pypistats?branchName=main)](https://dev.azure.com/hugovk/hugovk/_build?definitionId=1)
 [![GitHub Actions status](https://github.com/hugovk/pypistats/workflows/Test/badge.svg)](https://github.com/hugovk/pypistats/actions)
-[![codecov](https://codecov.io/gh/hugovk/pypistats/branch/main/graph/badge.svg)](https://codecov.io/gh/hugovk/pypistats)
+[![Codecov](https://codecov.io/gh/hugovk/pypistats/branch/main/graph/badge.svg)](https://codecov.io/gh/hugovk/pypistats)
 [![Licence](https://img.shields.io/github/license/hugovk/pypistats.svg)](LICENSE.txt)
 [![DOI](https://zenodo.org/badge/149862343.svg)](https://zenodo.org/badge/latestdoi/149862343)
 [![Code style: Black](https://img.shields.io/badge/code%20style-Black-000000.svg)](https://github.com/psf/black)

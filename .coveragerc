@@ -4,8 +4,9 @@
 # Regexes for lines to exclude from consideration
 exclude_also =
     # Don't complain if non-runnable code isn't run:
-    if __name__ == .__main__.:
     def main
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
 
 [run]
 omit =

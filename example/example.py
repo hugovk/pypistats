@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
 """
 Example use of pypistats
 """
+
 from __future__ import annotations
 
 import argparse
