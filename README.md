@@ -73,8 +73,8 @@ usage: pypistats recent [-h] [-p {day,week,month}]
                         [-v]
                         package
 
-Retrieve the aggregate download quantities for the last 1/7/30 days, only
-includes without mirror downloads
+Retrieve the aggregate download quantities for the last 1/7/30 days,
+excluding downloads from mirrors
 
 positional arguments:
   package
