@@ -49,8 +49,7 @@ run("pypistats --help")
 
 ```console
 $ pypistats --help
-usage: pypistats [-h] [-V]
-                 {recent,overall,python_major,python_minor,system} ...
+usage: pypistats [-h] [-V] {recent,overall,python_major,python_minor,system} ...
 
 positional arguments:
   {recent,overall,python_major,python_minor,system}
@@ -69,8 +68,7 @@ Help for a subcommand:
 ```console
 $ pypistats recent --help
 usage: pypistats recent [-h] [-p {day,week,month}]
-                        [-f {html,json,pretty,md,markdown,rst,tsv}] [-j]
-                        [-v]
+                        [-f {html,json,pretty,md,markdown,rst,tsv}] [-j] [-v]
                         package
 
 Retrieve the aggregate download quantities for the last day/week/month
@@ -80,8 +78,8 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -p {day,week,month}, --period {day,week,month}
-  -f {html,json,pretty,md,markdown,rst,tsv}, --format {html,json,pretty,md,markdown,rst,tsv}
+  -p, --period {day,week,month}
+  -f, --format {html,json,pretty,md,markdown,rst,tsv}
                         The format of output (default: pretty)
   -j, --json            Shortcut for "-f json" (default: False)
   -v, --verbose         Print debug messages to stderr (default: False)
@@ -111,37 +109,35 @@ Help for another subcommand:
 ```console
 $ pypistats python_minor --help
 usage: pypistats python_minor [-h] [-V VERSION]
-                              [-f {html,json,pretty,md,markdown,rst,tsv}]
-                              [-j] [-sd yyyy-mm[-dd]|name]
-                              [-ed yyyy-mm[-dd]|name] [-m yyyy-mm|name] [-l]
-                              [-t] [-d] [--monthly] [-c {yes,no,auto}] [-v]
+                              [-f {html,json,pretty,md,markdown,rst,tsv}] [-j]
+                              [-sd yyyy-mm[-dd]|name] [-ed yyyy-mm[-dd]|name]
+                              [-m yyyy-mm|name] [-l] [-t] [-d] [--monthly]
+                              [-c {yes,no,auto}] [-v]
                               package
 
-Retrieve the aggregate daily download time series by Python minor version
-number
+Retrieve the aggregate daily download time series by Python minor version number
 
 positional arguments:
   package
 
 options:
   -h, --help            show this help message and exit
-  -V VERSION, --version VERSION
+  -V, --version VERSION
                         eg. 2.7 or 3.6 (default: None)
-  -f {html,json,pretty,md,markdown,rst,tsv}, --format {html,json,pretty,md,markdown,rst,tsv}
+  -f, --format {html,json,pretty,md,markdown,rst,tsv}
                         The format of output (default: pretty)
   -j, --json            Shortcut for "-f json" (default: False)
-  -sd yyyy-mm[-dd]|name, --start-date yyyy-mm[-dd]|name
+  -sd, --start-date yyyy-mm[-dd]|name
                         Start date (default: None)
-  -ed yyyy-mm[-dd]|name, --end-date yyyy-mm[-dd]|name
+  -ed, --end-date yyyy-mm[-dd]|name
                         End date (default: None)
-  -m yyyy-mm|name, --month yyyy-mm|name
-                        Shortcut for -sd & -ed for a single month (default:
-                        None)
+  -m, --month yyyy-mm|name
+                        Shortcut for -sd & -ed for a single month (default: None)
   -l, --last-month      Shortcut for -sd & -ed for last month (default: False)
   -t, --this-month      Shortcut for -sd for this month (default: False)
   -d, --daily           Show daily downloads (default: False)
   --monthly             Show monthly downloads (default: False)
-  -c {yes,no,auto}, --color {yes,no,auto}
+  -c, --color {yes,no,auto}
                         Color terminal output (default: auto)
   -v, --verbose         Print debug messages to stderr (default: False)
 ```
