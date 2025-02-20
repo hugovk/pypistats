@@ -7,11 +7,14 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import re
-from typing import Any
 
 from dateutil.relativedelta import relativedelta
 
 import pypistats
+
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from typing import Any
 
 cli = argparse.ArgumentParser()
 subparsers = cli.add_subparsers(dest="subcommand")
