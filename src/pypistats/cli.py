@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
 """
 CLI with subcommands for pypistats
 """
+
 from __future__ import annotations
 
 import argparse
