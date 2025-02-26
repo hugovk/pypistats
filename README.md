@@ -49,8 +49,7 @@ run("pypistats --help")
 
 ```console
 $ pypistats --help
-usage: pypistats [-h] [-V]
-                 {recent,overall,python_major,python_minor,system} ...
+usage: pypistats [-h] [-V] {recent,overall,python_major,python_minor,system} ...
 
 positional arguments:
   {recent,overall,python_major,python_minor,system}
@@ -69,8 +68,7 @@ Help for a subcommand:
 ```console
 $ pypistats recent --help
 usage: pypistats recent [-h] [-p {day,week,month}]
-                        [-f {html,json,pretty,md,markdown,rst,tsv}] [-j]
-                        [-v]
+                        [-f {html,json,pretty,md,markdown,rst,tsv}] [-j] [-v]
                         package
 
 Retrieve the aggregate download quantities for the last 1/7/30 days,
@@ -81,8 +79,8 @@ positional arguments:
 
 options:
   -h, --help            show this help message and exit
-  -p {day,week,month}, --period {day,week,month}
-  -f {html,json,pretty,md,markdown,rst,tsv}, --format {html,json,pretty,md,markdown,rst,tsv}
+  -p, --period {day,week,month}
+  -f, --format {html,json,pretty,md,markdown,rst,tsv}
                         The format of output (default: pretty)
   -j, --json            Shortcut for "-f json" (default: False)
   -v, --verbose         Print debug messages to stderr (default: False)
@@ -96,11 +94,11 @@ Get recent downloads:
 
 ```console
 $ pypistats recent pillow
-┌───────────┬────────────┬────────────┐
-│  last_day │ last_month │  last_week │
-├───────────┼────────────┼────────────┤
-│ 3,419,597 │ 91,237,125 │ 21,259,217 │
-└───────────┴────────────┴────────────┘
+┌───────────┬─────────────┬────────────┐
+│  last_day │  last_month │  last_week │
+├───────────┼─────────────┼────────────┤
+│ 5,142,717 │ 125,777,276 │ 30,415,118 │
+└───────────┴─────────────┴────────────┘
 ```
 
 <!-- [[[end]]] -->
@@ -112,37 +110,35 @@ Help for another subcommand:
 ```console
 $ pypistats python_minor --help
 usage: pypistats python_minor [-h] [-V VERSION]
-                              [-f {html,json,pretty,md,markdown,rst,tsv}]
-                              [-j] [-sd yyyy-mm[-dd]|name]
-                              [-ed yyyy-mm[-dd]|name] [-m yyyy-mm|name] [-l]
-                              [-t] [-d] [--monthly] [-c {yes,no,auto}] [-v]
+                              [-f {html,json,pretty,md,markdown,rst,tsv}] [-j]
+                              [-sd yyyy-mm[-dd]|name] [-ed yyyy-mm[-dd]|name]
+                              [-m yyyy-mm|name] [-l] [-t] [-d] [--monthly]
+                              [-c {yes,no,auto}] [-v]
                               package
 
-Retrieve the aggregate daily download time series by Python minor version
-number
+Retrieve the aggregate daily download time series by Python minor version number
 
 positional arguments:
   package
 
 options:
   -h, --help            show this help message and exit
-  -V VERSION, --version VERSION
+  -V, --version VERSION
                         eg. 2.7 or 3.6 (default: None)
-  -f {html,json,pretty,md,markdown,rst,tsv}, --format {html,json,pretty,md,markdown,rst,tsv}
+  -f, --format {html,json,pretty,md,markdown,rst,tsv}
                         The format of output (default: pretty)
   -j, --json            Shortcut for "-f json" (default: False)
-  -sd yyyy-mm[-dd]|name, --start-date yyyy-mm[-dd]|name
+  -sd, --start-date yyyy-mm[-dd]|name
                         Start date (default: None)
-  -ed yyyy-mm[-dd]|name, --end-date yyyy-mm[-dd]|name
+  -ed, --end-date yyyy-mm[-dd]|name
                         End date (default: None)
-  -m yyyy-mm|name, --month yyyy-mm|name
-                        Shortcut for -sd & -ed for a single month (default:
-                        None)
+  -m, --month yyyy-mm|name
+                        Shortcut for -sd & -ed for a single month (default: None)
   -l, --last-month      Shortcut for -sd & -ed for last month (default: False)
   -t, --this-month      Shortcut for -sd for this month (default: False)
   -d, --daily           Show daily downloads (default: False)
   --monthly             Show monthly downloads (default: False)
-  -c {yes,no,auto}, --color {yes,no,auto}
+  -c, --color {yes,no,auto}
                         Color terminal output (default: auto)
   -v, --verbose         Print debug messages to stderr (default: False)
 ```
@@ -155,28 +151,30 @@ Get version downloads:
 
 ```console
 $ pypistats python_minor pillow --last-month
-┌──────────┬─────────┬────────────┐
-│ category │ percent │  downloads │
-├──────────┼─────────┼────────────┤
-│ 3.8      │  18.37% │ 16,161,117 │
-│ 3.10     │  17.47% │ 15,373,666 │
-│ 3.7      │  16.70% │ 14,691,371 │
-│ 3.11     │  15.49% │ 13,630,259 │
-│ 3.9      │  13.19% │ 11,605,389 │
-│ 3.6      │   9.68% │  8,519,789 │
-│ null     │   4.64% │  4,085,994 │
-│ 3.12     │   3.26% │  2,871,386 │
-│ 2.7      │   0.95% │    837,638 │
-│ 3.5      │   0.25% │    216,308 │
-│ 3.13     │   0.00% │      2,830 │
-│ 3.4      │   0.00% │      1,237 │
-│ 3.3      │   0.00% │        109 │
-│ 3.1      │   0.00% │          3 │
-│ 3.2      │   0.00% │          2 │
-│ Total    │         │ 87,997,098 │
-└──────────┴─────────┴────────────┘
+┌──────────┬─────────┬─────────────┐
+│ category │ percent │   downloads │
+├──────────┼─────────┼─────────────┤
+│ 3.10     │  19.31% │  24,065,642 │
+│ 3.11     │  17.45% │  21,749,566 │
+│ 3.12     │  15.68% │  19,541,358 │
+│ 3.9      │  13.93% │  17,370,148 │
+│ 3.7      │  12.86% │  16,034,418 │
+│ 3.8      │   9.69% │  12,077,524 │
+│ null     │   5.89% │   7,341,287 │
+│ 3.13     │   2.99% │   3,728,426 │
+│ 3.6      │   1.81% │   2,255,947 │
+│ 2.7      │   0.38% │     468,671 │
+│ 3.5      │   0.01% │      15,575 │
+│ 3.14     │   0.00% │       5,804 │
+│ 3.4      │   0.00% │         907 │
+│ 3.1      │   0.00% │          37 │
+│ 3.3      │   0.00% │          16 │
+│ 3.2      │   0.00% │           6 │
+│ 3.99     │   0.00% │           1 │
+│ Total    │         │ 124,655,333 │
+└──────────┴─────────┴─────────────┘
 
-Date range: 2024-02-01 - 2024-02-29
+Date range: 2025-01-01 - 2025-01-31
 ```
 
 <!-- [[[end]]] -->
@@ -185,26 +183,28 @@ You can format in Markdown, ready for pasting in GitHub issues and PRs:
 
 <!-- [[[cog run("pypistats python_minor pillow --last-month --format md", with_console=False) ]]] -->
 
-| category | percent |  downloads |
-| :------- | ------: | ---------: |
-| 3.8      |  18.37% | 16,161,117 |
-| 3.10     |  17.47% | 15,373,666 |
-| 3.7      |  16.70% | 14,691,371 |
-| 3.11     |  15.49% | 13,630,259 |
-| 3.9      |  13.19% | 11,605,389 |
-| 3.6      |   9.68% |  8,519,789 |
-| null     |   4.64% |  4,085,994 |
-| 3.12     |   3.26% |  2,871,386 |
-| 2.7      |   0.95% |    837,638 |
-| 3.5      |   0.25% |    216,308 |
-| 3.13     |   0.00% |      2,830 |
-| 3.4      |   0.00% |      1,237 |
-| 3.3      |   0.00% |        109 |
-| 3.1      |   0.00% |          3 |
-| 3.2      |   0.00% |          2 |
-| Total    |         | 87,997,098 |
+| category | percent |   downloads |
+| :------- | ------: | ----------: |
+| 3.10     |  19.31% |  24,065,642 |
+| 3.11     |  17.45% |  21,749,566 |
+| 3.12     |  15.68% |  19,541,358 |
+| 3.9      |  13.93% |  17,370,148 |
+| 3.7      |  12.86% |  16,034,418 |
+| 3.8      |   9.69% |  12,077,524 |
+| null     |   5.89% |   7,341,287 |
+| 3.13     |   2.99% |   3,728,426 |
+| 3.6      |   1.81% |   2,255,947 |
+| 2.7      |   0.38% |     468,671 |
+| 3.5      |   0.01% |      15,575 |
+| 3.14     |   0.00% |       5,804 |
+| 3.4      |   0.00% |         907 |
+| 3.1      |   0.00% |          37 |
+| 3.3      |   0.00% |          16 |
+| 3.2      |   0.00% |           6 |
+| 3.99     |   0.00% |           1 |
+| Total    |         | 124,655,333 |
 
-Date range: 2024-02-01 - 2024-02-29
+Date range: 2025-01-01 - 2025-01-31
 
 <!-- [[[end]]] -->
 
