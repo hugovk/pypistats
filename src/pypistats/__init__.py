@@ -161,6 +161,8 @@ def pypi_stats_api(
         res["data"] = _monthly_total(res["data"])
     elif total == "all":
         res["data"] = _total(res["data"])
+    elif total is not None:
+        raise ValueError(f"invalid value {total} provided for total: use 'all' or 'monthly'")
 
     if format == "json":
         return json.dumps(res)
@@ -287,9 +289,13 @@ def _grand_total_value(data: list) -> int:
     # For "overall", without_mirrors is a subset of with_mirrors.
     # Only sum with_mirrors.
     if data[0]["category"] in ["with_mirrors", "without_mirrors"]:
-        grand_total = sum(
+        count_with_mirrors = sum(
             row["downloads"] for row in data if row["category"] == "with_mirrors"
         )
+        count_without_mirrors = sum(
+            row["downloads"] for row in data if row["category"] == "without_mirrors"
+        )
+        grand_total = max(count_with_mirrors, count_without_mirrors)
     else:
         grand_total = sum(row["downloads"] for row in data)
 
@@ -329,7 +335,7 @@ def _percent(data: dict | list) -> dict | list:
     grand_total = _grand_total_value(data)
 
     for row in data:
-        row["percent"] = "{:.2%}".format(row["downloads"] / grand_total)
+        row["percent"] = "N/A" if grand_total == 0 else "{:.2%}".format(row["downloads"] / grand_total)
 
     return data
 
