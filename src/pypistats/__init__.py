@@ -162,7 +162,9 @@ def pypi_stats_api(
     elif total == "all":
         res["data"] = _total(res["data"])
     elif total is not None:
-        raise ValueError(f"invalid value {total} provided for total: use 'all' or 'monthly'")
+        raise ValueError(
+            f"invalid value {total} provided for total: use 'all' or 'monthly'"
+        )
 
     if format == "json":
         return json.dumps(res)
@@ -335,7 +337,11 @@ def _percent(data: dict | list) -> dict | list:
     grand_total = _grand_total_value(data)
 
     for row in data:
-        row["percent"] = "N/A" if grand_total == 0 else "{:.2%}".format(row["downloads"] / grand_total)
+        row["percent"] = (
+            "N/A"
+            if grand_total == 0
+            else "{:.2%}".format(row["downloads"] / grand_total)
+        )
 
     return data
 
