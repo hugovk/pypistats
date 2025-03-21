@@ -408,11 +408,11 @@ class TestPypiStats:
         assert pypistats._grand_total_value(data1) == 100
 
         # Non-mirror data should be summed normally
-        data3 = [
+        data2 = [
             {"category": "3.7", "downloads": 100},
             {"category": "3.8", "downloads": 200},
         ]
-        assert pypistats._grand_total_value(data3) == 300
+        assert pypistats._grand_total_value(data2) == 300
 
     def test__percent(self) -> None:
         # Arrange
