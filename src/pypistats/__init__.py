@@ -162,9 +162,8 @@ def pypi_stats_api(
     elif total == "all":
         res["data"] = _total(res["data"])
     elif total is not None:
-        raise ValueError(
-            f"invalid value {total} provided for total: use 'all' or 'monthly'"
-        )
+    msg = f"invalid value {total} provided for total: use 'all' or 'monthly'"
+        raise ValueError(msg)
 
     if format == "json":
         return json.dumps(res)
