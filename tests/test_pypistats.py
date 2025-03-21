@@ -319,7 +319,7 @@ class TestPypiStats:
 
     def test__validate_total(self) -> None:
         """Test the _validate_total method with valid and invalid inputs."""
-        valid_values = ["daily", "monthly", "all"]
+        valid_values = ("daily", "monthly", "all")
         for value in valid_values:
             pypistats._validate_total(value)
     
