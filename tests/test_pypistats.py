@@ -322,7 +322,7 @@ class TestPypiStats:
         valid_values = ["daily", "monthly", "all"]
         for value in valid_values:
             pypistats._validate_total(value)
-    
+
         with pytest.raises(ValueError, match="total must be one of"):
             pypistats._validate_total("weekly")
 
@@ -403,14 +403,14 @@ class TestPypiStats:
         # Use only max when both with_mirrors and without_mirrors are present
         data1 = [
             {"category": "with_mirrors", "downloads": 100},
-            {"category": "without_mirrors", "downloads": 80}
+            {"category": "without_mirrors", "downloads": 80},
         ]
         assert pypistats._grand_total_value(data1) == 100
 
         # Non-mirror data should be summed normally
         data3 = [
             {"category": "3.7", "downloads": 100},
-            {"category": "3.8", "downloads": 200}
+            {"category": "3.8", "downloads": 200},
         ]
         assert pypistats._grand_total_value(data3) == 300
 
