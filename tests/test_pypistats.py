@@ -317,6 +317,15 @@ class TestPypiStats:
         assert output[0]["category"] == "2.4"
         assert output[0]["downloads"] == 9
 
+    def test__validate_total(self) -> None:
+        """Test the _validate_total method with valid and invalid inputs."""
+        valid_values = ("daily", "monthly", "all")
+        for value in valid_values:
+            pypistats._validate_total(value)
+
+        with pytest.raises(ValueError, match="total must be one of"):
+            pypistats._validate_total("weekly")
+
     def test__total_recent(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA_RECENT)
@@ -388,6 +397,22 @@ class TestPypiStats:
 
         # Assert
         assert output == SAMPLE_DATA_RECENT
+
+    def test__grand_total_value_mirrors(self) -> None:
+        """Test the _grand_total_value logic for with_mirrors/without_mirrors."""
+        # Use only max when both with_mirrors and without_mirrors are present
+        data1 = [
+            {"category": "with_mirrors", "downloads": 100},
+            {"category": "without_mirrors", "downloads": 80},
+        ]
+        assert pypistats._grand_total_value(data1) == 100
+
+        # Non-mirror data should be summed normally
+        data2 = [
+            {"category": "3.7", "downloads": 100},
+            {"category": "3.8", "downloads": 200},
+        ]
+        assert pypistats._grand_total_value(data2) == 300
 
     def test__percent(self) -> None:
         # Arrange

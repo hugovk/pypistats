@@ -82,6 +82,13 @@ def _clear_cache() -> None:
 atexit.register(_clear_cache)
 
 
+def _validate_total(total: str) -> None:
+    supported_granularities = ("daily", "monthly", "all")
+    if total not in supported_granularities:
+        msg = f"total must be one of {supported_granularities}"
+        raise ValueError(msg)
+
+
 def pypi_stats_api(
     endpoint: str,
     params: str | None = None,
@@ -94,6 +101,7 @@ def pypi_stats_api(
     verbose: bool = False,
 ):
     """Call the API and return JSON"""
+    _validate_total(total)
     if format == "md":
         format = "markdown"
     if params:
@@ -287,9 +295,13 @@ def _grand_total_value(data: list) -> int:
     # For "overall", without_mirrors is a subset of with_mirrors.
     # Only sum with_mirrors.
     if data[0]["category"] in ["with_mirrors", "without_mirrors"]:
-        grand_total = sum(
+        count_with_mirrors = sum(
             row["downloads"] for row in data if row["category"] == "with_mirrors"
         )
+        count_without_mirrors = sum(
+            row["downloads"] for row in data if row["category"] == "without_mirrors"
+        )
+        grand_total = max(count_with_mirrors, count_without_mirrors)
     else:
         grand_total = sum(row["downloads"] for row in data)
 
