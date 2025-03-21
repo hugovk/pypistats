@@ -82,6 +82,13 @@ def _clear_cache() -> None:
 atexit.register(_clear_cache)
 
 
+def _validate_total(total: str) -> None:
+    supported_granularities = ["daily", "monthly", "all"]
+    if total not in supported_granularities:
+        msg = f"total must be one of {supported_granularities}"
+        raise ValueError(msg)
+
+
 def pypi_stats_api(
     endpoint: str,
     params: str | None = None,
@@ -94,6 +101,7 @@ def pypi_stats_api(
     verbose: bool = False,
 ):
     """Call the API and return JSON"""
+    _validate_total(total)
     if format == "md":
         format = "markdown"
     if params:
@@ -161,9 +169,6 @@ def pypi_stats_api(
         res["data"] = _monthly_total(res["data"])
     elif total == "all":
         res["data"] = _total(res["data"])
-    elif total is not None:
-    msg = f"invalid value {total} provided for total: use 'all' or 'monthly'"
-        raise ValueError(msg)
 
     if format == "json":
         return json.dumps(res)
