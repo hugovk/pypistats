@@ -11,13 +11,16 @@ import json
 import sys
 import warnings
 from pathlib import Path
-from typing import Any
 
 from platformdirs import user_cache_dir
 from slugify import slugify
 from termcolor import colored
 
 from . import _version
+
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from typing import Any
 
 __version__ = _version.__version__
 
@@ -141,22 +144,26 @@ def pypi_stats_api(
     first, last = _date_range(res["data"])
 
     # Validate end date
-    if end_date and end_date < first:
-        msg = (
-            f"Requested end date ({end_date}) is before earliest available "
-            f"data ({first}), because data is only available for 180 days. "
-            "See https://pypistats.org/about#data"
-        )
-        raise ValueError(msg)
+    if end_date:
+        assert first is not None
+        if end_date < first:
+            msg = (
+                f"Requested end date ({end_date}) is before earliest available "
+                f"data ({first}), because data is only available for 180 days. "
+                "See https://pypistats.org/about#data"
+            )
+            raise ValueError(msg)
 
     # Validate start date
-    if start_date and start_date < first:
-        warnings.warn(
-            f"Requested start date ({start_date}) is before earliest available "
-            f"data ({first}), because data is only available for 180 days. "
-            "See https://pypistats.org/about#data",
-            stacklevel=3,
-        )
+    if start_date:
+        assert first is not None
+        if start_date < first:
+            warnings.warn(
+                f"Requested start date ({start_date}) is before earliest available "
+                f"data ({first}), because data is only available for 180 days. "
+                "See https://pypistats.org/about#data",
+                stacklevel=3,
+            )
 
     if start_date or end_date:
         res["data"] = _filter(res["data"], start_date, end_date)
@@ -442,7 +449,7 @@ def _pytablewriter(headers, data, format_: str):
         "tsv": TsvTableWriter,
     }
 
-    writer = format_writers[format_]()
+    writer = format_writers[format_]()  # type: ignore[abstract]
     if format_ != "html":
         writer.margin = 1
 
@@ -456,7 +463,7 @@ def _pytablewriter(headers, data, format_: str):
     # Custom alignment and format
     if headers[0] in ["last_day", "last_month", "last_week"]:
         # Special case for 'recent'
-        writer.column_styles = len(headers) * [Style(thousand_separator=",")]
+        writer.column_styles = len(headers) * [Style(thousand_separator=",")]  # type: ignore[assignment]
     else:
         column_styles = []
         type_hints = []
@@ -475,8 +482,8 @@ def _pytablewriter(headers, data, format_: str):
             column_styles.append(style)
             type_hints.append(type_hint)
 
-        writer.column_styles = column_styles
-        writer.type_hints = type_hints
+        writer.column_styles = column_styles  # type: ignore[assignment]
+        writer.type_hints = type_hints  # type: ignore[assignment]
 
     if format_ == "numpy":
         return writer.tabledata.as_dataframe().values
