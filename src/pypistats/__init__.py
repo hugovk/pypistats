@@ -83,7 +83,7 @@ atexit.register(_clear_cache)
 
 
 def _validate_total(total: str) -> None:
-    supported_granularities = ["daily", "monthly", "all"]
+    supported_granularities = ("daily", "monthly", "all")
     if total not in supported_granularities:
         msg = f"total must be one of {supported_granularities}"
         raise ValueError(msg)
