@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pytest
 import respx
+from termcolor import termcolor
 
 import pypistats
 
@@ -76,6 +77,11 @@ class TestPypiStats:
         # Unstub caching
         pypistats._cache_filename = self.original__cache_filename
         pypistats._save_cache = self.original__save_cache
+        try:
+            # termcolor 3.1+
+            termcolor._can_do_colour.cache_clear()
+        except AttributeError:
+            pass
 
     def test__filter_no_filters_no_change(self) -> None:
         # Arrange
