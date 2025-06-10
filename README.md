@@ -281,7 +281,7 @@ Return data in a NumPy array for further processing:
 
 ```python
 import pypistats
-numpy_array = pypistats.overall("pyvista", total=True, format="numpy")
+numpy_array = pypistats.overall("pyvista", total="daily", format="numpy")
 print(type(numpy_array))
 # <class 'numpy.ndarray'>
 print(numpy_array)
@@ -298,7 +298,7 @@ Or in a pandas DataFrame:
 
 ```python
 import pypistats
-pandas_dataframe = pypistats.overall("pyvista", total=True, format="pandas")
+pandas_dataframe = pypistats.overall("pyvista", total="daily", format="pandas")
 print(type(pandas_dataframe))
 # <class 'pandas.core.frame.DataFrame'>
 print(pandas_dataframe)
@@ -323,7 +323,7 @@ For example, create charts with pandas:
 ```python
 # Show overall downloads over time, excluding mirrors
 import pypistats
-data = pypistats.overall("pillow", total=True, format="pandas")
+data = pypistats.overall("pillow", total="daily", format="pandas")
 data = data.groupby("category").get_group("without_mirrors").sort_values("date")
 
 chart = data.plot(x="date", y="downloads", figsize=(10, 2))
@@ -336,7 +336,7 @@ chart.figure.savefig("overall.png")  # alternatively
 ```python
 # Show Python 3 downloads over time
 import pypistats
-data = pypistats.python_major("pillow", total=True, format="pandas")
+data = pypistats.python_major("pillow", total="daily", format="pandas")
 data = data.groupby("category").get_group(3).sort_values("date")
 
 chart = data.plot(x="date", y="downloads", figsize=(10, 2))
