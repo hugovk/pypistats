@@ -281,41 +281,41 @@ Return data in a NumPy array for further processing:
 
 ```python
 import pypistats
-numpy_array = pypistats.overall("pyvista", total=True, format="numpy")
+numpy_array = pypistats.overall("pyvista", total="daily", format="numpy")
 print(type(numpy_array))
 # <class 'numpy.ndarray'>
 print(numpy_array)
-# [['with_mirrors' '2019-09-20' '2.23%' 1204]
-#  ['without_mirrors' '2019-09-20' '2.08%' 1122]
-#  ['with_mirrors' '2019-09-19' '0.92%' 496]
-#  ...
-#  ['with_mirrors' '2019-10-26' '0.02%' 13]
-#  ['without_mirrors' '2019-10-26' '0.02%' 12]
-#  ['Total' None None 54041]]
+#[['with_mirrors' '2025-04-09' '1.40%' 40033]
+# ['without_mirrors' '2025-04-09' '1.39%' 39906]
+# ['with_mirrors' '2025-04-07' '1.36%' 39014]
+# ...
+# ['with_mirrors' '2025-01-18' '0.17%' 4827]
+# ['without_mirrors' '2025-01-18' '0.17%' 4795]
+# ['Total' None None 2869617]]
 ```
 
 Or in a pandas DataFrame:
 
 ```python
 import pypistats
-pandas_dataframe = pypistats.overall("pyvista", total=True, format="pandas")
+pandas_dataframe = pypistats.overall("pyvista", total="daily", format="pandas")
 print(type(pandas_dataframe))
 # <class 'pandas.core.frame.DataFrame'>
 print(pandas_dataframe)
 #             category        date percent  downloads
-# 0       with_mirrors  2019-09-20   2.23%       1204
-# 1    without_mirrors  2019-09-20   2.08%       1122
-# 2       with_mirrors  2019-09-19   0.92%        496
-# 3       with_mirrors  2019-08-22   0.90%        489
-# 4    without_mirrors  2019-09-19   0.86%        466
+# 0       with_mirrors  2025-04-09   1.40%      40033
+# 1    without_mirrors  2025-04-09   1.39%      39906
+# 2       with_mirrors  2025-04-07   1.36%      39014
+# 3    without_mirrors  2025-04-07   1.35%      38837
+# 4       with_mirrors  2025-04-06   1.08%      30988
 # ..               ...         ...     ...        ...
-# 354  without_mirrors  2019-11-03   0.03%         15
-# 355  without_mirrors  2019-11-16   0.03%         15
-# 356     with_mirrors  2019-10-26   0.02%         13
-# 357  without_mirrors  2019-10-26   0.02%         12
-# 358            Total        None    None      54041
+# 358     with_mirrors  2024-12-28   0.17%       5011
+# 359  without_mirrors  2024-12-28   0.17%       4987
+# 360     with_mirrors  2025-01-18   0.17%       4827
+# 361  without_mirrors  2025-01-18   0.17%       4795
+# 362            Total        None    None    2869617
 #
-# [359 rows x 4 columns]
+# [363 rows x 4 columns]
 ```
 
 For example, create charts with pandas:
@@ -323,7 +323,7 @@ For example, create charts with pandas:
 ```python
 # Show overall downloads over time, excluding mirrors
 import pypistats
-data = pypistats.overall("pillow", total=True, format="pandas")
+data = pypistats.overall("pillow", total="daily", format="pandas")
 data = data.groupby("category").get_group("without_mirrors").sort_values("date")
 
 chart = data.plot(x="date", y="downloads", figsize=(10, 2))
@@ -336,7 +336,7 @@ chart.figure.savefig("overall.png")  # alternatively
 ```python
 # Show Python 3 downloads over time
 import pypistats
-data = pypistats.python_major("pillow", total=True, format="pandas")
+data = pypistats.python_major("pillow", total="daily", format="pandas")
 data = data.groupby("category").get_group(3).sort_values("date")
 
 chart = data.plot(x="date", y="downloads", figsize=(10, 2))
