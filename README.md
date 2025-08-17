@@ -75,7 +75,7 @@ Retrieve the aggregate download quantities for the last 1/7/30 days,
 excluding downloads from mirrors
 
 positional arguments:
-  package
+  package               package name, or dir to check pyproject.toml/setup.cfg (default: .)
 
 options:
   -h, --help            show this help message and exit
@@ -97,7 +97,7 @@ $ pypistats recent pillow
 ┌───────────┬─────────────┬────────────┐
 │  last_day │  last_month │  last_week │
 ├───────────┼─────────────┼────────────┤
-│ 5,142,717 │ 125,777,276 │ 30,415,118 │
+│ 7,099,431 │ 184,980,272 │ 43,134,813 │
 └───────────┴─────────────┴────────────┘
 ```
 
@@ -119,7 +119,7 @@ usage: pypistats python_minor [-h] [-V VERSION]
 Retrieve the aggregate daily download time series by Python minor version number
 
 positional arguments:
-  package
+  package               package name, or dir to check pyproject.toml/setup.cfg (default: .)
 
 options:
   -h, --help            show this help message and exit
@@ -154,27 +154,27 @@ $ pypistats python_minor pillow --last-month
 ┌──────────┬─────────┬─────────────┐
 │ category │ percent │   downloads │
 ├──────────┼─────────┼─────────────┤
-│ 3.10     │  19.31% │  24,065,642 │
-│ 3.11     │  17.45% │  21,749,566 │
-│ 3.12     │  15.68% │  19,541,358 │
-│ 3.9      │  13.93% │  17,370,148 │
-│ 3.7      │  12.86% │  16,034,418 │
-│ 3.8      │   9.69% │  12,077,524 │
-│ null     │   5.89% │   7,341,287 │
-│ 3.13     │   2.99% │   3,728,426 │
-│ 3.6      │   1.81% │   2,255,947 │
-│ 2.7      │   0.38% │     468,671 │
-│ 3.5      │   0.01% │      15,575 │
-│ 3.14     │   0.00% │       5,804 │
-│ 3.4      │   0.00% │         907 │
-│ 3.1      │   0.00% │          37 │
-│ 3.3      │   0.00% │          16 │
-│ 3.2      │   0.00% │           6 │
-│ 3.99     │   0.00% │           1 │
-│ Total    │         │ 124,655,333 │
+│ 3.11     │  21.79% │  39,303,874 │
+│ 3.12     │  18.85% │  34,005,926 │
+│ 3.10     │  16.91% │  30,503,181 │
+│ 3.9      │  12.22% │  22,039,674 │
+│ 3.7      │   9.35% │  16,857,870 │
+│ 3.13     │   8.24% │  14,866,029 │
+│ 3.8      │   5.47% │   9,860,598 │
+│ null     │   4.99% │   9,003,488 │
+│ 3.6      │   1.86% │   3,360,527 │
+│ 2.7      │   0.30% │     550,163 │
+│ 3.14     │   0.01% │      19,461 │
+│ 3.5      │   0.01% │      17,119 │
+│ 3.4      │   0.00% │         579 │
+│ 3.15     │   0.00% │         398 │
+│ 2.6      │   0.00% │          20 │
+│ 3.3      │   0.00% │          19 │
+│ 3.1      │   0.00% │           1 │
+│ Total    │         │ 180,388,927 │
 └──────────┴─────────┴─────────────┘
 
-Date range: 2025-01-01 - 2025-01-31
+Date range: 2025-07-01 - 2025-07-31
 ```
 
 <!-- [[[end]]] -->
@@ -185,26 +185,26 @@ You can format in Markdown, ready for pasting in GitHub issues and PRs:
 
 | category | percent |   downloads |
 | :------- | ------: | ----------: |
-| 3.10     |  19.31% |  24,065,642 |
-| 3.11     |  17.45% |  21,749,566 |
-| 3.12     |  15.68% |  19,541,358 |
-| 3.9      |  13.93% |  17,370,148 |
-| 3.7      |  12.86% |  16,034,418 |
-| 3.8      |   9.69% |  12,077,524 |
-| null     |   5.89% |   7,341,287 |
-| 3.13     |   2.99% |   3,728,426 |
-| 3.6      |   1.81% |   2,255,947 |
-| 2.7      |   0.38% |     468,671 |
-| 3.5      |   0.01% |      15,575 |
-| 3.14     |   0.00% |       5,804 |
-| 3.4      |   0.00% |         907 |
-| 3.1      |   0.00% |          37 |
-| 3.3      |   0.00% |          16 |
-| 3.2      |   0.00% |           6 |
-| 3.99     |   0.00% |           1 |
-| Total    |         | 124,655,333 |
+| 3.11     |  21.79% |  39,303,874 |
+| 3.12     |  18.85% |  34,005,926 |
+| 3.10     |  16.91% |  30,503,181 |
+| 3.9      |  12.22% |  22,039,674 |
+| 3.7      |   9.35% |  16,857,870 |
+| 3.13     |   8.24% |  14,866,029 |
+| 3.8      |   5.47% |   9,860,598 |
+| null     |   4.99% |   9,003,488 |
+| 3.6      |   1.86% |   3,360,527 |
+| 2.7      |   0.30% |     550,163 |
+| 3.14     |   0.01% |      19,461 |
+| 3.5      |   0.01% |      17,119 |
+| 3.4      |   0.00% |         579 |
+| 3.15     |   0.00% |         398 |
+| 2.6      |   0.00% |          20 |
+| 3.3      |   0.00% |          19 |
+| 3.1      |   0.00% |           1 |
+| Total    |         | 180,388,927 |
 
-Date range: 2025-01-01 - 2025-01-31
+Date range: 2025-07-01 - 2025-07-31
 
 <!-- [[[end]]] -->
 
@@ -224,6 +224,35 @@ pypistats python_major pip --start-date december --end-date january
 pypistats python_major pip --start-date dec      --end-date jan
 pypistats python_major pip --start-date 2018-12  --end-date 2019-01
 ```
+
+Alternatively, use a local path as the package to look up the name from `pyproject.toml`
+or `setup.cfg`:
+
+<!-- [[[cog run("pypistats recent .") ]]] -->
+
+```console
+$ pypistats recent .
+┌──────────┬────────────┬───────────┐
+│ last_day │ last_month │ last_week │
+├──────────┼────────────┼───────────┤
+│    1,557 │     75,440 │     8,864 │
+└──────────┴────────────┴───────────┘
+```
+
+<!-- [[[end]]] -->
+
+<!-- [[[cog run("pypistats recent ../Pillow") ]]] -->
+
+```console
+$ pypistats recent ../Pillow
+┌───────────┬─────────────┬────────────┐
+│  last_day │  last_month │  last_week │
+├───────────┼─────────────┼────────────┤
+│ 7,099,431 │ 184,980,272 │ 43,134,813 │
+└───────────┴─────────────┴────────────┘
+```
+
+<!-- [[[end]]] -->
 
 ## Example programmatic use
 
