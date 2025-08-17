@@ -112,8 +112,19 @@ max_supported_python = "3.14"
 
 [tool.pytest.ini_options]
 addopts = "--color=yes"
-filterwarnings = [
-  # Python <= 3.11
-  "ignore:sys.monitoring isn't available, using default core:coverage.exceptions.CoverageWarning",
-]
 testpaths = [ "tests" ]
+
+[tool.coverage.run]
+disable_warnings = [
+  "no-sysmon",
+]
+omit = [
+  "*/pypistats/__main__.py",
+]
+
+[tool.coverage.report]
+# Regexes for lines to exclude from consideration
+exclude_also = [
+  # Don't complain if non-runnable code isn't run:
+  "if __name__ == .__main__.:",
+]
