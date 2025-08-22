@@ -17,7 +17,6 @@ if TYPE_CHECKING:
     from typing import Any
 
 cli = argparse.ArgumentParser()
-cli.color = True
 subparsers = cli.add_subparsers(dest="subcommand")
 
 
