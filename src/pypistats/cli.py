@@ -17,7 +17,6 @@ if TYPE_CHECKING:
     from typing import Any
 
 cli = argparse.ArgumentParser()
-cli.color = True
 subparsers = cli.add_subparsers(dest="subcommand")
 
 
@@ -52,7 +51,7 @@ def subcommand(args=None, parent=subparsers):
     if args is None:
         args = []
 
-    def decorator(func):
+    def decorator(func) -> None:
         func2 = getattr(pypistats, func.__name__)
         parser = parent.add_parser(
             func.__name__,

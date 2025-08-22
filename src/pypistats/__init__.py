@@ -18,6 +18,10 @@ from termcolor import colored
 
 from . import _version
 
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from typing import Any
+
 __version__ = _version.__version__
 
 BASE_URL = "https://pypistats.org/api/"
@@ -25,13 +29,13 @@ CACHE_DIR = Path(user_cache_dir("pypistats"))
 USER_AGENT = f"pypistats/{__version__}"
 
 
-def _print_verbose(verbose: bool, *args, **kwargs) -> None:
+def _print_verbose(verbose: bool, *args, **kwargs: Any) -> None:
     """Print if verbose"""
     if verbose:
         _print_stderr(*args, **kwargs)
 
 
-def _print_stderr(*args, **kwargs) -> None:
+def _print_stderr(*args, **kwargs: Any) -> None:
     """Print to stderr"""
     print(*args, file=sys.stderr, **kwargs)
 
@@ -140,22 +144,26 @@ def pypi_stats_api(
     first, last = _date_range(res["data"])
 
     # Validate end date
-    if end_date and end_date < first:
-        msg = (
-            f"Requested end date ({end_date}) is before earliest available "
-            f"data ({first}), because data is only available for 180 days. "
-            "See https://pypistats.org/about#data"
-        )
-        raise ValueError(msg)
+    if end_date:
+        assert first is not None
+        if end_date < first:
+            msg = (
+                f"Requested end date ({end_date}) is before earliest available "
+                f"data ({first}), because data is only available for 180 days. "
+                "See https://pypistats.org/about#data"
+            )
+            raise ValueError(msg)
 
     # Validate start date
-    if start_date and start_date < first:
-        warnings.warn(
-            f"Requested start date ({start_date}) is before earliest available "
-            f"data ({first}), because data is only available for 180 days. "
-            "See https://pypistats.org/about#data",
-            stacklevel=3,
-        )
+    if start_date:
+        assert first is not None
+        if start_date < first:
+            warnings.warn(
+                f"Requested start date ({start_date}) is before earliest available "
+                f"data ({first}), because data is only available for 180 days. "
+                "See https://pypistats.org/about#data",
+                stacklevel=3,
+            )
 
     if start_date or end_date:
         res["data"] = _filter(res["data"], start_date, end_date)
@@ -441,7 +449,7 @@ def _pytablewriter(headers, data, format_: str):
         "tsv": TsvTableWriter,
     }
 
-    writer = format_writers[format_]()
+    writer = format_writers[format_]()  # type: ignore[abstract]
     if format_ != "html":
         writer.margin = 1
 
@@ -455,7 +463,7 @@ def _pytablewriter(headers, data, format_: str):
     # Custom alignment and format
     if headers[0] in ["last_day", "last_month", "last_week"]:
         # Special case for 'recent'
-        writer.column_styles = len(headers) * [Style(thousand_separator=",")]
+        writer.column_styles = len(headers) * [Style(thousand_separator=",")]  # type: ignore[assignment]
     else:
         column_styles = []
         type_hints = []
@@ -474,8 +482,8 @@ def _pytablewriter(headers, data, format_: str):
             column_styles.append(style)
             type_hints.append(type_hint)
 
-        writer.column_styles = column_styles
-        writer.type_hints = type_hints
+        writer.column_styles = column_styles  # type: ignore[assignment]
+        writer.type_hints = type_hints  # type: ignore[assignment]
 
     if format_ == "numpy":
         return writer.tabledata.as_dataframe().values
@@ -495,7 +503,7 @@ def _paramify(param_name: str, param_value: float | str | None) -> str:
     return ""
 
 
-def recent(package: str, period: str | None = None, **kwargs: str):
+def recent(package: str, period: str | None = None, **kwargs: Any):
     """Retrieve the aggregate download quantities for the last 1/7/30 days,
     excluding downloads from mirrors"""
     endpoint = f"packages/{package}/recent"
@@ -503,7 +511,7 @@ def recent(package: str, period: str | None = None, **kwargs: str):
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def overall(package: str, mirrors: bool | str | None = None, **kwargs: str):
+def overall(package: str, mirrors: bool | str | None = None, **kwargs: Any):
     """Retrieve the aggregate daily download time series with or without mirror
     downloads"""
     endpoint = f"packages/{package}/overall"
@@ -511,7 +519,7 @@ def overall(package: str, mirrors: bool | str | None = None, **kwargs: str):
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def python_major(package: str, version: str | None = None, **kwargs: str):
+def python_major(package: str, version: str | None = None, **kwargs: Any):
     """Retrieve the aggregate daily download time series by Python major version
     number"""
     endpoint = f"packages/{package}/python_major"
@@ -519,7 +527,7 @@ def python_major(package: str, version: str | None = None, **kwargs: str):
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def python_minor(package: str, version: str | None = None, **kwargs) -> str:
+def python_minor(package: str, version: str | None = None, **kwargs: Any) -> str:
     """Retrieve the aggregate daily download time series by Python minor version
     number"""
     endpoint = f"packages/{package}/python_minor"
@@ -527,7 +535,7 @@ def python_minor(package: str, version: str | None = None, **kwargs) -> str:
     return pypi_stats_api(endpoint, params, **kwargs)
 
 
-def system(package: str, os: str | None = None, **kwargs):
+def system(package: str, os: str | None = None, **kwargs: Any):
     """Retrieve the aggregate daily download time series by operating system"""
     endpoint = f"packages/{package}/system"
     params = _paramify("os", os)

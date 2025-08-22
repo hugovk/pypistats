@@ -61,7 +61,7 @@ class TestPypiStatsCache:
     def test_cache_round_trip(self) -> None:
         # Arrange
         filename = pypistats.CACHE_DIR / "test_cache_round_trip.json"
-        data = "test data"
+        data = {"test": "data"}
 
         # Act
         pypistats._save_cache(filename, data)
