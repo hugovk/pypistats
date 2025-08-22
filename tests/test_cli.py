@@ -11,6 +11,96 @@ from freezegun import freeze_time
 
 from pypistats import cli
 
+TYPE_CHECKING = False
+if TYPE_CHECKING:
+    from pyfakefs.fake_filesystem import FakeFilesystem
+
+
+@pytest.fixture
+def pyproject_toml(fs: FakeFilesystem):
+    fs.create_file("pyproject.toml", contents='[project]\nname = "toml-demo"')
+    return
+
+
+@pytest.fixture
+def pyproject_toml_no_name(fs: FakeFilesystem):
+    fs.create_file("pyproject.toml", contents='[tool.black]\ntarget_version = ["py39"]')
+    return
+
+
+@pytest.fixture
+def setup_cfg(fs: FakeFilesystem):
+    fs.create_file("setup.cfg", contents="[metadata]\nname = cfg-demo")
+    return
+
+
+@pytest.fixture
+def setup_cfg_no_name(fs: FakeFilesystem):
+    fs.create_file("setup.cfg", contents="[flake8]\nmax_line_length = 88")
+    return
+
+
+@pytest.mark.parametrize(
+    "fixture1, fixture2, test_input, expected",
+    [
+        ("pyproject_toml", None, "pillow", "pillow"),
+        ("pyproject_toml", None, ".", "toml-demo"),
+        (None, "setup_cfg", "pillow", "pillow"),
+        (None, "setup_cfg", ".", "cfg-demo"),
+        ("pyproject_toml_no_name", "setup_cfg", "pillow", "pillow"),
+        ("pyproject_toml_no_name", "setup_cfg", ".", "cfg-demo"),
+    ],
+)
+def test__package(
+    fixture1, fixture2, test_input, expected, request, fs: FakeFilesystem
+):
+    # Arrange
+    if fixture1:
+        request.getfixturevalue(fixture1)
+    if fixture2:
+        request.getfixturevalue(fixture2)
+
+    # Act / Assert
+    assert cli._package(test_input) == expected
+
+
+@pytest.mark.parametrize(
+    "fixture1, fixture2, expected",
+    [
+        (
+            None,
+            None,
+            "pyproject.toml and setup.cfg not found",
+        ),
+        (
+            "pyproject_toml_no_name",
+            None,
+            "no 'project.name' in pyproject.toml and setup.cfg not found",
+        ),
+        (
+            None,
+            "setup_cfg_no_name",
+            "pyproject.toml not found and no 'metadata.name' in setup.cfg",
+        ),
+        (
+            "pyproject_toml_no_name",
+            "setup_cfg_no_name",
+            "no 'project.name' in pyproject.toml and "
+            "no 'metadata.name' in setup.cfg",
+        ),
+    ],
+)
+def test__package_error(fixture1, fixture2, expected, request, fs: FakeFilesystem):
+    # Arrange
+    if fixture1:
+        request.getfixturevalue(fixture1)
+    if fixture2:
+        request.getfixturevalue(fixture2)
+
+    # Act / Assert
+    with pytest.raises(argparse.ArgumentTypeError, match=expected):
+        cli._package(".")
+
 
 @pytest.mark.parametrize(
     "test_input, expected",

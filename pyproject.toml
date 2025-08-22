@@ -44,6 +44,7 @@ dependencies = [
   "python-dateutil",
   "python-slugify",
   "termcolor>=2.1",
+  "tomli; python_version<'3.11'",
 ]
 optional-dependencies.numpy = [
   "numpy",
@@ -53,6 +54,7 @@ optional-dependencies.pandas = [
 ]
 optional-dependencies.tests = [
   "freezegun",
+  "pyfakefs",
   "pytest",
   "pytest-cov",
   "respx>=0.11",
