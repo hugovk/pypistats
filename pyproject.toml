@@ -115,9 +115,6 @@ addopts = "--color=yes"
 testpaths = [ "tests" ]
 
 [tool.coverage.run]
-disable_warnings = [
-  "no-sysmon",
-]
 omit = [
   "*/pypistats/__main__.py",
 ]
