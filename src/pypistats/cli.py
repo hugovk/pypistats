@@ -77,7 +77,7 @@ def _package(value: Any) -> str:
         try:
             import tomllib
         except ImportError:
-            import tomli as tomllib
+            import tomli as tomllib  # type: ignore[import-not-found, no-redef]
 
         data = tomllib.loads(pyproject_toml.read_text())
         try:
