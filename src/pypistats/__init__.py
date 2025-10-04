@@ -114,8 +114,12 @@ def pypi_stats_api(
         params = ""
     url = BASE_URL + endpoint.lower() + params
     cache_file = _cache_filename(url)
-    _print_verbose(verbose, "API URL:", url)
-    _print_verbose(verbose, "Cache file:", cache_file)
+    if verbose:
+        package = endpoint.split("/")[1]
+        human_url = f"https://pypistats.org/packages/{package}"
+        _print_verbose(verbose, f"Human URL:\t{human_url}")
+        _print_verbose(verbose, f"API URL:\t{url}")
+        _print_verbose(verbose, f"Cache file:\t{cache_file}")
 
     res = {}
     if cache_file.is_file():
