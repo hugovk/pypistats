@@ -17,8 +17,6 @@ jobs:
           python.version: "3.12"
         Python313:
           python.version: "3.13"
-        Python314:
-          python.version: "3.14"
 
     steps:
       - task: UsePythonVersion@0.206.0
