@@ -9,14 +9,22 @@ import atexit
 import json
 import sys
 import warnings
+from typing import Any
 
+import urllib3
+from prettytable import PrettyTable, TableStyle
+from pytablewriter import (
+    HtmlTableWriter,
+    NumpyTableWriter,
+    PandasDataFrameWriter,
+    RstSimpleTableWriter,
+    String,
+    TsvTableWriter,
+)
+from pytablewriter.style import Align, Style, ThousandSeparator
 from termcolor import colored
 
 from . import _cache, _version
-
-TYPE_CHECKING = False
-if TYPE_CHECKING:
-    from typing import Any
 
 __version__ = _version.__version__
 
@@ -80,8 +88,6 @@ def pypi_stats_api(
 
     if res == {}:
         # No cache, or couldn't load cache
-        import urllib3
-
         r = urllib3.request("GET", url, headers={"User-Agent": USER_AGENT})
 
         # Raise if we made a bad request
@@ -370,8 +376,6 @@ def _tabulate(data: dict | list, format_: str = "markdown", color: str = "yes") 
 def _prettytable(
     headers: list[str], data: dict | list, format_: str, color: str = "yes"
 ) -> str:
-    from prettytable import PrettyTable, TableStyle
-
     x = PrettyTable()
     x.set_style(
         TableStyle.MARKDOWN if format_ == "markdown" else TableStyle.SINGLE_BORDER
@@ -405,16 +409,6 @@ def _prettytable(
 
 
 def _pytablewriter(headers, data, format_: str):
-    from pytablewriter import (
-        HtmlTableWriter,
-        NumpyTableWriter,
-        PandasDataFrameWriter,
-        RstSimpleTableWriter,
-        String,
-        TsvTableWriter,
-    )
-    from pytablewriter.style import Align, Style, ThousandSeparator
-
     format_writers = {
         "html": HtmlTableWriter,
         "numpy": NumpyTableWriter,
