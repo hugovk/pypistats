@@ -7,14 +7,18 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import re
+from configparser import ConfigParser
+from pathlib import Path
+from typing import Any
 
 from dateutil.relativedelta import relativedelta
 
-import pypistats
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib  # type: ignore[import-not-found, no-redef]
 
-TYPE_CHECKING = False
-if TYPE_CHECKING:
-    from typing import Any
+import pypistats
 
 cli = argparse.ArgumentParser()
 subparsers = cli.add_subparsers(dest="subcommand")
@@ -66,19 +70,12 @@ def subcommand(args=None, parent=subparsers):
 
 
 def _package(value: Any) -> str:
-    from pathlib import Path
-
     directory = Path(value)
     if not directory.is_dir():
         return value
 
     pyproject_toml = directory / Path("pyproject.toml")
     if pyproject_toml.exists():
-        try:
-            import tomllib
-        except ImportError:
-            import tomli as tomllib  # type: ignore[import-not-found, no-redef]
-
         data = tomllib.loads(pyproject_toml.read_text())
         try:
             return data["project"]["name"]
@@ -89,8 +86,6 @@ def _package(value: Any) -> str:
 
     setup_cfg = directory / Path("setup.cfg")
     if setup_cfg.exists():
-        from configparser import ConfigParser
-
         config = ConfigParser()
         config.read(setup_cfg)
 
