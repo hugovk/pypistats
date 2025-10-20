@@ -4,21 +4,27 @@ CLI with subcommands for pypistats
 
 from __future__ import annotations
 
-import argparse
-import datetime as dt
-import re
-from configparser import ConfigParser
-from pathlib import Path
-from typing import Any
+import sys
 
-from dateutil.relativedelta import relativedelta
+import wrapt
 
-try:
-    import tomllib
-except ImportError:
-    import tomli as tomllib  # type: ignore[import-not-found, no-redef]
+argparse = wrapt.lazy_import("argparse")
+dt = wrapt.lazy_import("datetime")
+re = wrapt.lazy_import("re")
 
-import pypistats
+ConfigParser = wrapt.lazy_import("configparser", "ConfigParser")
+# Path = wrapt.lazy_import("pathlib", "Path")
+from pathlib import Path  # noqa: E402
+
+Any = wrapt.lazy_import("typing", "Any")
+relativedelta = wrapt.lazy_import("dateutil.relativedelta", "relativedelta")
+
+if sys.version_info >= (3, 11):
+    tomllib = wrapt.lazy_import("tomllib")
+else:
+    tomllib = wrapt.lazy_import("tomli")  # type: ignore[import-not-found, no-redef]
+
+pypistats = wrapt.lazy_import("pypistats")
 
 cli = argparse.ArgumentParser()
 subparsers = cli.add_subparsers(dest="subcommand")

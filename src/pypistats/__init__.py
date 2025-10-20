@@ -5,30 +5,37 @@ https://pypistats.org/api
 
 from __future__ import annotations
 
-import atexit
-import datetime as dt
-import json
-import sys
-import warnings
-from pathlib import Path
-from typing import Any
+import wrapt
 
-import httpx
-from platformdirs import user_cache_dir
-from prettytable import PrettyTable, TableStyle
-from pytablewriter import (
-    HtmlTableWriter,
-    NumpyTableWriter,
-    PandasDataFrameWriter,
-    RstSimpleTableWriter,
-    String,
-    TsvTableWriter,
-)
-from pytablewriter.style import Align, Style, ThousandSeparator
-from slugify import slugify
-from termcolor import colored
+atexit = wrapt.lazy_import("atexit")
+dt = wrapt.lazy_import("datetime")
+json = wrapt.lazy_import("json")
+sys = wrapt.lazy_import("sys")
+warnings = wrapt.lazy_import("warnings")
+# Path = wrapt.lazy_import("pathlib", "Path")
+from pathlib import Path  # noqa: E402
 
-from . import _version
+Any = wrapt.lazy_import("typing", "Any")
+
+httpx = wrapt.lazy_import("httpx")
+# user_cache_dir = wrapt.lazy_import("platformdirs", "user_cache_dir")
+from platformdirs import user_cache_dir  # noqa: E402
+
+PrettyTable = wrapt.lazy_import("prettytable", "PrettyTable")
+TableStyle = wrapt.lazy_import("prettytable", "TableStyle")
+HtmlTableWriter = wrapt.lazy_import("pytablewriter", "HtmlTableWriter")
+NumpyTableWriter = wrapt.lazy_import("pytablewriter", "NumpyTableWriter")
+PandasDataFrameWriter = wrapt.lazy_import("pytablewriter", "PandasDataFrameWriter")
+RstSimpleTableWriter = wrapt.lazy_import("pytablewriter", "RstSimpleTableWriter")
+String = wrapt.lazy_import("pytablewriter", "String")
+TsvTableWriter = wrapt.lazy_import("pytablewriter", "TsvTableWriter")
+Align = wrapt.lazy_import("pytablewriter.style", "Align")
+Style = wrapt.lazy_import("pytablewriter.style", "Style")
+ThousandSeparator = wrapt.lazy_import("pytablewriter.style", "ThousandSeparator")
+slugify = wrapt.lazy_import("slugify", "slugify")
+colored = wrapt.lazy_import("termcolor", "colored")
+
+from . import _version  # noqa: E402
 
 __version__ = _version.__version__
 
