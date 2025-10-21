@@ -5,6 +5,20 @@ https://pypistats.org/api
 
 from __future__ import annotations
 
+__lazy_modules__ = [
+    "atexit",
+    "json",
+    "sys",
+    "warnings",
+    "typing",
+    "urllib3",
+    "prettytable",
+    "pytablewriter",
+    "pytablewriter.style",
+    "termcolor",
+    "pypistats",
+]
+
 import atexit
 import json
 import sys
