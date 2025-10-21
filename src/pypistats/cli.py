@@ -4,6 +4,19 @@ CLI with subcommands for pypistats
 
 from __future__ import annotations
 
+__lazy_modules__ = [
+    "argparse",
+    "datetime",
+    "re",
+    "configparser",
+    "pathlib",
+    "typing",
+    "dateutil.relativedelta",
+    "tomllib",
+    "tomli",
+    "pypistats",
+]
+
 import argparse
 import datetime as dt
 import re
