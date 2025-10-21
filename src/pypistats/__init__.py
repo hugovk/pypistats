@@ -5,6 +5,23 @@ https://pypistats.org/api
 
 from __future__ import annotations
 
+__lazy_modules__ = [
+    "atexit",
+    "datetime",
+    "json",
+    "sys",
+    "warnings",
+    "pathlib",
+    "typing",
+    "httpx",
+    "platformdirs",
+    "prettytable",
+    "pytablewriter",
+    "slugify",
+    "termcolor",
+    "pypistats",
+]
+
 import atexit
 import datetime as dt
 import json
