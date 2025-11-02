@@ -1,14 +1,14 @@
 # Only for testing pinned versions on the CI
 freezegun==1.5.5
 httpx==0.28.1
-numpy==2.3.3
+numpy==2.3.4
 pandas==2.3.3
-platformdirs==4.4.0
+platformdirs==4.5.0
 prettytable==3.16.0
-pyfakefs==5.9.3
+pyfakefs==5.10.1
 pytablewriter[html]==1.2.1
 pytest==8.4.2
 pytest-cov==7.0.0
 python-slugify==8.0.4
 respx==0.22.0
-termcolor==3.1.0
+termcolor==3.2.0
