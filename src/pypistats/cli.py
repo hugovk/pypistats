@@ -4,17 +4,27 @@ CLI with subcommands for pypistats
 
 from __future__ import annotations
 
-import argparse
-import datetime as dt
-import re
+import sys
 
-from dateutil.relativedelta import relativedelta
+import wrapt
 
-import pypistats
+argparse = wrapt.lazy_import("argparse")
+dt = wrapt.lazy_import("datetime")
+re = wrapt.lazy_import("re")
 
-TYPE_CHECKING = False
-if TYPE_CHECKING:
-    from typing import Any
+ConfigParser = wrapt.lazy_import("configparser", "ConfigParser")
+# Path = wrapt.lazy_import("pathlib", "Path")
+from pathlib import Path  # noqa: E402
+
+Any = wrapt.lazy_import("typing", "Any")
+relativedelta = wrapt.lazy_import("dateutil.relativedelta", "relativedelta")
+
+if sys.version_info >= (3, 11):
+    tomllib = wrapt.lazy_import("tomllib")
+else:
+    tomllib = wrapt.lazy_import("tomli")  # type: ignore[import-not-found, no-redef]
+
+pypistats = wrapt.lazy_import("pypistats")
 
 cli = argparse.ArgumentParser()
 subparsers = cli.add_subparsers(dest="subcommand")
@@ -66,19 +76,12 @@ def subcommand(args=None, parent=subparsers):
 
 
 def _package(value: Any) -> str:
-    from pathlib import Path
-
     directory = Path(value)
     if not directory.is_dir():
         return value
 
     pyproject_toml = directory / Path("pyproject.toml")
     if pyproject_toml.exists():
-        try:
-            import tomllib
-        except ImportError:
-            import tomli as tomllib  # type: ignore[import-not-found, no-redef]
-
         data = tomllib.loads(pyproject_toml.read_text())
         try:
             return data["project"]["name"]
@@ -89,8 +92,6 @@ def _package(value: Any) -> str:
 
     setup_cfg = directory / Path("setup.cfg")
     if setup_cfg.exists():
-        from configparser import ConfigParser
-
         config = ConfigParser()
         config.read(setup_cfg)
 

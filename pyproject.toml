@@ -45,6 +45,7 @@ dependencies = [
   "python-slugify",
   "termcolor>=3.2",
   "tomli; python_version<'3.11'",
+  "wrapt",
 ]
 optional-dependencies.numpy = [
   "numpy",
