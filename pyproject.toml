@@ -41,7 +41,6 @@ dependencies = [
   "platformdirs",
   "prettytable>=3.12",
   "pytablewriter[html]>=0.63",
-  "python-dateutil",
   "python-slugify",
   "termcolor>=3.2",
   "tomli; python_version<'3.11'",

@@ -6,5 +6,4 @@ pytablewriter
 pytest
 respx
 termcolor
-types-python-dateutil
 types-python-slugify
