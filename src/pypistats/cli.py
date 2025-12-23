@@ -5,10 +5,9 @@ CLI with subcommands for pypistats
 from __future__ import annotations
 
 import argparse
+import calendar
 import datetime as dt
 import re
-
-from dateutil.relativedelta import relativedelta
 
 import pypistats
 
@@ -368,15 +367,20 @@ def _month(yyyy_mm: str) -> tuple[str, str]:
     """Helper to return start_date and end_date of a month as yyyy-mm-dd"""
     year, month = map(int, yyyy_mm.split("-"))
     first = dt.date(year, month, 1)
-    last = first + relativedelta(months=1) - relativedelta(days=1)
+    last_day = calendar.monthrange(year, month)[1]
+    last = dt.date(year, month, last_day)
     return str(first), str(last)
 
 
 def _last_month() -> tuple[str, str]:
     """Helper to return start_date and end_date of the previous month as yyyy-mm-dd"""
     today = dt.date.today()
-    d = today - relativedelta(months=1)
-    return _month(d.isoformat()[:7])
+    # Go to previous month
+    if today.month == 1:
+        year, month = today.year - 1, 12
+    else:
+        year, month = today.year, today.month - 1
+    return _month(f"{year}-{month:02d}")
 
 
 def _this_month() -> str:
