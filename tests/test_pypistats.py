@@ -13,6 +13,7 @@ import pytest
 from termcolor import termcolor
 
 import pypistats
+from pypistats import _cache
 
 from .data.expected_tabulated import (
     EXPECTED_TABULATED_HTML,
@@ -57,6 +58,14 @@ SAMPLE_RESPONSE_OVERALL = """{
         }"""
 
 
+def stub__cache_filename(*args) -> Path:
+    return Path("/this/does/not/exist")
+
+
+def stub__save_cache(*args) -> None:
+    pass
+
+
 def mock_urllib3_response(content: str, status: int = 200) -> mock.Mock:
     """Helper to create a mock urllib3 response."""
     response = mock.Mock()
@@ -70,26 +79,18 @@ def assert_called_with_url(mock_request: mock.Mock, url: str) -> None:
     mock_request.assert_called_once_with("GET", url, headers=mock.ANY)
 
 
-def stub__cache_filename(*args) -> Path:
-    return Path("/this/does/not/exist")
-
-
-def stub__save_cache(*args) -> None:
-    pass
-
-
 class TestPypiStats:
     def setup_method(self) -> None:
         # Stub caching. Caches are tested in another class.
-        self.original__cache_filename = pypistats._cache_filename
-        self.original__save_cache = pypistats._save_cache
-        pypistats._cache_filename = stub__cache_filename  # type: ignore[assignment]
-        pypistats._save_cache = stub__save_cache  # type: ignore[assignment]
+        self.original__cache_filename = _cache.filename
+        self.original__save_cache = _cache.save
+        _cache.filename = stub__cache_filename  # type: ignore[assignment]
+        _cache.save = stub__save_cache  # type: ignore[assignment]
 
     def teardown_method(self) -> None:
         # Unstub caching
-        pypistats._cache_filename = self.original__cache_filename
-        pypistats._save_cache = self.original__save_cache
+        _cache.filename = self.original__cache_filename
+        _cache.save = self.original__save_cache
         termcolor.can_colorize.cache_clear()
 
     def test__filter_no_filters_no_change(self) -> None:

@@ -6,17 +6,13 @@ https://pypistats.org/api
 from __future__ import annotations
 
 import atexit
-import datetime as dt
 import json
 import sys
 import warnings
-from pathlib import Path
 
-from platformdirs import user_cache_dir
-from slugify import slugify
 from termcolor import colored
 
-from . import _version
+from . import _cache, _version
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
@@ -25,7 +21,6 @@ if TYPE_CHECKING:
 __version__ = _version.__version__
 
 BASE_URL = "https://pypistats.org/api/"
-CACHE_DIR = Path(user_cache_dir("pypistats"))
 USER_AGENT = f"pypistats/{__version__}"
 
 
@@ -40,50 +35,7 @@ def _print_stderr(*args, **kwargs: Any) -> None:
     print(*args, file=sys.stderr, **kwargs)
 
 
-def _cache_filename(url: str) -> Path:
-    """yyyy-mm-dd-url-slug.json"""
-    today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
-    slug = slugify(url)
-    filename = CACHE_DIR / f"{today}-{slug}.json"
-
-    return filename
-
-
-def _load_cache(cache_file: Path) -> dict:
-    if not cache_file.exists():
-        return {}
-
-    with cache_file.open("r") as f:
-        try:
-            data = json.load(f)
-        except json.decoder.JSONDecodeError:
-            return {}
-
-    return data
-
-
-def _save_cache(cache_file: Path, data) -> None:
-    try:
-        if not CACHE_DIR.exists():
-            CACHE_DIR.mkdir(parents=True)
-
-        with cache_file.open("w") as f:
-            json.dump(data, f)
-
-    except OSError:
-        pass
-
-
-def _clear_cache() -> None:
-    """Delete old cache files, run as last task"""
-    cache_files = CACHE_DIR.glob("**/*.json")
-    this_month = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m")
-    for cache_file in cache_files:
-        if not cache_file.name.startswith(this_month):
-            cache_file.unlink()
-
-
-atexit.register(_clear_cache)
+atexit.register(_cache.clear)
 
 
 def _validate_total(total: str) -> None:
@@ -113,7 +65,7 @@ def pypi_stats_api(
     else:
         params = ""
     url = BASE_URL + endpoint.lower() + params
-    cache_file = _cache_filename(url)
+    cache_file = _cache.filename(url)
     if verbose:
         package = endpoint.split("/")[1]
         human_url = f"https://pypistats.org/packages/{package}"
@@ -124,7 +76,7 @@ def pypi_stats_api(
     res = {}
     if cache_file.is_file():
         _print_verbose(verbose, "Cache file exists")
-        res = _load_cache(cache_file)
+        res = _cache.load(cache_file)
 
     if res == {}:
         # No cache, or couldn't load cache
@@ -141,7 +93,7 @@ def pypi_stats_api(
 
         res = json.loads(r.data.decode("utf-8"))
 
-        _save_cache(cache_file, res)
+        _cache.save(cache_file, res)
 
     if not res.get("data", []):
         return f"No data found for https://pypi.org/project/{res.get('package', '')}/"
