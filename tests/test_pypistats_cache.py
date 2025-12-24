@@ -6,11 +6,13 @@ from __future__ import annotations
 
 import tempfile
 from pathlib import Path
+from unittest import mock
 
-import respx
 from freezegun import freeze_time
 
 import pypistats
+
+from .test_pypistats import mock_urllib3_response
 
 
 class TestPypiStatsCache:
@@ -86,11 +88,10 @@ class TestPypiStatsCache:
         # Assert
         assert not cache_file.exists()
 
-    @respx.mock
-    def test_subcommand_with_cache(self) -> None:
+    @mock.patch("urllib3.request")
+    def test_subcommand_with_cache(self, mock_request) -> None:
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = """{
           "data": [
             {"category": "without_mirrors", "date": "2018-11-01", "downloads": 2295765}
@@ -107,7 +108,7 @@ Date range: 2018-11-01 - 2018-11-01
 """
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         # First time to save to cache
         pypistats.overall(package)
         # Second time to read from cache

@@ -128,16 +128,18 @@ def pypi_stats_api(
 
     if res == {}:
         # No cache, or couldn't load cache
-        import httpx
+        import urllib3
 
-        r = httpx.get(url, headers={"User-Agent": USER_AGENT})
+        r = urllib3.request("GET", url, headers={"User-Agent": USER_AGENT})
 
         # Raise if we made a bad request
         # (4XX client error or 5XX server error response)
-        _print_verbose(verbose, "HTTP status code:", r.status_code)
-        r.raise_for_status()
+        _print_verbose(verbose, "HTTP status code:", r.status)
+        if r.status >= 400:
+            msg = f"HTTP Error {r.status} for url: {url}"
+            raise urllib3.exceptions.HTTPError(msg)
 
-        res = r.json()
+        res = json.loads(r.data.decode("utf-8"))
 
         _save_cache(cache_file, res)
 

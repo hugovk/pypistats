@@ -1,6 +1,5 @@
 # Only for testing pinned versions on the CI
 freezegun==1.5.5
-httpx==0.28.1
 numpy==2.3.5
 pandas==2.3.3
 platformdirs==4.5.0
@@ -10,5 +9,5 @@ pytablewriter[html]==1.2.1
 pytest==9.0.1
 pytest-cov==7.0.0
 python-slugify==8.0.4
-respx==0.22.0
 termcolor==3.2.0
+urllib3==2.6.0
