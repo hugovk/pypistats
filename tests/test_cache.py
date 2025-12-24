@@ -1,5 +1,5 @@
 """
-Unit tests for pypistats cache
+Unit tests for cache
 """
 
 from __future__ import annotations
@@ -11,20 +11,21 @@ from unittest import mock
 from freezegun import freeze_time
 
 import pypistats
+from pypistats import _cache
 
 from .test_pypistats import mock_urllib3_response
 
 
-class TestPypiStatsCache:
+class TestCache:
     def setup_method(self) -> None:
         # Choose a new cache dir that doesn't exist
-        self.original_cache_dir = pypistats.CACHE_DIR
+        self.original_cache_dir = _cache.CACHE_DIR
         self.temp_dir = tempfile.TemporaryDirectory()
-        pypistats.CACHE_DIR = Path(self.temp_dir.name) / "pypistats"
+        _cache.CACHE_DIR = Path(self.temp_dir.name) / "pypistats"
 
     def teardown_method(self) -> None:
         # Reset original
-        pypistats.CACHE_DIR = self.original_cache_dir
+        _cache.CACHE_DIR = self.original_cache_dir
 
     @freeze_time("2018-12-26")
     def test__cache_filename(self) -> None:
@@ -32,42 +33,42 @@ class TestPypiStatsCache:
         url = "https://pypistats.org/api/packages/pip/recent"
 
         # Act
-        out = pypistats._cache_filename(url)
+        out = _cache.filename(url)
 
         # Assert
         assert str(out).endswith(
             "2018-12-26-https-pypistats-org-api-packages-pip-recent.json"
         )
 
-    def test__load_cache_not_exist(self) -> None:
+    def test_load_cache_not_exist(self) -> None:
         # Arrange
         filename = Path("file-does-not-exist")
 
         # Act
-        data = pypistats._load_cache(filename)
+        data = _cache.load(filename)
 
         # Assert
         assert data == {}
 
-    def test__load_cache_bad_data(self) -> None:
+    def test_load_cache_bad_data(self) -> None:
         # Arrange
         with tempfile.NamedTemporaryFile(delete=False) as f:
             f.write(b"Invalid JSON!")
 
         # Act
-        data = pypistats._load_cache(Path(f.name))
+        data = _cache.load(Path(f.name))
 
         # Assert
         assert data == {}
 
     def test_cache_round_trip(self) -> None:
         # Arrange
-        filename = pypistats.CACHE_DIR / "test_cache_round_trip.json"
+        filename = _cache.CACHE_DIR / "test_cache_round_trip.json"
         data = {"test": "data"}
 
         # Act
-        pypistats._save_cache(filename, data)
-        new_data = pypistats._load_cache(filename)
+        _cache.save(filename, data)
+        new_data = _cache.load(filename)
 
         # Tidy up
         filename.unlink()
@@ -75,15 +76,15 @@ class TestPypiStatsCache:
         # Assert
         assert new_data == data
 
-    def test__clear_cache(self) -> None:
+    def test_cache_clear(self) -> None:
         # Arrange
         # Create old cache file
-        cache_file = pypistats.CACHE_DIR / "2018-11-26-old-cache-file.json"
-        pypistats._save_cache(cache_file, data={})
+        cache_file = _cache.CACHE_DIR / "2018-11-26-old-cache-file.json"
+        _cache.save(cache_file, data={})
         assert cache_file.exists()
 
         # Act
-        pypistats._clear_cache()
+        _cache.clear()
 
         # Assert
         assert not cache_file.exists()
