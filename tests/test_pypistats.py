@@ -7,9 +7,9 @@ from __future__ import annotations
 import copy
 import json
 from pathlib import Path
+from unittest import mock
 
 import pytest
-import respx
 from termcolor import termcolor
 
 import pypistats
@@ -55,6 +55,19 @@ SAMPLE_RESPONSE_OVERALL = """{
           "package": "pip",
           "type": "overall_downloads"
         }"""
+
+
+def mock_urllib3_response(content: str, status: int = 200) -> mock.Mock:
+    """Helper to create a mock urllib3 response."""
+    response = mock.Mock()
+    response.status = status
+    response.data = content.encode()
+    return response
+
+
+def assert_called_with_url(mock_request: mock.Mock, url: str) -> None:
+    """Assert that urllib3.request was called once with the given URL."""
+    mock_request.assert_called_once_with("GET", url, headers=mock.ANY)
 
 
 def stub__cache_filename(*args) -> Path:
@@ -130,12 +143,11 @@ class TestPypiStats:
             assert row["date"] >= start_date
             assert row["date"] <= end_date
 
-    @respx.mock
-    def test_warn_if_start_date_before_earliest_available(self) -> None:
+    @mock.patch("urllib3.request")
+    def test_warn_if_start_date_before_earliest_available(self, mock_request) -> None:
         # Arrange
         start_date = "2000-01-01"
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/python_major"
         mocked_response = """{
             "data": [
                 {"category": "2", "date": "2018-11-01", "downloads": 2008344},
@@ -146,7 +158,7 @@ class TestPypiStats:
             "type": "python_major_downloads"
         }"""
 
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         # Act / Assert
         with pytest.warns(
             UserWarning,
@@ -155,13 +167,15 @@ class TestPypiStats:
             "See https://pypistats.org/about#data",
         ):
             pypistats.python_major(package, start_date=start_date)
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/python_major"
+        )
 
-    @respx.mock
-    def test_error_if_end_date_before_earliest_available(self) -> None:
+    @mock.patch("urllib3.request")
+    def test_error_if_end_date_before_earliest_available(self, mock_request) -> None:
         # Arrange
         end_date = "2000-01-01"
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/python_major"
         mocked_response = """{
             "data": [
                 {"category": "2", "date": "2018-11-01", "downloads": 2008344},
@@ -172,7 +186,7 @@ class TestPypiStats:
             "type": "python_major_downloads"
         }"""
 
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         # Act / Assert
         with pytest.raises(
             ValueError,
@@ -181,6 +195,9 @@ class TestPypiStats:
             "See https://pypistats.org/about#data",
         ):
             pypistats.python_major(package, end_date=end_date)
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/python_major"
+        )
 
     @pytest.mark.parametrize(
         "test_name, test_value, expected",
@@ -457,25 +474,27 @@ class TestPypiStats:
         # Assert
         assert output == SAMPLE_DATA_RECENT
 
-    @respx.mock
-    def test_valid_json(self) -> None:
+    @mock.patch("urllib3.request")
+    def test_valid_json(self, mock_request) -> None:
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/recent?&period=day"
         mocked_response = """
         {"data": {"last_day": 1956060}, "package": "pip", "type": "recent_downloads"}
         """
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.recent(package, period="day", format="json")
 
         # Assert
         # Should not raise any errors eg. TypeError
         json.loads(output)
         assert json.loads(output) == json.loads(mocked_response)
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/recent?&period=day"
+        )
 
-    @respx.mock
+    @mock.patch("urllib3.request")
     @pytest.mark.parametrize(
         "test_format, expected_output",
         [
@@ -498,10 +517,9 @@ class TestPypiStats:
             ),
         ],
     )
-    def test_recent_tabular(self, test_format, expected_output) -> None:
+    def test_recent_tabular(self, mock_request, test_format, expected_output) -> None:
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/recent"
         mocked_response = """{
             "data":
                 {"last_day": 2295765, "last_month": 67759913, "last_week": 15706750},
@@ -509,17 +527,19 @@ class TestPypiStats:
         }"""
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.recent(package, format=test_format)
 
         # Assert
         assert output.strip() == expected_output.strip()
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/recent"
+        )
 
-    @respx.mock
-    def test_overall_tabular_start_date(self, monkeypatch) -> None:
+    @mock.patch("urllib3.request")
+    def test_overall_tabular_start_date(self, mock_request, monkeypatch) -> None:
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
 | category        | percent | downloads |
@@ -533,19 +553,22 @@ Date range: 2020-05-02 - 2020-05-02
         monkeypatch.setenv("NO_COLOR", "1")
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.overall(
             package, mirrors=False, start_date="2020-05-02", format="md"
         )
 
         # Assert
         assert output.strip() == expected_output.strip()
+        assert_called_with_url(
+            mock_request,
+            "https://pypistats.org/api/packages/pip/overall?&mirrors=false",
+        )
 
-    @respx.mock
-    def test_overall_tabular_end_date(self, monkeypatch) -> None:
+    @mock.patch("urllib3.request")
+    def test_overall_tabular_end_date(self, mock_request, monkeypatch) -> None:
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/overall?&mirrors=false"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
 | category        | percent | downloads |
@@ -559,19 +582,22 @@ Date range: 2020-05-01 - 2020-05-01
         monkeypatch.setenv("NO_COLOR", "1")
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.overall(
             package, mirrors=False, end_date="2020-05-01", format="md"
         )
 
         # Assert
         assert output.strip() == expected_output.strip()
+        assert_called_with_url(
+            mock_request,
+            "https://pypistats.org/api/packages/pip/overall?&mirrors=false",
+        )
 
-    @respx.mock
-    def test_python_major_json(self) -> None:
+    @mock.patch("urllib3.request")
+    def test_python_major_json(self, mock_request) -> None:
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/python_major"
         mocked_response = """{
             "data": [
                 {"category": "2", "date": "2018-11-01", "downloads": 2008344},
@@ -592,17 +618,19 @@ Date range: 2020-05-01 - 2020-05-01
         }"""
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.python_major(package, format="json")
 
         # Assert
         assert json.loads(output) == json.loads(expected_output)
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/python_major"
+        )
 
-    @respx.mock
-    def test_python_minor_json(self) -> None:
+    @mock.patch("urllib3.request")
+    def test_python_minor_json(self, mock_request) -> None:
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/python_minor"
         mocked_response = """{
             "data": [
                 {"category": "2.6", "date": "2018-11-01", "downloads": 6863},
@@ -637,17 +665,19 @@ Date range: 2020-05-01 - 2020-05-01
         }"""
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.python_minor(package, format="json")
 
         # Assert
         assert json.loads(output) == json.loads(expected_output)
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/python_minor"
+        )
 
-    @respx.mock
-    def test_system_tabular(self, monkeypatch) -> None:
+    @mock.patch("urllib3.request")
+    def test_system_tabular(self, mock_request, monkeypatch) -> None:
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/system"
         mocked_response = """{
             "data": [
                 {"category": "Darwin", "downloads": 10734594},
@@ -672,17 +702,19 @@ Date range: 2020-05-01 - 2020-05-01
         monkeypatch.setenv("NO_COLOR", "1")
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.system(package, format="md")
 
         # Assert
         assert output.strip() == expected_output.strip()
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/system"
+        )
 
-    @respx.mock
-    def test_python_minor_monthly(self) -> None:
+    @mock.patch("urllib3.request")
+    def test_python_minor_monthly(self, mock_request) -> None:
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/python_minor"
         mocked_response = """{
             "data": [
                 {"category": "2.6", "date": "2018-11-01", "downloads": 1},
@@ -709,13 +741,15 @@ Date range: 2020-05-01 - 2020-05-01
         }"""
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.python_minor(package, total="monthly", format="json")
 
         # Assert
         assert json.loads(output) == json.loads(expected_output)
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/python_minor"
+        )
 
-    @respx.mock
     def test_versions_are_strings(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA_VERSION_STRINGS)
@@ -732,12 +766,11 @@ Date range: 2020-05-01 - 2020-05-01
         # Assert
         assert output.strip() == expected_output.strip()
 
-    @respx.mock
-    def test_format_numpy(self) -> None:
+    @mock.patch("urllib3.request")
+    def test_format_numpy(self, mock_request) -> None:
         # Arrange
         numpy = pytest.importorskip("numpy", reason="NumPy is not installed")
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
 [['with_mirrors' '100.00%' 3587357]
@@ -746,19 +779,21 @@ Date range: 2020-05-01 - 2020-05-01
 """
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.overall(package, format="numpy")
 
         # Assert
         assert isinstance(output, numpy.ndarray)
         assert str(output).strip() == expected_output.strip()
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/overall"
+        )
 
-    @respx.mock
-    def test_format_pandas(self) -> None:
+    @mock.patch("urllib3.request")
+    def test_format_pandas(self, mock_request) -> None:
         # Arrange
         pandas = pytest.importorskip("pandas", reason="pandas is not installed")
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = """
           category  percent  downloads
@@ -768,18 +803,20 @@ Date range: 2020-05-01 - 2020-05-01
 """
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.overall(package, format="pandas")
 
         # Assert
         assert isinstance(output, pandas.DataFrame)
         assert str(output).strip() == expected_output.strip()
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/overall"
+        )
 
-    @respx.mock
-    def test_format_none(self) -> None:
+    @mock.patch("urllib3.request")
+    def test_format_none(self, mock_request) -> None:
         # Arrange
         package = "pip"
-        mocked_url = "https://pypistats.org/api/packages/pip/overall"
         mocked_response = SAMPLE_RESPONSE_OVERALL
         expected_output = {
             "category": "with_mirrors",
@@ -788,14 +825,17 @@ Date range: 2020-05-01 - 2020-05-01
         }
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.overall(package, format=None)
 
         # Assert
         assert output[0] == expected_output
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/overall"
+        )
 
-    @respx.mock
-    def test_package_not_exist(self) -> None:
+    @mock.patch("urllib3.request")
+    def test_package_not_exist(self, mock_request) -> None:
         # Arrange
         package = "a" * 100
         mocked_response = f"""{{
@@ -803,12 +843,15 @@ Date range: 2020-05-01 - 2020-05-01
             "package":"{package}",
             "type":"python_major_downloads"
         }}"""
-        mocked_url = f"https://pypistats.org/api/packages/{package}/python_major"
         expected_output = f"No data found for https://pypi.org/project/{package}/"
 
         # Act
-        respx.get(mocked_url).respond(content=mocked_response)
+        mock_request.return_value = mock_urllib3_response(mocked_response)
         output = pypistats.python_major(package)
 
         # Assert
         assert output == expected_output
+        assert_called_with_url(
+            mock_request,
+            f"https://pypistats.org/api/packages/{package}/python_major",
+        )

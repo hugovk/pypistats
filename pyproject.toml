@@ -37,13 +37,13 @@ classifiers = [
 ]
 dynamic = [ "version" ]
 dependencies = [
-  "httpx>=0.19",
   "platformdirs",
   "prettytable>=3.12",
   "pytablewriter[html]>=0.63",
   "python-slugify",
   "termcolor>=3.2",
   "tomli; python_version<'3.11'",
+  "urllib3>=2",
 ]
 optional-dependencies.numpy = [
   "numpy",
@@ -56,7 +56,6 @@ optional-dependencies.tests = [
   "pyfakefs",
   "pytest",
   "pytest-cov",
-  "respx>=0.11",
 ]
 urls.Changelog = "https://github.com/hugovk/pypistats/releases"
 urls.Homepage = "https://github.com/hugovk/pypistats"

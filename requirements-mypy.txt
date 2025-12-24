@@ -4,6 +4,6 @@ platformdirs
 prettytable
 pytablewriter
 pytest
-respx
 termcolor
 types-python-slugify
+urllib3
