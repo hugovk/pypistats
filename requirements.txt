@@ -4,7 +4,7 @@ numpy==2.4.0
 pandas==2.3.3
 platformdirs==4.5.1
 prettytable==3.17.0
-pyfakefs==5.10.2
+pyfakefs==6.0.0
 pytablewriter[html]==1.2.1
 pytest==9.0.2
 pytest-cov==7.0.0
