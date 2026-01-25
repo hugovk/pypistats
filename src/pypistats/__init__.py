@@ -51,7 +51,7 @@ def pypi_stats_api(
     format: str | None = "pretty",
     start_date: str | None = None,
     end_date: str | None = None,
-    sort: bool = True,
+    sort: bool | str = True,
     total: str = "all",
     color: str = "yes",
     verbose: bool = False,
@@ -142,7 +142,7 @@ def pypi_stats_api(
     # These only for tables, like markdown and rst
     data = res["data"]
     if sort:
-        data = _sort(data)
+        data = _sort(data, sort)
 
     data = _percent(data)
     data = _grand_total(data)
@@ -180,14 +180,32 @@ def _filter(data, start_date=None, end_date=None):
     return data
 
 
-def _sort(data: dict | list) -> dict | list:
-    """Sort by downloads"""
+def _sort(data: dict | list, sort: bool | str = True) -> dict | list:
+    """Sort data by the specified column.
+
+    Args:
+        data: The data to sort
+        sort: Column name to sort by (for example: "downloads", "date"),
+              True for "downloads" (backwards compat), False to disable
+    """
 
     # Only for lists of dicts, not a single dict
     if isinstance(data, dict):
         return data
 
-    data = sorted(data, key=lambda k: k["downloads"], reverse=True)
+    if sort is False:
+        return data
+
+    if sort is True:
+        sort = "downloads"
+
+    # Check if the sort key exists in the data
+    if not data or sort not in data[0]:
+        return data
+
+    # Sort ascending for date, descending for downloads
+    reverse = sort == "downloads"
+    data = sorted(data, key=lambda k: k[sort], reverse=reverse)
     return data
 
 
