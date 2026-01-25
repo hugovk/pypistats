@@ -773,11 +773,6 @@ Date range: 2020-05-01 - 2020-05-01
         numpy = pytest.importorskip("numpy", reason="NumPy is not installed")
         package = "pip"
         mocked_response = SAMPLE_RESPONSE_OVERALL
-        expected_output = """
-[['with_mirrors' '100.00%' 3587357]
- ['without_mirrors' '99.22%' 3559451]
- ['Total' None 3587357]]
-"""
 
         # Act
         mock_request.return_value = mock_urllib3_response(mocked_response)
@@ -785,7 +780,10 @@ Date range: 2020-05-01 - 2020-05-01
 
         # Assert
         assert isinstance(output, numpy.ndarray)
-        assert str(output).strip() == expected_output.strip()
+        assert output.shape == (3, 3)
+        assert list(output[:, 0]) == ["with_mirrors", "without_mirrors", "Total"]
+        assert list(output[:2, 1]) == ["100.00%", "99.22%"]
+        assert list(output[:, 2]) == [3587357, 3559451, 3587357]
         assert_called_with_url(
             mock_request, "https://pypistats.org/api/packages/pip/overall"
         )
@@ -796,12 +794,6 @@ Date range: 2020-05-01 - 2020-05-01
         pandas = pytest.importorskip("pandas", reason="pandas is not installed")
         package = "pip"
         mocked_response = SAMPLE_RESPONSE_OVERALL
-        expected_output = """
-          category  percent  downloads
-0     with_mirrors  100.00%    3587357
-1  without_mirrors   99.22%    3559451
-2            Total     None    3587357
-"""
 
         # Act
         mock_request.return_value = mock_urllib3_response(mocked_response)
@@ -809,7 +801,11 @@ Date range: 2020-05-01 - 2020-05-01
 
         # Assert
         assert isinstance(output, pandas.DataFrame)
-        assert str(output).strip() == expected_output.strip()
+        assert output.shape == (3, 3)
+        assert list(output.columns) == ["category", "percent", "downloads"]
+        assert list(output["category"]) == ["with_mirrors", "without_mirrors", "Total"]
+        assert list(output["percent"][:2]) == ["100.00%", "99.22%"]
+        assert list(output["downloads"]) == [3587357, 3559451, 3587357]
         assert_called_with_url(
             mock_request, "https://pypistats.org/api/packages/pip/overall"
         )
