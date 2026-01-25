@@ -69,13 +69,14 @@ Help for a subcommand:
 $ pypistats recent --help
 usage: pypistats recent [-h] [-p {day,week,month}]
                         [-f {html,json,pretty,md,markdown,rst,tsv}] [-j] [-v]
-                        package
+                        [package]
 
-Retrieve the aggregate download quantities for the last 1/7/30 days,
-excluding downloads from mirrors
+Retrieve the aggregate download quantities for the last 1/7/30 days, excluding
+downloads from mirrors
 
 positional arguments:
-  package               package name, or dir to check pyproject.toml/setup.cfg (default: .)
+  package               package name, or dir to check pyproject.toml/setup.cfg
+                        (default: .)
 
 options:
   -h, --help            show this help message and exit
@@ -97,7 +98,7 @@ $ pypistats recent pillow
 ┌───────────┬─────────────┬────────────┐
 │  last_day │  last_month │  last_week │
 ├───────────┼─────────────┼────────────┤
-│ 7,099,431 │ 184,980,272 │ 43,134,813 │
+│ 5,537,706 │ 225,816,599 │ 58,094,476 │
 └───────────┴─────────────┴────────────┘
 ```
 
@@ -112,14 +113,15 @@ $ pypistats python_minor --help
 usage: pypistats python_minor [-h] [-V VERSION]
                               [-f {html,json,pretty,md,markdown,rst,tsv}] [-j]
                               [-sd yyyy-mm[-dd]|name] [-ed yyyy-mm[-dd]|name]
-                              [-m yyyy-mm|name] [-l] [-t] [-d] [--monthly]
+                              [-m yyyy-mm|name] [-l] [-t] [-d] [--monthly] [-s SORT]
                               [-c {yes,no,auto}] [-v]
-                              package
+                              [package]
 
 Retrieve the aggregate daily download time series by Python minor version number
 
 positional arguments:
-  package               package name, or dir to check pyproject.toml/setup.cfg (default: .)
+  package               package name, or dir to check pyproject.toml/setup.cfg
+                        (default: .)
 
 options:
   -h, --help            show this help message and exit
@@ -185,7 +187,7 @@ You can format in Markdown, ready for pasting in GitHub issues and PRs:
 <!-- [[[cog run("pypistats python_minor pillow --last-month --format md", with_console=False) ]]] -->
 
 | category | percent |   downloads |
-| :--------|-------: |-----------: |
+| :------- | ------: | ----------: |
 | 3.12     |  29.56% |  70,503,800 |
 | 3.11     |  20.43% |  48,711,283 |
 | 3.10     |  14.74% |  35,149,431 |
