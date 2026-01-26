@@ -167,7 +167,7 @@ def _define_format(args: argparse.Namespace) -> str:
 def _python_major_version(value: Any) -> int | None:
     pattern = r"^\d+$"  # x format
     if not re.match(pattern, value):
-        msg = "Invalid major version format. Expected a positive integer value"
+        msg = "Invalid major version format. Expected a positive integer value."
         raise argparse.ArgumentTypeError(msg)
     return value
 
@@ -176,8 +176,8 @@ def _python_minor_version(value: Any) -> int | None:
     pattern = r"^\d+\.\d+$"  # x.x format
     if not re.match(pattern, value):
         msg = (
-            "Invalid minor version format."
-            "Expected a positive float value in x.x pattern"
+            "Invalid minor version format. "
+            "Expected a positive float value in x.x pattern."
         )
         raise argparse.ArgumentTypeError(msg)
     return value
