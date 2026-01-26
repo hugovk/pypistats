@@ -256,20 +256,15 @@ def _total(data: dict | list) -> dict | list:
 
 def _date_range(data: dict | list) -> tuple[str | None, str | None]:
     """Return the first and last dates in data"""
-    try:
-        first = data[0]["date"]
-        last = data[0]["date"]
-    except KeyError:
-        # /recent has no dates
+    # /recent returns a dict with no dates
+    if isinstance(data, dict):
         return None, None
-    for row in data:
-        date = row["date"]
-        if date < first:
-            first = date
-        elif date > last:
-            last = date
 
-    return first, last
+    try:
+        dates = {row["date"] for row in data}
+    except KeyError:
+        return None, None
+    return min(dates), max(dates)
 
 
 def _grand_total_value(data: list) -> int:
