@@ -204,7 +204,11 @@ def _sort(data: dict | list, sort: bool | str = True) -> dict | list:
 
     # Sort ascending for date, descending for downloads/percent
     reverse = sort in ("downloads", "percent")
-    data = sorted(data, key=lambda k: k[sort], reverse=reverse)
+    if sort == "percent":
+        # Sort floats not strings
+        data = sorted(data, key=lambda k: float(k[sort].rstrip("%")), reverse=reverse)
+    else:
+        data = sorted(data, key=lambda k: k[sort], reverse=reverse)
     return data
 
 
