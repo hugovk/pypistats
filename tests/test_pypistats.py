@@ -275,7 +275,7 @@ class TestPypiStats:
         # Assert
         assert output.strip() == expected.strip()
 
-    def test__sort(self) -> None:
+    def test__sort_by_downloads(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA)
         expected_output = [
@@ -292,10 +292,69 @@ class TestPypiStats:
         ]
 
         # Act
-        output = pypistats._sort(data)
+        output = pypistats._sort(data, sort="downloads")
 
         # Assert
         assert output == expected_output
+
+    def test__sort_by_downloads_default(self) -> None:
+        # Arrange: sort=True should behave like sort="downloads" for backwards compat
+        data = copy.deepcopy(SAMPLE_DATA)
+
+        # Act
+        output_true = pypistats._sort(data, sort=True)
+        output_downloads = pypistats._sort(data, sort="downloads")
+
+        # Assert
+        assert output_true == output_downloads
+
+    def test__sort_by_percent(self) -> None:
+        # Arrange: sort by percent descending (biggest first)
+        data = [
+            {"category": "3.6", "percent": "10.00%", "downloads": 100},
+            {"category": "3.7", "percent": "50.00%", "downloads": 500},
+            {"category": "3.8", "percent": "40.00%", "downloads": 400},
+        ]
+        expected_output = [
+            {"category": "3.7", "percent": "50.00%", "downloads": 500},
+            {"category": "3.8", "percent": "40.00%", "downloads": 400},
+            {"category": "3.6", "percent": "10.00%", "downloads": 100},
+        ]
+
+        # Act
+        output = pypistats._sort(data, sort="percent")
+
+        # Assert
+        assert output == expected_output
+
+    def test__sort_by_date(self) -> None:
+        # Arrange
+        data = [
+            {"category": "3.6", "date": "2018-08-17", "downloads": 100},
+            {"category": "3.6", "date": "2018-08-15", "downloads": 200},
+            {"category": "3.6", "date": "2018-08-16", "downloads": 150},
+        ]
+        expected_output = [
+            {"category": "3.6", "date": "2018-08-15", "downloads": 200},
+            {"category": "3.6", "date": "2018-08-16", "downloads": 150},
+            {"category": "3.6", "date": "2018-08-17", "downloads": 100},
+        ]
+
+        # Act
+        output = pypistats._sort(data, sort="date")
+
+        # Assert
+        assert output == expected_output
+
+    def test__sort_disabled(self) -> None:
+        # Arrange
+        data = copy.deepcopy(SAMPLE_DATA)
+
+        # Act
+        output = pypistats._sort(data, sort=False)
+
+        # Assert
+        assert output == SAMPLE_DATA
 
     def test__sort_recent(self) -> None:
         # Arrange
@@ -306,6 +365,19 @@ class TestPypiStats:
 
         # Assert
         assert output == SAMPLE_DATA_RECENT
+
+    def test__sort_key_not_in_data(self) -> None:
+        # Arrange: sort key doesn't exist in data, should return unchanged
+        data = [
+            {"category": "3.6", "downloads": 100},
+            {"category": "3.7", "downloads": 200},
+        ]
+
+        # Act
+        output = pypistats._sort(data, sort="date")
+
+        # Assert
+        assert output == data
 
     def test__monthly_total(self) -> None:
         # Arrange
