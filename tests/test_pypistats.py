@@ -311,14 +311,14 @@ class TestPypiStats:
     def test__sort_by_percent(self) -> None:
         # Arrange: sort by percent descending (biggest first)
         data = [
-            {"category": "3.6", "percent": "10.00%", "downloads": 100},
+            {"category": "3.6", "percent": "9.00%", "downloads": 90},
             {"category": "3.7", "percent": "50.00%", "downloads": 500},
-            {"category": "3.8", "percent": "40.00%", "downloads": 400},
+            {"category": "3.8", "percent": "41.00%", "downloads": 410},
         ]
         expected_output = [
             {"category": "3.7", "percent": "50.00%", "downloads": 500},
-            {"category": "3.8", "percent": "40.00%", "downloads": 400},
-            {"category": "3.6", "percent": "10.00%", "downloads": 100},
+            {"category": "3.8", "percent": "41.00%", "downloads": 410},
+            {"category": "3.6", "percent": "9.00%", "downloads": 90},
         ]
 
         # Act
