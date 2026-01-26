@@ -141,10 +141,9 @@ def pypi_stats_api(
 
     # These only for tables, like markdown and rst
     data = res["data"]
+    data = _percent(data)
     if sort:
         data = _sort(data, sort)
-
-    data = _percent(data)
     data = _grand_total(data)
 
     if format is None:
@@ -203,8 +202,8 @@ def _sort(data: dict | list, sort: bool | str = True) -> dict | list:
     if not data or sort not in data[0]:
         return data
 
-    # Sort ascending for date, descending for downloads
-    reverse = sort == "downloads"
+    # Sort ascending for date, descending for downloads/percent
+    reverse = sort in ("downloads", "percent")
     data = sorted(data, key=lambda k: k[sort], reverse=reverse)
     return data
 

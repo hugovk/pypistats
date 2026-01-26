@@ -308,6 +308,25 @@ class TestPypiStats:
         # Assert
         assert output_true == output_downloads
 
+    def test__sort_by_percent(self) -> None:
+        # Arrange: sort by percent descending (biggest first)
+        data = [
+            {"category": "3.6", "percent": "10.00%", "downloads": 100},
+            {"category": "3.7", "percent": "50.00%", "downloads": 500},
+            {"category": "3.8", "percent": "40.00%", "downloads": 400},
+        ]
+        expected_output = [
+            {"category": "3.7", "percent": "50.00%", "downloads": 500},
+            {"category": "3.8", "percent": "40.00%", "downloads": 400},
+            {"category": "3.6", "percent": "10.00%", "downloads": 100},
+        ]
+
+        # Act
+        output = pypistats._sort(data, sort="percent")
+
+        # Assert
+        assert output == expected_output
+
     def test__sort_by_date(self) -> None:
         # Arrange
         data = [
