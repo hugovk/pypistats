@@ -4,20 +4,20 @@ CLI with subcommands for pypistats
 
 from __future__ import annotations
 
-import argparse
-import calendar
-import datetime as dt
-import re
-from configparser import ConfigParser
-from pathlib import Path
-from typing import Any
+lazy import argparse
+lazy import calendar
+lazy import datetime as dt
+lazy import re
+lazy from configparser import ConfigParser
+lazy from pathlib import Path
+lazy from typing import Any
 
 try:
     import tomllib
 except ImportError:
     import tomli as tomllib  # type: ignore[import-not-found, no-redef]
 
-import pypistats
+lazy import pypistats
 
 cli = argparse.ArgumentParser()
 subparsers = cli.add_subparsers(dest="subcommand")

@@ -5,15 +5,15 @@ https://pypistats.org/api
 
 from __future__ import annotations
 
-import atexit
-import json
-import sys
-import warnings
-from typing import Any
+lazy import atexit
+lazy import json
+lazy import sys
+lazy import warnings
+lazy from typing import Any
 
-import urllib3
-from prettytable import PrettyTable, TableStyle
-from pytablewriter import (
+lazy import urllib3
+lazy from prettytable import PrettyTable, TableStyle
+lazy from pytablewriter import (
     HtmlTableWriter,
     NumpyTableWriter,
     PandasDataFrameWriter,
@@ -21,10 +21,10 @@ from pytablewriter import (
     String,
     TsvTableWriter,
 )
-from pytablewriter.style import Align, Style, ThousandSeparator
-from termcolor import colored
+lazy from pytablewriter.style import Align, Style, ThousandSeparator
+lazy from termcolor import colored
 
-from . import _cache, _version
+lazy from . import _cache, _version
 
 __version__ = _version.__version__
 
