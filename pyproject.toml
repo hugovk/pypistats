@@ -114,6 +114,10 @@ max_supported_python = "3.15"
 
 [tool.pytest.ini_options]
 addopts = "--color=yes"
+filterwarnings = [
+  # Pending release of https://github.com/Knio/dominate/pull/211
+  "ignore:There is no current event loop:DeprecationWarning:dominate",
+]
 testpaths = [ "tests" ]
 
 [tool.coverage.run]
