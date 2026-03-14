@@ -372,8 +372,8 @@ def _prettytable(
 ) -> str:
     from prettytable import PrettyTable, TableStyle
 
-    x = PrettyTable()
-    x.set_style(
+    table = PrettyTable()
+    table.set_style(
         TableStyle.MARKDOWN if format_ == "markdown" else TableStyle.SINGLE_BORDER
     )
 
@@ -388,20 +388,20 @@ def _prettytable(
 
     for header in headers:
         col_data = [row[header] if header in row else "" for row in data]
-        x.add_column(h(header), col_data)
+        table.add_column(h(header), col_data)
 
-    x.align[h("last_day")] = "r"
-    x.align[h("last_month")] = "r"
-    x.align[h("last_week")] = "r"
-    x.align[h("category")] = "l"
-    x.align[h("percent")] = "r"
-    x.align[h("downloads")] = "r"
-    x.custom_format[h("last_day")] = lambda f, v: f"{v:,}"
-    x.custom_format[h("last_month")] = lambda f, v: f"{v:,}"
-    x.custom_format[h("last_week")] = lambda f, v: f"{v:,}"
-    x.custom_format[h("downloads")] = lambda f, v: f"{v:,}"
+    table.align[h("last_day")] = "r"
+    table.align[h("last_month")] = "r"
+    table.align[h("last_week")] = "r"
+    table.align[h("category")] = "l"
+    table.align[h("percent")] = "r"
+    table.align[h("downloads")] = "r"
+    table.custom_format[h("last_day")] = lambda f, v: f"{v:,}"
+    table.custom_format[h("last_month")] = lambda f, v: f"{v:,}"
+    table.custom_format[h("last_week")] = lambda f, v: f"{v:,}"
+    table.custom_format[h("downloads")] = lambda f, v: f"{v:,}"
 
-    return x.get_string() + "\n"
+    return table.get_string() + "\n"
 
 
 def _pytablewriter(headers, data, format_: str):
