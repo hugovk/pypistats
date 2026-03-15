@@ -5,7 +5,7 @@ pandas==3.0.1
 platformdirs==4.9.2
 prettytable==3.17.0
 pyfakefs==6.1.3
-pytablewriter[html]==1.2.1
+pytablewriter==1.2.1
 pytest==9.0.2
 pytest-cov==7.0.0
 python-slugify==8.0.4
