@@ -40,7 +40,7 @@ dynamic = [ "version" ]
 dependencies = [
   "platformdirs",
   "prettytable>=3.12",
-  "pytablewriter[html]>=0.63",
+  "pytablewriter>=0.63",
   "python-slugify",
   "termcolor>=3.2",
   "tomli; python_version<'3.11'",

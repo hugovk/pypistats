@@ -361,7 +361,7 @@ def _tabulate(data: dict | list, format_: str = "markdown", color: str = "yes") 
     headers.append("downloads")
     headers.remove("downloads")
 
-    if format_ in ("markdown", "pretty"):
+    if format_ in ("html", "markdown", "pretty"):
         return _prettytable(headers, data, format_, color)
     else:
         return _pytablewriter(headers, data, format_)
@@ -372,10 +372,14 @@ def _prettytable(
 ) -> str:
     from prettytable import PrettyTable, TableStyle
 
-    x = PrettyTable()
-    x.set_style(
-        TableStyle.MARKDOWN if format_ == "markdown" else TableStyle.SINGLE_BORDER
-    )
+    table = PrettyTable()
+
+    if format_ == "html":
+        table.border = False
+    elif format_ == "markdown":
+        table.set_style(TableStyle.MARKDOWN)
+    else:
+        table.set_style(TableStyle.SINGLE_BORDER)
 
     if isinstance(data, dict):
         data = [data]
@@ -388,25 +392,27 @@ def _prettytable(
 
     for header in headers:
         col_data = [row[header] if header in row else "" for row in data]
-        x.add_column(h(header), col_data)
+        table.add_column(h(header), col_data)
 
-    x.align[h("last_day")] = "r"
-    x.align[h("last_month")] = "r"
-    x.align[h("last_week")] = "r"
-    x.align[h("category")] = "l"
-    x.align[h("percent")] = "r"
-    x.align[h("downloads")] = "r"
-    x.custom_format[h("last_day")] = lambda f, v: f"{v:,}"
-    x.custom_format[h("last_month")] = lambda f, v: f"{v:,}"
-    x.custom_format[h("last_week")] = lambda f, v: f"{v:,}"
-    x.custom_format[h("downloads")] = lambda f, v: f"{v:,}"
+    table.align[h("last_day")] = "r"
+    table.align[h("last_month")] = "r"
+    table.align[h("last_week")] = "r"
+    table.align[h("category")] = "l"
+    table.align[h("percent")] = "r"
+    table.align[h("downloads")] = "r"
+    table.custom_format[h("last_day")] = lambda f, v: f"{v:,}"
+    table.custom_format[h("last_month")] = lambda f, v: f"{v:,}"
+    table.custom_format[h("last_week")] = lambda f, v: f"{v:,}"
+    table.custom_format[h("downloads")] = lambda f, v: f"{v:,}"
 
-    return x.get_string() + "\n"
+    if format_ == "html":
+        return table.get_html_string(format=True) + "\n"
+    else:
+        return table.get_string() + "\n"
 
 
 def _pytablewriter(headers, data, format_: str):
     from pytablewriter import (
-        HtmlTableWriter,
         NumpyTableWriter,
         PandasDataFrameWriter,
         RstSimpleTableWriter,
@@ -416,7 +422,6 @@ def _pytablewriter(headers, data, format_: str):
     from pytablewriter.style import Align, Style, ThousandSeparator
 
     format_writers = {
-        "html": HtmlTableWriter,
         "numpy": NumpyTableWriter,
         "pandas": PandasDataFrameWriter,
         "rst": RstSimpleTableWriter,
@@ -424,8 +429,7 @@ def _pytablewriter(headers, data, format_: str):
     }
 
     writer = format_writers[format_]()  # type: ignore[abstract]
-    if format_ != "html":
-        writer.margin = 1
+    writer.margin = 1
 
     if isinstance(data, dict):
         writer.value_matrix = [data]
