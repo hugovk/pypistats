@@ -6,7 +6,7 @@ platformdirs==4.9.4
 prettytable==3.17.0
 pyfakefs==6.1.6
 pytablewriter==1.2.1
-pytest==9.0.2
+pytest==9.0.3
 pytest-cov==7.1.0
 python-slugify==8.0.4
 termcolor==3.3.0
