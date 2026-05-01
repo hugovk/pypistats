@@ -1,5 +1,5 @@
 freezegun
-mypy==1.20.0
+mypy==1.20.2
 platformdirs
 prettytable
 pytablewriter
