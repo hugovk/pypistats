@@ -1,8 +1,8 @@
 # Only for testing pinned versions on the CI
 freezegun==1.5.5
-numpy==2.4.4
-pandas==3.0.2
-platformdirs==4.9.6
+numpy==2.4.6
+pandas==3.0.3
+platformdirs==4.10.0
 prettytable==3.17.0
 pyfakefs==6.2.0
 pytablewriter==1.2.1
