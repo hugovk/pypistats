@@ -3,7 +3,7 @@ freezegun==1.5.5
 numpy==2.4.6
 pandas==3.0.3
 platformdirs==4.10.0
-prettytable==3.17.0
+prettytable==3.18.0
 pyfakefs==6.2.0
 pytablewriter==1.2.1
 pytest==9.0.3
