@@ -18,16 +18,13 @@ __version__ = _version.__version__
 BASE_URL = "https://pypistats.org/api/"
 USER_AGENT = f"pypistats/{__version__}"
 
-
-def _print_verbose(verbose: bool, *args, **kwargs: Any) -> None:
-    """Print if verbose"""
-    if verbose:
-        _print_stderr(*args, **kwargs)
+_verbose = False
 
 
-def _print_stderr(*args, **kwargs: Any) -> None:
-    """Print to stderr"""
-    print(*args, file=sys.stderr, **kwargs)
+def _print_verbose(*args: Any, **kwargs: Any) -> None:
+    """Print to stderr if verbose"""
+    if _verbose:
+        print(*args, file=sys.stderr, **kwargs)
 
 
 def _validate_total(total: str) -> None:
@@ -46,7 +43,6 @@ def pypi_stats_api(
     sort: bool | str = True,
     total: str = "all",
     color: str = "yes",
-    verbose: bool = False,
 ):
     """Call the API and return JSON"""
     _validate_total(total)
@@ -61,16 +57,16 @@ def pypi_stats_api(
     from . import _cache
 
     cache_file = _cache.filename(url)
-    if verbose:
+    if _verbose:
         package = endpoint.split("/")[1]
         human_url = f"https://pypistats.org/packages/{package}"
-        _print_verbose(verbose, f"Human URL:\t{human_url}")
-        _print_verbose(verbose, f"API URL:\t{url}")
-        _print_verbose(verbose, f"Cache file:\t{cache_file}")
+        _print_verbose(f"Human URL:\t{human_url}")
+        _print_verbose(f"API URL:\t{url}")
+        _print_verbose(f"Cache file:\t{cache_file}")
 
     res = {}
     if cache_file.is_file():
-        _print_verbose(verbose, "Cache file exists")
+        _print_verbose("Cache file exists")
         res = _cache.load(cache_file)
 
     if res == {}:
@@ -83,7 +79,7 @@ def pypi_stats_api(
 
         # Raise if we made a bad request
         # (4XX client error or 5XX server error response)
-        _print_verbose(verbose, "HTTP status code:", r.status)
+        _print_verbose("HTTP status code:", r.status)
         if r.status >= 400:
             msg = f"HTTP Error {r.status} for url: {url}"
             raise urllib3.exceptions.HTTPError(msg)
