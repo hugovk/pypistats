@@ -361,10 +361,10 @@ def _tabulate(data: dict | list, format_: str = "markdown", color: str = "yes") 
     headers.append("downloads")
     headers.remove("downloads")
 
-    if format_ in ("html", "markdown", "pretty", "rst", "tsv"):
-        return _prettytable(headers, data, format_, color)
+    if format_ in ("numpy", "pandas"):
+        return _dataframe(headers, data, format_)
     else:
-        return _pytablewriter(headers, data, format_)
+        return _prettytable(headers, data, format_, color)
 
 
 def _prettytable(
@@ -415,63 +415,20 @@ def _prettytable(
         return table.get_string() + "\n"
 
 
-def _pytablewriter(headers, data, format_: str):
-    from pytablewriter import (
-        NumpyTableWriter,
-        PandasDataFrameWriter,
-        RstSimpleTableWriter,
-        String,
-        TsvTableWriter,
-    )
-    from pytablewriter.style import Align, Style, ThousandSeparator
-
-    format_writers = {
-        "numpy": NumpyTableWriter,
-        "pandas": PandasDataFrameWriter,
-        "rst": RstSimpleTableWriter,
-        "tsv": TsvTableWriter,
-    }
-
-    writer = format_writers[format_]()  # type: ignore[abstract]
-    writer.margin = 1
-
+def _dataframe(headers: list[str], data: dict | list, format_: str):
     if isinstance(data, dict):
-        writer.value_matrix = [data]
-    else:  # isinstance(data, list):
-        writer.value_matrix = data
+        data = [data]
 
-    writer.headers = headers
-
-    # Custom alignment and format
-    if headers[0] in ["last_day", "last_month", "last_week"]:
-        # Special case for 'recent'
-        writer.column_styles = len(headers) * [Style(thousand_separator=",")]  # type: ignore[assignment]
-    else:
-        column_styles = []
-        type_hints = []
-
-        for header in headers:
-            align = Align.AUTO
-            thousand_separator = ThousandSeparator.NONE
-            type_hint = None
-            if header == "percent":
-                align = Align.RIGHT
-            elif header == "downloads" and (format_ not in ["numpy", "pandas"]):
-                thousand_separator = ThousandSeparator.COMMA
-            elif header == "category":
-                type_hint = String
-            style = Style(align=align, thousand_separator=thousand_separator)
-            column_styles.append(style)
-            type_hints.append(type_hint)
-
-        writer.column_styles = column_styles  # type: ignore[assignment]
-        writer.type_hints = type_hints  # type: ignore[assignment]
+    rows = [[row.get(header, "") for header in headers] for row in data]
 
     if format_ == "numpy":
-        return writer.tabledata.as_dataframe().values
-    elif format_ == "pandas":
-        return writer.tabledata.as_dataframe()
-    return writer.dumps()
+        import numpy
+
+        return numpy.array(rows, dtype=object)
+
+    import pandas
+
+    return pandas.DataFrame(rows, columns=headers)
 
 
 def _paramify(param_name: str, param_value: float | str | None) -> str:

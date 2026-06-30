@@ -1,8 +1,8 @@
 freezegun
 mypy==2.1.0
+pandas-stubs
 platformdirs
 prettytable
-pytablewriter
 pytest
 termcolor
 types-python-slugify
