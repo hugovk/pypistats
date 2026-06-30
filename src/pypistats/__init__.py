@@ -5,14 +5,9 @@ https://pypistats.org/api
 
 from __future__ import annotations
 
-import atexit
-import json
 import sys
-import warnings
 
-from termcolor import colored
-
-from . import _cache, _version
+from . import _version
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
@@ -33,9 +28,6 @@ def _print_verbose(verbose: bool, *args, **kwargs: Any) -> None:
 def _print_stderr(*args, **kwargs: Any) -> None:
     """Print to stderr"""
     print(*args, file=sys.stderr, **kwargs)
-
-
-atexit.register(_cache.clear)
 
 
 def _validate_total(total: str) -> None:
@@ -65,6 +57,9 @@ def pypi_stats_api(
     else:
         params = ""
     url = BASE_URL + endpoint.lower() + params
+
+    from . import _cache
+
     cache_file = _cache.filename(url)
     if verbose:
         package = endpoint.split("/")[1]
@@ -80,6 +75,8 @@ def pypi_stats_api(
 
     if res == {}:
         # No cache, or couldn't load cache
+        import json
+
         import urllib3
 
         r = urllib3.request("GET", url, headers={"User-Agent": USER_AGENT})
@@ -116,6 +113,8 @@ def pypi_stats_api(
     if start_date:
         assert first is not None
         if start_date < first:
+            import warnings
+
             warnings.warn(
                 f"Requested start date ({start_date}) is before earliest available "
                 f"data ({first}), because data is only available for 180 days. "
@@ -137,6 +136,8 @@ def pypi_stats_api(
         res["data"] = _total(res["data"])
 
     if format == "json":
+        import json
+
         return json.dumps(res)
 
     # These only for tables, like markdown and rst
@@ -338,6 +339,9 @@ def _colourify(data) -> list:
     for row in data:
         if "percent" not in row:
             continue
+
+        from termcolor import colored
+
         percent = float(row["percent"].rstrip("%"))
         if percent <= 5:
             colour = "red"
@@ -389,6 +393,8 @@ def _prettytable(
     # Apply bold to header?
     def h(header: str) -> str:
         if color != "no" and format_ == "pretty":
+            from termcolor import colored
+
             return colored(header, attrs=["bold"])
         return header
 
