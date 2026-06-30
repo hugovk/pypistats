@@ -5,11 +5,15 @@ CLI with subcommands for pypistats
 from __future__ import annotations
 
 import argparse
+import atexit
 import calendar
 import datetime as dt
 import re
 
 import pypistats
+from pypistats import _cache
+
+atexit.register(_cache.clear)
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
