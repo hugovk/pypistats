@@ -583,7 +583,7 @@ class TestPypiStats:
             pytest.param(
                 "tsv",
                 """
-"last_day"\t"last_month"\t"last_week"
+last_day\tlast_month\tlast_week
 2,295,765\t67,759,913\t15,706,750
 """,
                 id="tsv",
