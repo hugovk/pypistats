@@ -361,7 +361,7 @@ def _tabulate(data: dict | list, format_: str = "markdown", color: str = "yes") 
     headers.append("downloads")
     headers.remove("downloads")
 
-    if format_ in ("html", "markdown", "pretty"):
+    if format_ in ("html", "markdown", "pretty", "rst"):
         return _prettytable(headers, data, format_, color)
     else:
         return _pytablewriter(headers, data, format_)
@@ -378,6 +378,8 @@ def _prettytable(
         table.border = False
     elif format_ == "markdown":
         table.set_style(TableStyle.MARKDOWN)
+    elif format_ == "rst":
+        table.set_style(TableStyle.RST)
     else:
         table.set_style(TableStyle.SINGLE_BORDER)
 
