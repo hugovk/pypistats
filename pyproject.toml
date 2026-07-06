@@ -107,17 +107,17 @@ lint.future-annotations = true
 max_supported_python = "3.15"
 
 [tool.mypy]
-pretty = true
 # strict = true
+pretty = true
 show_error_codes = true
 
 [tool.pytest]
+ini_options.testpaths = [ "tests" ]
 ini_options.addopts = "--color=yes"
 ini_options.filterwarnings = [
   # Pending release of https://github.com/Knio/dominate/pull/211
   "ignore:There is no current event loop:DeprecationWarning:dominate",
 ]
-ini_options.testpaths = [ "tests" ]
 
 [tool.coverage]
 run.omit = [
