@@ -1,5 +1,5 @@
 freezegun
-mypy==2.1.0
+mypy==2.3.0
 pandas-stubs
 platformdirs
 prettytable
