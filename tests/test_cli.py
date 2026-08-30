@@ -19,25 +19,21 @@ if TYPE_CHECKING:
 @pytest.fixture
 def pyproject_toml(fs: FakeFilesystem):
     fs.create_file("pyproject.toml", contents='[project]\nname = "toml-demo"')
-    return
 
 
 @pytest.fixture
 def pyproject_toml_no_name(fs: FakeFilesystem):
     fs.create_file("pyproject.toml", contents='[tool.black]\ntarget_version = ["py39"]')
-    return
 
 
 @pytest.fixture
 def setup_cfg(fs: FakeFilesystem):
     fs.create_file("setup.cfg", contents="[metadata]\nname = cfg-demo")
-    return
 
 
 @pytest.fixture
 def setup_cfg_no_name(fs: FakeFilesystem):
     fs.create_file("setup.cfg", contents="[flake8]\nmax_line_length = 88")
-    return
 
 
 @pytest.mark.parametrize(
