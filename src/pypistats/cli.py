@@ -9,6 +9,7 @@ import atexit
 import calendar
 import datetime as dt
 import re
+import sys
 
 import pypistats
 from pypistats import _cache
@@ -272,11 +273,16 @@ common_arguments = [
         argument("-p", "--period", choices=("day", "week", "month")),
         arg_format,
         arg_json,
+        arg_color,
         arg_verbose,
     ]
 )
 def recent(args: argparse.Namespace) -> None:  # pragma: no cover
-    print(pypistats.recent(args.package, period=args.period, format=args.format))
+    print(
+        pypistats.recent(
+            args.package, period=args.period, format=args.format, color=args.color
+        )
+    )
 
 
 @subcommand(
@@ -434,7 +440,15 @@ def main() -> None:
 
         pypistats._verbose = args.verbose
 
-        args.func(args)
+        try:
+            args.func(args)
+        except pypistats.HTTPError as e:
+            prefix = "Error:"
+            if args.color != "no":
+                from termcolor import colored
+
+                prefix = colored(prefix, "red", attrs=["bold"])
+            sys.exit(f"{prefix} {e}")
 
 
 if __name__ == "__main__":

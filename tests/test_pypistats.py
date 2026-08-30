@@ -201,6 +201,31 @@ class TestPypiStats:
         )
 
     @pytest.mark.parametrize(
+        "status, match",
+        [
+            (404, "Package 'some-package' not found on PyPI Stats"),
+            (429, "Rate limit exceeded, try again later"),
+            (
+                503,
+                (
+                    "HTTP Error 503 for url: "
+                    "https://pypistats.org/api/packages/some-package/recent"
+                ),
+            ),
+        ],
+    )
+    @mock.patch("urllib3.request")
+    def test_error_response(self, mock_request, status: int, match: str) -> None:
+        # Arrange
+        package = "some-package"
+        mock_request.return_value = mock_urllib3_response("", status=status)
+
+        # Act / Assert
+        with pytest.raises(pypistats.HTTPError, match=match) as excinfo:
+            pypistats.recent(package)
+        assert excinfo.value.status == status
+
+    @pytest.mark.parametrize(
         "test_name, test_value, expected",
         [
             ("period", None, ""),
