@@ -21,6 +21,14 @@ USER_AGENT = f"pypistats/{__version__}"
 _verbose = False
 
 
+class HTTPError(Exception):
+    """The PyPI Stats API returned a 4XX or 5XX response"""
+
+    def __init__(self, message: str, status: int) -> None:
+        super().__init__(message)
+        self.status = status
+
+
 def _print_verbose(*args: Any, **kwargs: Any) -> None:
     """Print to stderr if verbose"""
     if _verbose:
@@ -81,8 +89,14 @@ def pypi_stats_api(
         # (4XX client error or 5XX server error response)
         _print_verbose("HTTP status code:", r.status)
         if r.status >= 400:
-            msg = f"HTTP Error {r.status} for url: {url}"
-            raise urllib3.exceptions.HTTPError(msg)
+            if r.status == 404:
+                package = endpoint.split("/")[1]
+                msg = f"Package {package!r} not found on PyPI Stats"
+            elif r.status == 429:
+                msg = "Rate limit exceeded, try again later"
+            else:
+                msg = f"HTTP Error {r.status} for url: {url}"
+            raise HTTPError(msg, r.status)
 
         res = json.loads(r.data.decode("utf-8"))
 

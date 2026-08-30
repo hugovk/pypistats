@@ -5,11 +5,14 @@ Unit tests for cli
 from __future__ import annotations
 
 import argparse
+import sys
+from pathlib import Path
+from unittest import mock
 
 import pytest
 from freezegun import freeze_time
 
-from pypistats import cli
+from pypistats import _cache, cli
 
 TYPE_CHECKING = False
 if TYPE_CHECKING:
@@ -290,3 +293,18 @@ def test__python_minor_version_invalid(test_input: str) -> None:
     # Act / Assert
     with pytest.raises(argparse.ArgumentTypeError):
         cli._python_minor_version(test_input)
+
+
+@mock.patch("urllib3.request")
+def test_main_http_error_exits_cleanly(mock_request, monkeypatch) -> None:
+    # Arrange
+    monkeypatch.setattr(_cache, "filename", lambda url: Path("/this/does/not/exist"))
+    monkeypatch.setattr(
+        sys, "argv", ["pypistats", "recent", "some-package", "--color", "no"]
+    )
+    mock_request.return_value = mock.Mock(status=404, data=b"")
+
+    # Act / Assert
+    with pytest.raises(SystemExit) as excinfo:
+        cli.main()
+    assert excinfo.value.code == "Error: Package 'some-package' not found on PyPI Stats"
