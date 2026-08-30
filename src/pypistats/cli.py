@@ -208,18 +208,18 @@ arg_month = argument(
     "--month",
     metavar="yyyy-mm|name",
     type=_valid_yyyy_mm,
-    help="Shortcut for -sd & -ed for a single month",
+    help="Shortcut for `-sd` & `-ed` for a single month",
 )
 arg_last_month = argument(
     "-l",
     "--last-month",
-    help="Shortcut for -sd & -ed for last month",
+    help="Shortcut for `-sd` & `-ed` for last month",
     action="store_true",
 )
 arg_this_month = argument(
-    "-t", "--this-month", help="Shortcut for -sd for this month", action="store_true"
+    "-t", "--this-month", help="Shortcut for `-sd` for this month", action="store_true"
 )
-arg_json = argument("-j", "--json", action="store_true", help='Shortcut for "-f json"')
+arg_json = argument("-j", "--json", action="store_true", help="Shortcut for `-f json`")
 arg_daily = argument("-d", "--daily", action="store_true", help="Show daily downloads")
 arg_monthly = argument("--monthly", action="store_true", help="Show monthly downloads")
 arg_format = argument(
@@ -248,7 +248,7 @@ package_argument = argument(
     default=".",
     type=_package,
     nargs="?",
-    help="package name, or dir to check pyproject.toml/setup.cfg",
+    help="package name, or dir to check `pyproject.toml`/`setup.cfg`",
 )
 common_arguments = [
     arg_format,
