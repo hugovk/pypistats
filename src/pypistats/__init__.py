@@ -395,7 +395,7 @@ def _prettytable(
         return header
 
     for header in headers:
-        col_data = [row[header] if header in row else "" for row in data]
+        col_data = [row.get(header, "") for row in data]
         table.add_column(h(header), col_data)
 
     table.align[h("last_day")] = "r"

@@ -69,7 +69,7 @@ build.hooks.vcs.version-file = "src/pypistats/_version.py"
 
 [tool.ruff]
 fix = true
-lint.select = [
+lint.extend-select = [
   "C4",     # flake8-comprehensions
   "E",      # pycodestyle errors
   "EM",     # flake8-errmsg
@@ -79,17 +79,16 @@ lint.select = [
   "ISC",    # flake8-implicit-str-concat
   "LOG",    # flake8-logging
   "PGH",    # pygrep-hooks
-  "PIE",    # flake8-pie
   "PT",     # flake8-pytest-style
   "PYI",    # flake8-pyi
-  "RUF022", # unsorted-dunder-all
-  "RUF100", # unused noqa (yesqa)
   "TC",     # flake8-type-checking
+  "TID251", # flake8-tidy-imports: banned-api
   "UP",     # pyupgrade
   "W",      # pycodestyle warnings
-  "YTT",    # flake8-2020
 ]
 lint.ignore = [
+  "DTZ007", # Naive datetime: dates are local by design
+  "DTZ011", # date.today(): dates are local by design
   "E203",   # Whitespace before ':'
   "E221",   # Multiple spaces before operator
   "E226",   # Missing whitespace around arithmetic operator
@@ -99,6 +98,7 @@ lint.ignore = [
 lint.flake8-import-conventions.aliases.datetime = "dt"
 lint.flake8-import-conventions.banned-from = [ "datetime" ]
 lint.flake8-pytest-style.parametrize-names-type = "csv"
+lint.flake8-tidy-imports.banned-api."typing.TYPE_CHECKING".msg = "Use TYPE_CHECKING = False instead"
 lint.isort.known-first-party = [ "pypistats" ]
 lint.isort.required-imports = [ "from __future__ import annotations" ]
 lint.future-annotations = true
@@ -109,15 +109,17 @@ max_supported_python = "3.15"
 [tool.mypy]
 # strict = true
 pretty = true
+num_workers = 4
 show_error_codes = true
 
 [tool.pytest]
-ini_options.testpaths = [ "tests" ]
-ini_options.addopts = "--color=yes"
-ini_options.filterwarnings = [
+addopts = [ "--color=yes" ]
+filterwarnings = [
   # Pending release of https://github.com/Knio/dominate/pull/211
   "ignore:There is no current event loop:DeprecationWarning:dominate",
 ]
+minversion = "9.0"
+testpaths = [ "tests" ]
 
 [tool.coverage]
 run.omit = [

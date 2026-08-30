@@ -8,7 +8,9 @@ def run(command: str, with_console: bool = True) -> None:
     # Use a fixed terminal width for consistent output
     env = os.environ.copy()
     env["COLUMNS"] = "88"
-    output = subprocess.run(command.split(), capture_output=True, text=True, env=env)
+    output = subprocess.run(
+        command.split(), capture_output=True, text=True, env=env, check=True
+    )
     print()
     if with_console:
         print("```console")
