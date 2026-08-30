@@ -90,6 +90,8 @@ lint.select = [
   "YTT",    # flake8-2020
 ]
 lint.ignore = [
+  "DTZ007", # Naive datetime: dates are local by design
+  "DTZ011", # date.today(): dates are local by design
   "E203",   # Whitespace before ':'
   "E221",   # Multiple spaces before operator
   "E226",   # Missing whitespace around arithmetic operator
