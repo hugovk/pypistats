@@ -81,8 +81,10 @@ def test__package(
         (
             "pyproject_toml_no_name",
             "setup_cfg_no_name",
-            "no 'project.name' in pyproject.toml and "
-            "no 'metadata.name' in setup.cfg",
+            (
+                "no 'project.name' in pyproject.toml and "
+                "no 'metadata.name' in setup.cfg"
+            ),
         ),
     ],
 )
