@@ -35,6 +35,23 @@ def _print_verbose(*args: Any, **kwargs: Any) -> None:
         print(*args, file=sys.stderr, **kwargs)
 
 
+def _earliest_data_reason(first: str) -> str:
+    """Explain why the earliest available data is `first`: either the 180-day
+    retention window, or the package is newer than that window"""
+    import datetime as dt
+
+    first_date = dt.date.fromisoformat(first)
+    window_start = dt.date.today() - dt.timedelta(days=180)
+    # The retention window's edge can drift by a few days
+    if (first_date - window_start).days > 7:
+        return "which may mean the package is too new to have any earlier data"
+
+    return (
+        "because data is only available for 180 days. "
+        "See https://pypistats.org/about#data"
+    )
+
+
 def _validate_total(total: str) -> None:
     supported_granularities = ("daily", "monthly", "all")
     if total not in supported_granularities:
@@ -114,8 +131,7 @@ def pypi_stats_api(
         if end_date < first:
             msg = (
                 f"Requested end date ({end_date}) is before earliest available "
-                f"data ({first}), because data is only available for 180 days. "
-                "See https://pypistats.org/about#data"
+                f"data ({first}), {_earliest_data_reason(first)}"
             )
             raise ValueError(msg)
 
@@ -127,8 +143,7 @@ def pypi_stats_api(
 
             warnings.warn(
                 f"Requested start date ({start_date}) is before earliest available "
-                f"data ({first}), because data is only available for 180 days. "
-                "See https://pypistats.org/about#data",
+                f"data ({first}), {_earliest_data_reason(first)}",
                 stacklevel=3,
             )
 
