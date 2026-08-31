@@ -114,10 +114,6 @@ show_error_codes = true
 
 [tool.pytest]
 addopts = [ "--color=yes" ]
-filterwarnings = [
-  # Pending release of https://github.com/Knio/dominate/pull/211
-  "ignore:There is no current event loop:DeprecationWarning:dominate",
-]
 minversion = "9.0"
 testpaths = [ "tests" ]
 
