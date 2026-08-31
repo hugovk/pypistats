@@ -442,7 +442,7 @@ def main() -> None:
 
         try:
             args.func(args)
-        except pypistats.HTTPError as e:
+        except (pypistats.HTTPError, ValueError) as e:
             prefix = "Error:"
             if args.color != "no":
                 from termcolor import colored

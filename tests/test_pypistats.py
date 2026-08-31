@@ -10,6 +10,7 @@ from pathlib import Path
 from unittest import mock
 
 import pytest
+from freezegun import freeze_time
 from termcolor import termcolor
 
 import pypistats
@@ -194,6 +195,39 @@ class TestPypiStats:
             match=r"Requested end date \(2000-01-01\) is before earliest available "
             r"data \(2018-11-01\), because data is only available for 180 days. "
             "See https://pypistats.org/about#data",
+        ):
+            pypistats.python_major(package, end_date=end_date)
+        assert_called_with_url(
+            mock_request, "https://pypistats.org/api/packages/pip/python_major"
+        )
+
+    @freeze_time("2018-12-01")
+    @mock.patch("urllib3.request")
+    def test_error_if_end_date_before_earliest_available_new_package(
+        self, mock_request
+    ) -> None:
+        # Arrange
+        # Data starts 2018-11-01, well inside the 180-day window:
+        # the package is newer than the window, not limited by retention
+        end_date = "2018-10-31"
+        package = "pip"
+        mocked_response = """{
+            "data": [
+                {"category": "2", "date": "2018-11-01", "downloads": 2008344},
+                {"category": "3", "date": "2018-11-01", "downloads": 280299},
+                {"category": "null", "date": "2018-11-01", "downloads": 7122}
+            ],
+            "package": "pip",
+            "type": "python_major_downloads"
+        }"""
+
+        mock_request.return_value = mock_urllib3_response(mocked_response)
+        # Act / Assert
+        with pytest.raises(
+            ValueError,
+            match=r"Requested end date \(2018-10-31\) is before earliest available "
+            r"data \(2018-11-01\), which may mean the package is too new to have "
+            "any earlier data",
         ):
             pypistats.python_major(package, end_date=end_date)
         assert_called_with_url(
