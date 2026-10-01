@@ -78,10 +78,7 @@ def _package(value: Any) -> str:
 
     pyproject_toml = directory / Path("pyproject.toml")
     if pyproject_toml.exists():
-        try:
-            import tomllib
-        except ImportError:
-            import tomli as tomllib  # type: ignore[import-not-found, no-redef]
+        import tomllib
 
         data = tomllib.loads(pyproject_toml.read_text())
         try:
