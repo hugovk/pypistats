@@ -17,7 +17,7 @@ def filename(url: str) -> Path:
     """yyyy-mm-dd-url-slug.json"""
     from slugify import slugify
 
-    today = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%d")
+    today = dt.datetime.now(dt.UTC).strftime("%Y-%m-%d")
     slug = slugify(url)
     return CACHE_DIR / f"{today}-{slug}.json"
 
@@ -52,7 +52,7 @@ def save(cache_file: Path, data) -> None:
 def clear() -> None:
     """Delete old cache files"""
     cache_files = CACHE_DIR.glob("**/*.json")
-    this_month = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m")
+    this_month = dt.datetime.now(dt.UTC).strftime("%Y-%m")
     for cache_file in cache_files:
         if not cache_file.name.startswith(this_month):
             cache_file.unlink()
