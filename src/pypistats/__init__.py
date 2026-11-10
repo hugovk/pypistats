@@ -349,7 +349,8 @@ def _percent(data: dict | list) -> dict | list:
     grand_total = _grand_total_value(data)
 
     for row in data:
-        row["percent"] = "{:.2%}".format(row["downloads"] / grand_total)
+        percent = row["downloads"] / grand_total if grand_total else 0
+        row["percent"] = "{:.2%}".format(percent)
 
     return data
 

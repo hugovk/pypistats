@@ -586,6 +586,23 @@ class TestPypiStats:
         # Assert
         assert output == expected_output
 
+    def test__percent_all_zero(self) -> None:
+        # Arrange
+        data = [
+            {"category": "3.9", "downloads": 0},
+            {"category": "3.10", "downloads": 0},
+        ]
+        expected_output = [
+            {"category": "3.9", "percent": "0.00%", "downloads": 0},
+            {"category": "3.10", "percent": "0.00%", "downloads": 0},
+        ]
+
+        # Act
+        output = pypistats._percent(data)
+
+        # Assert
+        assert output == expected_output
+
     def test__percent_one_row(self) -> None:
         # Arrange
         data = copy.deepcopy(SAMPLE_DATA_ONE_ROW)
